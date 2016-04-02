@@ -6,12 +6,263 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 02 Apr 2016 23:18:57 +0800</pubDate>
-    <lastBuildDate>Sat, 02 Apr 2016 23:18:57 +0800</lastBuildDate>
+    <pubDate>Sat, 02 Apr 2016 23:42:11 +0800</pubDate>
+    <lastBuildDate>Sat, 02 Apr 2016 23:42:11 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>HsMM</title>
+        <title>Ensemble Learning Methods</title>
+        <description>&lt;p&gt;集成学习的关键是弱学习器的组合，目标是为了提升模型的性能，一般用在Model Selection，此时降低了选择弱名的可能性。当然集成学习也广泛的应用于结果置信度检验、特征选择、数据融合、增量学习等方面，取得了良好的效果。&lt;/p&gt;
+
+&lt;p&gt;一般而言，对于给定的任务，比如分类，首先在处理完特征之后，我们需要考虑的是选择何种模型来对这些样本进行训练。一般我们没有样本数据产生过程的先验知识，只能通过手动的选择调参，才有可能得到一个较好拟合已知样本的模型。集成学习给了一个非常完美的模型选择的解决方案，通过训练多个子模型，组成committee，最后综合决策，达到了自动选择模型的效果。&lt;/p&gt;
+
+&lt;p&gt;一般模型的性能某种程度取决于数据集的大小，也即观测样本的覆盖度。数据集过大对于一般模型可能会导致训练过拟合或者训练性能瓶颈，此时则可以切分数据集，在子数据集上单独训练模型，然后按照某种组合策略构建committee。数据集过小对于一般模型则会欠拟合，此时可以使用bootstrap等抽样方法，在每一份抽样样本中单独训练模型，组成committee。&lt;/p&gt;
+
+&lt;p&gt;一般而言，样本的分类边界十分复杂，如果仅仅使用一般的模型，则很难学习出能够较好拟合样本的分类边界。但是如果使用集成学习框架，通过学习多个子模型，则能够很好的学习出该分类边界。&lt;/p&gt;
+
+&lt;p&gt;另外，如果我们收集到的数据来源很多，导致数据的类型、维度不同，如果将所有来源的数据都放在同一个向量中，可能会降低模型的学习能力。但是假如我们在不同来源的数据中根据该数据特性或者其他先验知识单独训练模型，则效果一般都会好很多。今天看了一篇关于新浪微博垃圾用户检测的论文，研究现状里就提到了采用这种思想的方法，通过观测，发现垃圾用户一般有三种行为：广告、重复转发和恶意关注，然后根据这三种类型去抽取特征，得到三种类型的特征向量之后，然后分别在三种特征上进行子模型训练，最后效果也还不错。&lt;/p&gt;
+
+&lt;p&gt;此外，集成学习框架还可以用来对结果进行评估，可以根据committee中的子模型的vote去计算。&lt;/p&gt;
+
+&lt;p&gt;有人总结了使用ensemble learning的三大原因：&lt;/p&gt;
+
+&lt;p&gt;统计学，已知样本无法完成的表达原始数据的生成分布，通过bootstrap等方法，可以尽量的拟合原始分布训练模型。
+可计算，体现于模型选择，通过模型融合的解决方案将缺乏模型先验知识的人从单模型调优中解放出来。
+任意拟合，单模型无法拟合出复杂分类边界，则模型融合则很好的解决了这一问题。
+参考文献 http://www.scholarpedia.org/article/Ensemble_learning&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 03 Apr 2016 03:24:56 +0800</pubDate>
+        <link>http://kymo.github.io/machinelearning/2016/04/03/EnsembleLearningMethods.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/03/EnsembleLearningMethods.html</guid>
+        
+        
+        <category>machinelearning</category>
+        
+      </item>
+    
+      <item>
+        <title>Support Vector Machine</title>
+        <description>&lt;p&gt;Support Vector Machine ，支持向量机，通常用来进行classification，但是也有做regression。SVM在面对非线性问题上具有独特的优势。本文从linear和nonlinear两种情况下对SVM的建模过程、优化目标的求解推导过程以及优化算法SMO进行阐述。&lt;/p&gt;
+
+&lt;p&gt;1、  linear SVM&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;在分类任务中，样本label为({-1,1})，关于从sign distance转换到geometry distance的过程其实很容易理解，sign distance可以衡量某个样本被分类的置信，如果sign distance越大，那么该样本被分为该类别的可信度就更大；而geometry distance可以理解为样本距离超平面(Y = w^TX + b)的距离，是sign distance归一化的结果，求解目标为(argmax(\frac {&lt;/td&gt;
+      &lt;td&gt;w^Tx + b&lt;/td&gt;
+      &lt;td&gt;)} {&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;w&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;}))，并且需要满足约束：(y_i(w^Tx_i + b) \geq 1)，为了求解方便，可以不加证明的令(&lt;/td&gt;
+      &lt;td&gt;w^Tx+b&lt;/td&gt;
+      &lt;td&gt;=1)，形式化如下：&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;\begin{cases}argmax \frac {1} {&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;w&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;} \ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases}&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;而此时最大化&lt;/td&gt;
+      &lt;td&gt;w&lt;/td&gt;
+      &lt;td&gt;可以转换为最小化&lt;/td&gt;
+      &lt;td&gt;w&lt;/td&gt;
+      &lt;td&gt;，并且最小化&lt;/td&gt;
+      &lt;td&gt;w&lt;/td&gt;
+      &lt;td&gt;和最小化(\frac {1}{2} w^Tw)等价，所以1.1可以变为：&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;\begin{cases}argmmin \frac {1}{2} w^Tw \ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases}&lt;/p&gt;
+
+&lt;p&gt;由此可以得到不等式约束问题，原始问题通过分析不难发现，求解十分困难，不过对于PSO(粒子群算法)而言，往往可以求得比较好的解。不过在碰到这种带不等式约束的问题的时候，我们可以通过拉格朗日对偶性质将原始问题转化为对偶问题，在最大熵模型中也有类似的处理过程。首先构造拉格朗日函数：&lt;/p&gt;
+
+&lt;p&gt;[ L(w,b,\alpha) = \frac {1} {2} w^Tw - \sum_{i=1}^N a_i[y_i(w^Tx_i + b) - 1] ]&lt;/p&gt;
+
+&lt;p&gt;首先我们可以得到这个函数的等价形式，令(\theta = argmax_\alpha L(w,b,\alpha))，那么：&lt;/p&gt;
+
+&lt;p&gt;[\theta=\begin{cases}\frac {1} {2} w^Tw~~~y_i(w^Tx_i+b) \geq 1\ \infty~~~~ y_i(w^Tx_i+b) &amp;lt; 1~~\end{cases}]&lt;/p&gt;
+
+&lt;p&gt;可见，(min\theta)和原始优化目标(argmin \frac {1}{2}w^Tw)等价。令(p=min\theta)，其对偶形式(d=max_{\alpha}min_{w,b}L(w,\alpha))，那么必然会有(p \geq d)。此时令(g=argmin_{w} L(w,b,\alpha))，(g \leq L(w^&lt;em&gt;,b,\alpha) \leq \frac {1}{2} {w^&lt;/em&gt;}^Tw^* = p)，所以(p \geq d)。所以此时该算法满足弱对偶，我们可以通过求解该弱对偶问题去近似求解原始问题，在EM中就是不断优化极大似然下界~ 并且可以知道的是，不管原始问题是何种优化，对偶问题都会是凸优化，也即都会存在极值。不过在SVM中，我们是可以把弱对偶加强，变成strong duality，也即(p = d)，优化对偶问题等价于对原始问题的求解。那么怎么判断该对偶问题是强对偶问题呢？KKT条件。如下：&lt;/p&gt;
+
+&lt;p&gt;\begin{cases}  \bigtriangledown L(w,b,\alpha) = 0 \ \alpha_i(y_i(w^Tx_i+b) - 1) = 0\ \alpha_i \geq 0 \end{cases}&lt;/p&gt;
+
+&lt;p&gt;很明显，此时KKT条件成立，所以满足强对偶。其中(y_i(w^Tx_i+b)-1) = 0)但此时KKT只是必要条件，不过由于我们的原始问题是凸优化，所以KKT便是充要条件了。&lt;/p&gt;
+
+&lt;p&gt;对对偶问题，首先是(min_{w,b}L(w,b,\alpha))，分别对(w)和(b)求导，得：&lt;/p&gt;
+
+&lt;p&gt;[\frac {\partial L(w,\alpha,b)} {\partial(w)} = w - \sum_{i=1}^N \alpha_iy_ix_i=0]&lt;/p&gt;
+
+&lt;p&gt;[\frac {\partial L(w,\alpha,b)} {\partial(b)} = \sum_{i=1}^N\alpha_iy_i=0]&lt;/p&gt;
+
+&lt;p&gt;随后，将(w=\sum_{i=1}^N\alpha_iy_ix_i)代入(L(w,b,\alpha))中，则有：&lt;/p&gt;
+
+&lt;p&gt;\begin{eqnarray&lt;em&gt;}
+L(w,\alpha,b)&amp;amp;=&amp;amp;\frac {1}{2} w^Tw - \sum_{i=1}^N\alpha_i[y_i(w^Tx_i+b)-1]\&amp;amp;=&amp;amp;\frac{1}{2}\sum_{i=1}^N\alpha_iy_ix_i^T\sum_{j=1}^N\alpha_jy_jx_j - \sum_{i=1}^N\alpha_i[y_i(w^Tx_i+b)-1]\ &amp;amp;=&amp;amp;\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j - \sum_{i=1}^N\alpha_i\sum_{j=1}^N\alpha_jy_jx_j^Tx_i + \sum_{i=1}^N\alpha_i\&amp;amp;=&amp;amp;-\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j + \sum_{i=1}^N\alpha_i\end{eqnarray&lt;/em&gt;}&lt;/p&gt;
+
+&lt;p&gt;所以：&lt;/p&gt;
+
+&lt;p&gt;[\begin{cases}-\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j + \sum_{i=1}^N\alpha_i\s.t~~~\sum_{i=1}^N\alpha_iy_i=0 \end{cases}]&lt;/p&gt;
+
+&lt;p&gt;到这，我们还没有考虑soft margin。实际情况中，总是会存在一定的噪声数据，使得我们的分类超平面被这些噪声数据所误导，从而使得模型的variance增大，所以一般来讲都会采用soft margin构建优化函数，我们以(\varepsilon)的范围容许一定的误差，即原来的(y_i(w^Tx_i+b) \geq 1)此时为(y_i(w^Tx_i + b) \geq 1 - \varepsilon_i)，所以我们的优化目标变为：&lt;/p&gt;
+
+&lt;p&gt;[\begin{cases}argmin \frac {1}{2} w^Tw + C\sum_{i=1}^N\varepsilon_i \s.t ~~ y_i(w^Tx_i+b) \geq 1 - \varepsilon_i ~~i=1,2,\cdot \cdot ,n \ \sum_{i=1}^N\varepsilon_i \geq C \end{cases}]&lt;/p&gt;
+
+&lt;p&gt;关于上式，可以看成是利用hinge loss加l2范数正则项的结果，SVM此时的损失函数可以表示为 (min_{w,b} \sum_{i=1}^N [1-y_i(w^Tx_i+b)]&lt;em&gt;{+} + \lambda|w|^2 )，其中如果(z&amp;gt;0)，那么(z&lt;/em&gt;{+})=z，否则等于0。如果令(\varepsilon_i=1-y_i(w^Tx_i+b),\varepsilon_i \geq 0)，那么此时最优化问题为 (min_{w,b} \sum_{i=1}^N\varepsilon_i + \lambda|w|^2)，如果取(\lambda=\frac {1}{2C})，那么就和上述优化目标等价，所以可以看出，软间隔实际上是在ERM的基础上加了SRM~&lt;/p&gt;
+
+&lt;p&gt;之后的推导没有多大差别，只不过在求导的过程中出现了(\alpha_i = C - \varepsilon_i)，又有前面在对偶转换使用的KKT条件之一(\alpha_i(y_i(w^Tx_i+b) - 1) =0 )可得，在分类超平面上的点，也即满足(y_i(w^Tx_i+b)-1 + \varepsilon_i = 0)，而那些不在超平面的点，必然有(\alpha_i=0)，而在超平面上的，则有(0&amp;lt; \alpha_i &amp;lt; C)，在超平面之外的则是(\alpha_i=C)。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;nonlinear SVM&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;非线性情况之下，利用线性曲线去拟合，明显会产生underfitting，但是我们可以通过函数映射的方式，将原来空间中的非线性特征，映射到高维空间中，使得样本可分或者近似可分，实际上是，机器学习中有一种叫做基展开的技术，就是处理这种线性到非线性的特征映射。不过对于SVM中使用这种非线性变化是因为它能够和核函数配合的天衣无缝。&lt;/p&gt;
+
+&lt;p&gt;这里用一个简单的例子作简要说明。对于(x=(x_1,x_2))二维空间的某个点，我们将其映射到三维空间。所利用的映射函数可以为(\phi (x_1,x_2) = (x_1^2,x_2^2,2x_1x_2))，那么在三维空间中，样本线性可分的可能性更大，但是计算开销却上升了，因为在转化成对偶问题之后就产生了向量内积运算。对于原始二维空间中的两点(p=(\eta_1,\eta_2),q=(\gamma_1,\gamma_2))，在三维空间中的向量内积为(&amp;lt;\phi(\eta_1,\eta_2),\phi(\gamma_1,\gamma_2)&amp;gt; = \eta_1^2\gamma_1^2 + \eta_2^2\gamma_2^2 + 4\eta_1\eta_2\gamma_1\gamma_2)，这和(\eta_1^2\gamma_1^2 + \eta_2^2\gamma_2^2 + 2\eta_1\eta_2\gamma_1\gamma_2)十分相似，而后者却等于(&amp;lt;(\eta_1,\eta_2), (\gamma_1, \gamma_2)&amp;gt;^2)，所以只需要令(\phi(x_1,x_2) = (x_1^2, x_2^2, \sqrt {2} x_1x_2))，就可以得到(&amp;lt;\phi(\eta_1,\eta_2),\phi(\gamma_1,\gamma_2)&amp;gt;)=(&amp;lt;(\eta_1,\eta_2), (\gamma_1, \gamma_2)&amp;gt;^2)~ 由此可以推广到高维。不难看出在高维空间中的内积可以通过在原始空间内积的平方得到~此时(K(p,q) = &amp;lt;\phi(\eta_1,\eta_2), \phi(\gamma_1, \gamma_2)&amp;gt;)=(&amp;lt;p,q&amp;gt;^2)。对偶转换之后只需要将(x_i,x_j)的内积运算更换成(K(x_i,x_j))，即可处理非线性数据~&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;SMO&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;SMO本质上上一种坐标上升优化算法，坐标上升可以理解为在(p)维向量构成的空间中，每次选择一个维度进行优化，最终能够求得比较合适的解。SMO每次选择两个参数，因为此时待求变量有(\sum_{i=1}^N\alpha_iy_i =0)的约束。SMO的优化过程如下：&lt;/p&gt;
+
+&lt;p&gt;选择(\alpha_i, \alpha_j)
+固定其他参数，然后对(\alpha_i, \alpha_j)进行优化
+利用(\alpha_i, \alpha_j)，对截距进行优化
+在了解确切的(\alpha_i,\alpha_j)贪心选择策略之前，先假定我们已经将(\alpha_i,\alpha_j)选择妥当，然后直接对(\alpha_i,\alpha_j)进行优化。根据条件(\sum_{k=1}^N\alpha_ky_k=0)，令(A = y_i\sum_{k!=i,j}^N\alpha_ky_k). 那么(\alpha_i,\alpha_j)的关系为(\alpha_i = A - y_iy_j\alpha_j)。此时我们的优化目标[max_{\alpha} L(\alpha) = \sum_{k=1}^N\alpha_k - \frac{1}{2} \sum_{l=1}^N\sum_{k=1}^N\alpha_l\alpha_ky_ly_kK_{l,k}]&lt;/p&gt;
+
+&lt;p&gt;其中，(K_{l,k} = K(x_l, x_j))，令(B = \sum_{k!=i,j}\alpha_k, S = y_iy_j, V_i = \sum_{k!=i,j}\alpha_ky_kK_{i,k}, V_j =\sum_{k!=i,j}\alpha_ky_kK_{j,k})，那么有：&lt;/p&gt;
+
+&lt;p&gt;\begin{eqnarray&lt;em&gt;} L(\alpha) &amp;amp;=&amp;amp; \sum_{k!=i,j}^N\alpha_k + \alpha_i + \alpha_j - \frac {1}{2}[\alpha_i\alpha_i y_iy_iK_{i,i} + \alpha_j\alpha_jy_jy_jK_{j,j} + 2\alpha_i\alpha_jy_iy_jK_{i,j} + 2\sum_{k!=i,j}^N\alpha_i\alpha_ky_iy_kK_{i,k} + 2\sum_{k!=i,j}^N\alpha_j\alpha_ky_jy_kK_{j,k} + \sum_{l!=i,j}^N \sum_{k!=i,j}^N\alpha_l\alpha_ky_ly_kK_{l,k}] \                                                               &amp;amp;=&amp;amp; B + A - S\alpha_j + \alpha_j - \frac{1}{2} [2\alpha_i\alpha_jSK_{i,j} + \alpha_i^2K_{i,i} + \alpha_j^2K_{j,j} + 2\alpha_iy_iV_i + 2\alpha_jy_jV_j +  \sum_{l!=i,j}^N \sum_{k!=i,j}^N\alpha_l\alpha_ky_ly_kK_{l,k}]    \                                                          &amp;amp;=&amp;amp;-S\alpha_j + \alpha_j  - \frac{1}{2}K_{i,i}(A-S\alpha_j)^2 - \frac{1}{2} K_{j,j}\alpha_j^2 - K_{i,j}\alpha_j(A-S\alpha_j)S - \alpha_jy_jV_j - (A-S\alpha_j)y_iV_i + \varepsilon_{constant} \end{eqnarray&lt;/em&gt;}&lt;/p&gt;
+
+&lt;p&gt;其中，(\varepsilon_{constant})为一些常量，在求极值点是可以忽略，上式对(\alpha_j)求导，有：&lt;/p&gt;
+
+&lt;p&gt;\begin{eqnarray&lt;em&gt;} \frac {\partial_{L(\alpha_j)}} {\partial_{\alpha_j}} &amp;amp;=&amp;amp; -S + 1 + ASK_{i,i} -K_{i,i}\alpha_j - K_{j,j}\alpha_j -ASK_{i,j} + 2K_{i,j}\alpha_j -y_jV_j + Sy_iV_i=0 \ \alpha_j&amp;amp;=&amp;amp; \frac {-S + 1 + AS(K_{i,i}-K_{i,j}) + y_j(V_i-V_j)}{K_{i,i} + K_{j,j} - 2K_{i,j}} \end{eqnarray&lt;/em&gt;}&lt;/p&gt;
+
+&lt;p&gt;又有优化(\alpha_i,\alpha_j)的时候，其他参数没有被改变。&lt;/p&gt;
+
+&lt;p&gt;\begin{eqnarray&lt;em&gt;}\alpha_iy_i+\alpha_jy_j&amp;amp;=&amp;amp; -\sum_{k!=i,j}\alpha_k^{old}y_k=\alpha_i^{old}y_i + \alpha_j^{old}y_j \ V_i &amp;amp;=&amp;amp; \sum_{k!=i,j}\alpha_ky_kK_{i,k}=\sum_{k!=i,j}\alpha_k^{old}y_kK_{i,k} = \sum_{k=1}^N\alpha_k^{old}y_kK_{i,k} + b - b - \alpha_i^{old}y_iK_{i,i} - \alpha_j^{old}y_jK_{i,j} \ V_j &amp;amp; = &amp;amp;\sum_{k!=i,j}\alpha_ky_kK_{j,k}=\sum_{k!=i,j}\alpha_k^{old}y_kK_{j,k} = \sum_{k=1}^N\alpha_k^{old}y_kK_{j,k} + b - b - \alpha_j^{old}y_jK_{j,j} - \alpha_i^{old}y_iK_{i,j}  \end{eqnarray&lt;/em&gt;}&lt;/p&gt;
+
+&lt;p&gt;且(g(x_i) = \sum_{k=1}^N\alpha_k^{old}y_kK_{i,k} + b)，(g(x_j) = \sum_{k=1}^N\alpha_k^{old}y_kK_{j,k} + b)，所以：&lt;/p&gt;
+
+&lt;p&gt;[V_i - V_j = g(x_i) - g(x_j) - \alpha_i^{old}y_iK_{i,i} + \alpha_j^{old}y_jK_{j,j} - \alpha_j^{old}y_jK_{i,j} + \alpha_i^{old}y_iK_{i,j} ]&lt;/p&gt;
+
+&lt;p&gt;然后，将A = (\alpha_i^{old}+S\alpha_j^{old})，S=(y_iy_j)代入(\alpha_j)表达式，可得：&lt;/p&gt;
+
+&lt;p&gt;\begin{eqnarray&lt;em&gt;}\alpha_j &amp;amp;=&amp;amp; \frac {y_jy_j - y_iy_j +(\alpha_i^{old}+y_iy_j\alpha_j^{old})y_iy_j(K_{i,i}-K_{i,j}) + y_j(g(x_i) - g(x_j) - \alpha_i^{old}y_iK_{i,i} + \alpha_j^{old}y_jK_{j,j} - \alpha_j^{old}y_jK_{i,j} + \alpha_i^{old}y_iK_{i,j})} {K_{i,i} + K_{j,j} - 2K_{i,j}} \ &amp;amp;=&amp;amp; \frac {y_j[y_j-y_i + y_j\alpha_j^{old}(K_{i,i} + K_{j,j} - 2K_{i,j} + g(x_i) - g(x_j) ]} {K_{i,i} + K_{j,j} - 2K_{i,j}}\ &amp;amp;=&amp;amp; \alpha_j^{old} + \frac{y_j[y_j-y_i + g(x_i)-g(x_j)]} {K_{i,i} + K_{j,j} - 2K_{i,j}}\end{eqnarray&lt;/em&gt;}&lt;/p&gt;
+
+&lt;p&gt;然后令(E_i = g(x_i) - y_i)，(\eta = K_{i,i} + K_{j,j} - 2K{i,j})，(\alpha_j^{new,unc} = \alpha_j^{old} + \frac {y_j(E_i - E_j)} {\eta})，此时求出的(\alpha_j)还需要经过边界判定，对(\alpha_i,\alpha_j)有(\alpha_iy_i + \alpha_jy_j = \alpha_i^{old} + \alpha_j^{old})和(0&amp;lt;=\alpha_i&amp;lt;=C)，(0&amp;lt;=\alpha_j&amp;lt;=C)的条件限制，所以必须对(\alpha_i, \alpha_j)的上下边界(L,H)进行确认。&lt;/p&gt;
+
+&lt;p&gt;如果(y_i = y_j)，那么(L= max(0, \alpha_j^{old} - \alpha_i^{old}))，(H=min(C,C+\alpha_j^{old} - \alpha_i^{old}))
+如果(y_i!=y_j)，那么(L=max(0, \alpha_j^{old} + \alpha_i^{old} - C))，(H=min(C,\alpha_j^{old} + \alpha_i^{old}))
+根据上式可以得到(\alpha_j^{new})为：&lt;/p&gt;
+
+&lt;p&gt;[\alpha_j^{new} = \begin{cases} H,~~~\alpha_j^{new,unc} &amp;gt; H \ \alpha_j^{new,unc},~~~~~ L&amp;lt;=\alpha_j^{new,unc}&amp;lt;=H \ L,~~~~~\alpha_j^{new,unc} &amp;lt; L \end{cases}]&lt;/p&gt;
+
+&lt;p&gt;由此可以得到(\alpha_i^{new}= \alpha_i^{old} + y_iy_j(\alpha_j^{old} - \alpha_j^{new}))。&lt;/p&gt;
+
+&lt;p&gt;关于(alpha_i, \alpha_j)的更新策略完成，但是对于上式中的bias也需要进行更新，以保证KKT条件(\alpha_j(y_j(\sum_{i=1}^N\alpha_iy_iK_{i,j} + b) - 1) = 0)成立。&lt;/p&gt;
+
+&lt;p&gt;当(0&amp;lt; \alpha_i^{new} &amp;lt; C)，(y_i(\sum_{k=1}^N\alpha_ky_kK_{i,k}+b) = 1) ，所以(b_1^{new} = y_i - \sum_{k!=i,j}^N\alpha_ky_kK_{i,k} - \alpha_i^{new}y_iK_{i,i} - \alpha_j^{new}y_jK_{i,j})，又知(E_i = g(x_i) - y_i = \sum_{k=1}^N\alpha_ky_kK_{i,k} + b^{old} - y_i)，此时除(\alpha_i,\alpha_j)以外的都不会发生变化，所以(E_i = \sum_{k!=i,j}^N\alpha_ky_kK_{k,i} + \alpha_i^{old}y_iKii + \alpha_j^{old}y_jK_{i,j} + b^{old} - y_i)，也即 (b_i^{new} = -E_i - y_iK_{i,i}(\alpha_i^{new} - \alpha_i^{old}) - y_jK_{i,j}(\alpha_j^{new} - \alpha_j^{old}) + b^{old})
+同1，当(0&amp;lt; \alpha_j^{new} &amp;lt; C)，则(b_2^{new} = -E_j - y_iK_{i,j}(\alpha_i^{new} - \alpha_i^{old}) - y_jK_{j,j}(\alpha_j^{new} - \alpha_j^{old}) + b^{old})
+如果(\alpha_i^{new})和(\alpha_j^{new})都满足条件，则(b_1^{new})=(b_2^{new})
+如果(\alpha_i^{new})、(\alpha_j^{new})为0或者C，那么取(b_1^{new})和(b_2^{new})的中值即可
+至此，SMO算法结束，不过实际中，需要实时更新(E_i)，所以在更新完bias之后，再利用已有的信息重新更新(E_i)即可。&lt;/p&gt;
+
+&lt;p&gt;最终实现见：SVM@GITHUB&lt;/p&gt;
+
+&lt;p&gt;参考资料&lt;/p&gt;
+
+&lt;p&gt;李航 《统计学习方法》&lt;/p&gt;
+
+&lt;p&gt;http://www.cnblogs.com/jerrylead/archive/2011/03/18/1988419.html&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
+        <link>http://kymo.github.io/tt/2016/04/02/SVM.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/tt/2016/04/02/SVM.html</guid>
+        
+        
+        <category>tt</category>
+        
+      </item>
+    
+      <item>
+        <title>Random Forest</title>
+        <description>&lt;p&gt;一般我们提到序列标注问题，会有三种模型很引人瞩目，最大熵马尔科夫模型、隐马尔科夫模型和条件穗机场模型。三种的联系和区别详见：隐马尔可夫模型 最大熵马尔可夫模型 条件随机场 区别和联系。&lt;/p&gt;
+
+&lt;h3 id=&quot;hmm&quot;&gt;HMM简单介绍&lt;/h3&gt;
+
+&lt;p&gt;在介绍CRF建模过程，我们先简单的了解下HMM，因为HMM可以认为是CRF的子集，任何可以由HMM解决的问题都可以由CRF解决~&lt;/p&gt;
+
+&lt;p&gt;HMM有两种假设：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;某种状态只依赖于前一状态，也即隐含状态满足一阶马尔科夫性质；&lt;/li&gt;
+  &lt;li&gt;观测状态之间彼此独立&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面用一个简单的中文分词来介绍HMM吧。
+一般在中文分词中，我们会设定某个中文汉字所处的状态（B:词的开头；M：在词中间；E：在词结尾；S：单字成词），这四种状态（BMES）可以认为是我们的隐含状态，而该状态对应的中文字符，则是我们的观测状态。&lt;/p&gt;
+
+&lt;p&gt;通过大量的语料的统计可以得到这四种状态之间的转移概率矩阵p(SJ|SI)p(SJ|SI)
+即由状态SISI转移到SJSJ的概率。同时也可以统计出初始状态的概率π(SI)π(SI)，另外我们的发射概率（也即有隐含状态（BMES）生成汉字的概率）也可以通过统计得出，当然了，也可以利用EM算法去训练，但在此不再赘述。&lt;/p&gt;
+
+&lt;p&gt;HMM一般会解决三类问题：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;模型学习，可以使用统计也可以使用EM；&lt;/li&gt;
+  &lt;li&gt;给定观测状态，确定最可能的隐含状态序列，比如中文分词、词性标注等；&lt;/li&gt;
+  &lt;li&gt;给定隐含状态，确定最可能的观测序列，比如天气预报。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;中文分词给定的是观测序列（即一个个的中文字符），任务即是找到某种最可能的隐含状态，也即判断中文字符所处的位置(BMES)，使得该观测序列产生的概率最大。在进行计算的时候，我们不可能对所有的序列进行判断， 这将是一个NP问题。下图是对“我来自武汉”的一个HMM模型图示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/public/image/t.png&quot; alt=&quot;HMM图片&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;途中蓝色部分为隐含状态之间的转移概率矩阵，蓝线表示状态的转移。红线表示由隐含状态生成观测状态。计算的时候，我们可以根据迭代公式计算出前向概率，然后反向递推，得到生成该序列最大概率的隐含状态序列。比如上图中最后最有可能得到的生成“我、来、自、武、汉”这一观测序列的隐含状态序列为“SBEBE”，也即分词结果为”我\来自\武汉”。&lt;/p&gt;
+
+&lt;h3 id=&quot;crf&quot;&gt;CRF&lt;/h3&gt;
+
+&lt;p&gt;HMM的假设简单粗暴，却行之有效，然而在分词或者词性标注这些应用上，却无法达到CRF所取得的效果，原因之一正是在于其假设。HMM过于local，导致其损失了非常多global的信息，而CRF却可以利用这些信息，从而可以得到更好的结果。&lt;/p&gt;
+
+&lt;p&gt;CRF自从被Lafferty等人发明之后，由最初的应用于序列标注的自然语言处理领域广泛的扩散至生物信息学、计算机视觉等领域。CRF中十分重要的一 个概念为特征函数，其是状态转移特征函数和状态生成特征函数的集合。其实刚开始看CRF的时候这个特征函数很不容易理解，但是我们可以把它理解成一个对某种规则的一种特征化处理，比如在词性标注中，在训练的时候如果当前词为“形容词”，并且它以“的”结尾，那么该特征函数输出为1，否则为0。并且我们需要对每一个特征函数赋以某种权值，则如果最后的结果中该特征和权重的积较大，可以表征：以”的“结尾的词以某种概率是形容词“，而这个权重λλ是模型训练的目标。&lt;/p&gt;
+
+&lt;p&gt;参考文献&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wenku.baidu.com/link?url=7LBbXiKPWAPnqYexmBOhz4iCUSny6Ayg3M53Ls0IiVKdqLq-9YPNAiW3WKJ5UgihjWKmm4yTpahIIeu75BB_mM_Q1QicaLIGrOiwHUO8ktu###&quot;&gt;百度文库&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://blog.csdn.net/felomeng/article/details/4367250&quot;&gt;http://blog.csdn.net/felomeng/article/details/4367250&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
+        <link>http://kymo.github.io/machinelearning/2016/04/02/RandomForests.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/RandomForests.html</guid>
+        
+        
+        <category>machinelearning</category>
+        
+      </item>
+    
+      <item>
+        <title>HMM</title>
         <description>&lt;h1 id=&quot;hmm&quot;&gt;HMM&lt;/h1&gt;
 
 &lt;p&gt;在了解隐马尔科夫模型之前，先得了解马尔科夫过程，一般而言，在理解一个模型的时候，最好是能够知道该模型提出的初衷，站在设计者的角度来思考模型总能达到事半功倍的效果。
@@ -55,16 +306,40 @@ Beta[t][i] = sigma(j=1,N){Beta[t+1][j] * A[j][i] * B[j][t+1]}&lt;/p&gt;
       </item>
     
       <item>
-        <title>ESL笔记</title>
-        <description>&lt;p&gt;testsdf&lt;/p&gt;
+        <title>ESL Notes</title>
+        <description>&lt;p&gt;对ml的大部分模型有了了解之后，混沌中遇到师兄赠书，便要了ESL，度厂实习期间，看的晕晕乎乎，英文略显晦涩，但是坚持至今，现在最大的障碍是太多细节和精髓无法掌握，只好做些笔记，帮助理解。借助豆瓣笔记强大的latex支持，以后的笔记都会发在豆瓣，这里只是提供外链~&lt;/p&gt;
+
+&lt;p&gt;第1章 略&lt;/p&gt;
+
+&lt;p&gt;第2章 Overview of Supervised Learning&lt;/p&gt;
+
+&lt;p&gt;第3章 Linear Methods for Regression&lt;/p&gt;
+
+&lt;p&gt;第4章 Linear Methods for Classification&lt;/p&gt;
+
+&lt;p&gt;第5章 Basis Expansions And Regularization&lt;/p&gt;
+
+&lt;p&gt;第6章 Kernel Methods&lt;/p&gt;
+
+&lt;p&gt;第7章 Model Assessment And Selection&lt;/p&gt;
+
+&lt;p&gt;第8章 Model Inference And Averaging&lt;/p&gt;
+
+&lt;p&gt;第9章 Additive Models And Trees&lt;/p&gt;
+
+&lt;p&gt;第10章 Boosting And Additive Trees&lt;/p&gt;
+
+&lt;p&gt;第11章 Neural Networks&lt;/p&gt;
+
+&lt;p&gt;第12-14章节 略&lt;/p&gt;
 
 </description>
         <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
-        <link>http://kymo.github.io/tt/2016/04/02/ESL%E7%AC%94%E8%AE%B0.html</link>
-        <guid isPermaLink="true">http://kymo.github.io/tt/2016/04/02/ESL%E7%AC%94%E8%AE%B0.html</guid>
+        <link>http://kymo.github.io/machinelearning/2016/04/02/ESL_Notes.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/ESL_Notes.html</guid>
         
         
-        <category>tt</category>
+        <category>machinelearning</category>
         
       </item>
     

@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "HsMM"
+title:  "HMM"
 date:  2016-04-01 19:24:56
 categories: tt
 ---

@@ -1,0 +1,37 @@
+---
+layout: post
+title:  "ESL Notes"
+date:  2016-04-01 19:24:56
+categories: MachineLearning
+---
+
+对ml的大部分模型有了了解之后，混沌中遇到师兄赠书，便要了ESL，度厂实习期间，看的晕晕乎乎，英文略显晦涩，但是坚持至今，现在最大的障碍是太多细节和精髓无法掌握，只好做些笔记，帮助理解。借助豆瓣笔记强大的latex支持，以后的笔记都会发在豆瓣，这里只是提供外链~
+
+第1章 略
+
+第2章 Overview of Supervised Learning
+
+第3章 Linear Methods for Regression 
+
+第4章 Linear Methods for Classification
+
+第5章 Basis Expansions And Regularization
+
+第6章 Kernel Methods
+
+第7章 Model Assessment And Selection
+
+第8章 Model Inference And Averaging
+
+第9章 Additive Models And Trees
+
+第10章 Boosting And Additive Trees
+
+第11章 Neural Networks
+
+第12-14章节 略
+
+[jekyll]:      http://jekyllrb.com
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-help]: https://github.com/jekyll/jekyll-help
+

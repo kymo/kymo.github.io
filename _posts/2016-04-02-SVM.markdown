@@ -1,0 +1,123 @@
+---
+layout: post
+title:  "Support Vector Machine"
+date:  2016-04-01 19:24:56
+categories: tt
+---
+
+Support Vector Machine ，支持向量机，通常用来进行classification，但是也有做regression。SVM在面对非线性问题上具有独特的优势。本文从linear和nonlinear两种情况下对SVM的建模过程、优化目标的求解推导过程以及优化算法SMO进行阐述。
+
+1、  linear SVM
+
+在分类任务中，样本label为\({-1,1}\)，关于从sign distance转换到geometry distance的过程其实很容易理解，sign distance可以衡量某个样本被分类的置信，如果sign distance越大，那么该样本被分为该类别的可信度就更大；而geometry distance可以理解为样本距离超平面\(Y = w^TX + b\)的距离，是sign distance归一化的结果，求解目标为\(argmax(\frac {|w^Tx + b|)} {||w||})\)，并且需要满足约束：\(y_i(w^Tx_i + b) \geq 1\)，为了求解方便，可以不加证明的令\(|w^Tx+b|=1\)，形式化如下：
+
+\begin{cases}argmax \frac {1} {||w||} \\ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases}
+
+而此时最大化|w|可以转换为最小化|w|，并且最小化|w|和最小化\(\frac {1}{2} w^Tw\)等价，所以1.1可以变为：
+
+\begin{cases}argmmin \frac {1}{2} w^Tw \\ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases}
+
+由此可以得到不等式约束问题，原始问题通过分析不难发现，求解十分困难，不过对于PSO(粒子群算法)而言，往往可以求得比较好的解。不过在碰到这种带不等式约束的问题的时候，我们可以通过拉格朗日对偶性质将原始问题转化为对偶问题，在最大熵模型中也有类似的处理过程。首先构造拉格朗日函数：
+
+\[ L(w,b,\alpha) = \frac {1} {2} w^Tw - \sum_{i=1}^N a_i[y_i(w^Tx_i + b) - 1] \]
+
+首先我们可以得到这个函数的等价形式，令\(\theta = argmax_\alpha L(w,b,\alpha)\)，那么：
+
+\[\theta=\begin{cases}\frac {1} {2} w^Tw~~~y_i(w^Tx_i+b) \geq 1\\ \infty~~~~ y_i(w^Tx_i+b) < 1~~\end{cases}\]
+
+可见，\(min\theta\)和原始优化目标\(argmin \frac {1}{2}w^Tw\)等价。令\(p=min\theta\)，其对偶形式\(d=max_{\alpha}min_{w,b}L(w,\alpha)\)，那么必然会有\(p \geq d\)。此时令\(g=argmin_{w} L(w,b,\alpha)\)，\(g \leq L(w^*,b,\alpha) \leq \frac {1}{2} {w^*}^Tw^* = p\)，所以\(p \geq d\)。所以此时该算法满足弱对偶，我们可以通过求解该弱对偶问题去近似求解原始问题，在EM中就是不断优化极大似然下界~ 并且可以知道的是，不管原始问题是何种优化，对偶问题都会是凸优化，也即都会存在极值。不过在SVM中，我们是可以把弱对偶加强，变成strong duality，也即\(p = d\)，优化对偶问题等价于对原始问题的求解。那么怎么判断该对偶问题是强对偶问题呢？KKT条件。如下：
+
+\begin{cases}  \bigtriangledown L(w,b,\alpha) = 0 \\ \alpha_i(y_i(w^Tx_i+b) - 1) = 0\\ \alpha_i \geq 0 \end{cases}
+
+很明显，此时KKT条件成立，所以满足强对偶。其中\(y_i(w^Tx_i+b)-1) = 0\)但此时KKT只是必要条件，不过由于我们的原始问题是凸优化，所以KKT便是充要条件了。
+
+对对偶问题，首先是\(min_{w,b}L(w,b,\alpha)\)，分别对\(w\)和\(b\)求导，得：
+
+\[\frac {\partial L(w,\alpha,b)} {\partial(w)} = w - \sum_{i=1}^N \alpha_iy_ix_i=0\]
+
+\[\frac {\partial L(w,\alpha,b)} {\partial(b)} = \sum_{i=1}^N\alpha_iy_i=0\]
+
+随后，将\(w=\sum_{i=1}^N\alpha_iy_ix_i\)代入\(L(w,b,\alpha)\)中，则有：
+
+\begin{eqnarray*}
+L(w,\alpha,b)&=&\frac {1}{2} w^Tw - \sum_{i=1}^N\alpha_i[y_i(w^Tx_i+b)-1]\\&=&\frac{1}{2}\sum_{i=1}^N\alpha_iy_ix_i^T\sum_{j=1}^N\alpha_jy_jx_j - \sum_{i=1}^N\alpha_i[y_i(w^Tx_i+b)-1]\\ &=&\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j - \sum_{i=1}^N\alpha_i\sum_{j=1}^N\alpha_jy_jx_j^Tx_i + \sum_{i=1}^N\alpha_i\\&=&-\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j + \sum_{i=1}^N\alpha_i\end{eqnarray*}
+
+所以：
+
+\[\begin{cases}-\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j + \sum_{i=1}^N\alpha_i\\s.t~~~\sum_{i=1}^N\alpha_iy_i=0 \end{cases}\]
+
+到这，我们还没有考虑soft margin。实际情况中，总是会存在一定的噪声数据，使得我们的分类超平面被这些噪声数据所误导，从而使得模型的variance增大，所以一般来讲都会采用soft margin构建优化函数，我们以\(\varepsilon\)的范围容许一定的误差，即原来的\(y_i(w^Tx_i+b) \geq 1\)此时为\(y_i(w^Tx_i + b) \geq 1 - \varepsilon_i\)，所以我们的优化目标变为：
+
+\[\begin{cases}argmin \frac {1}{2} w^Tw + C\sum_{i=1}^N\varepsilon_i \\s.t ~~ y_i(w^Tx_i+b) \geq 1 - \varepsilon_i ~~i=1,2,\cdot \cdot ,n \\ \sum_{i=1}^N\varepsilon_i \geq C \end{cases}\]
+
+关于上式，可以看成是利用hinge loss加l2范数正则项的结果，SVM此时的损失函数可以表示为 \(min_{w,b} \sum_{i=1}^N [1-y_i(w^Tx_i+b)]_{+} + \lambda\|w\|^2 \)，其中如果\(z>0\)，那么\(z_{+}\)=z，否则等于0。如果令\(\varepsilon_i=1-y_i(w^Tx_i+b),\varepsilon_i \geq 0\)，那么此时最优化问题为 \(min_{w,b} \sum_{i=1}^N\varepsilon_i + \lambda\|w\|^2\)，如果取\(\lambda=\frac {1}{2C}\)，那么就和上述优化目标等价，所以可以看出，软间隔实际上是在ERM的基础上加了SRM~
+
+之后的推导没有多大差别，只不过在求导的过程中出现了\(\alpha_i = C - \varepsilon_i\)，又有前面在对偶转换使用的KKT条件之一\(\alpha_i(y_i(w^Tx_i+b) - 1) =0 \)可得，在分类超平面上的点，也即满足\(y_i(w^Tx_i+b)-1 + \varepsilon_i = 0\)，而那些不在超平面的点，必然有\(\alpha_i=0\)，而在超平面上的，则有\(0< \alpha_i < C\)，在超平面之外的则是\(\alpha_i=C\)。
+
+2.      nonlinear SVM
+
+非线性情况之下，利用线性曲线去拟合，明显会产生underfitting，但是我们可以通过函数映射的方式，将原来空间中的非线性特征，映射到高维空间中，使得样本可分或者近似可分，实际上是，机器学习中有一种叫做基展开的技术，就是处理这种线性到非线性的特征映射。不过对于SVM中使用这种非线性变化是因为它能够和核函数配合的天衣无缝。
+
+这里用一个简单的例子作简要说明。对于\(x=(x_1,x_2)\)二维空间的某个点，我们将其映射到三维空间。所利用的映射函数可以为\(\phi (x_1,x_2) = (x_1^2,x_2^2,2x_1x_2)\)，那么在三维空间中，样本线性可分的可能性更大，但是计算开销却上升了，因为在转化成对偶问题之后就产生了向量内积运算。对于原始二维空间中的两点\(p=(\eta_1,\eta_2),q=(\gamma_1,\gamma_2)\)，在三维空间中的向量内积为\(<\phi(\eta_1,\eta_2),\phi(\gamma_1,\gamma_2)> = \eta_1^2\gamma_1^2 + \eta_2^2\gamma_2^2 + 4\eta_1\eta_2\gamma_1\gamma_2\)，这和\(\eta_1^2\gamma_1^2 + \eta_2^2\gamma_2^2 + 2\eta_1\eta_2\gamma_1\gamma_2\)十分相似，而后者却等于\(<(\eta_1,\eta_2), (\gamma_1, \gamma_2)>^2\)，所以只需要令\(\phi(x_1,x_2) = (x_1^2, x_2^2, \sqrt {2} x_1x_2)\)，就可以得到\(<\phi(\eta_1,\eta_2),\phi(\gamma_1,\gamma_2)>\)=\(<(\eta_1,\eta_2), (\gamma_1, \gamma_2)>^2\)~ 由此可以推广到高维。不难看出在高维空间中的内积可以通过在原始空间内积的平方得到~此时\(K(p,q) = <\phi(\eta_1,\eta_2), \phi(\gamma_1, \gamma_2)>\)=\(<p,q>^2\)。对偶转换之后只需要将\(x_i,x_j\)的内积运算更换成\(K(x_i,x_j)\)，即可处理非线性数据~
+
+3.     SMO
+
+SMO本质上上一种坐标上升优化算法，坐标上升可以理解为在\(p\)维向量构成的空间中，每次选择一个维度进行优化，最终能够求得比较合适的解。SMO每次选择两个参数，因为此时待求变量有\(\sum_{i=1}^N\alpha_iy_i =0\)的约束。SMO的优化过程如下：
+
+选择\(\alpha_i, \alpha_j\)
+固定其他参数，然后对\(\alpha_i, \alpha_j\)进行优化
+利用\(\alpha_i, \alpha_j\)，对截距进行优化
+在了解确切的\(\alpha_i,\alpha_j\)贪心选择策略之前，先假定我们已经将\(\alpha_i,\alpha_j\)选择妥当，然后直接对\(\alpha_i,\alpha_j\)进行优化。根据条件\(\sum_{k=1}^N\alpha_ky_k=0\)，令\(A = y_i\sum_{k!=i,j}^N\alpha_ky_k\). 那么\(\alpha_i,\alpha_j\)的关系为\(\alpha_i = A - y_iy_j\alpha_j\)。此时我们的优化目标\[max_{\alpha} L(\alpha) = \sum_{k=1}^N\alpha_k - \frac{1}{2} \sum_{l=1}^N\sum_{k=1}^N\alpha_l\alpha_ky_ly_kK_{l,k}\]
+
+其中，\(K_{l,k} = K(x_l, x_j)\)，令\(B = \sum_{k!=i,j}\alpha_k, S = y_iy_j, V_i = \sum_{k!=i,j}\alpha_ky_kK_{i,k}, V_j =\sum_{k!=i,j}\alpha_ky_kK_{j,k}\)，那么有：
+
+\begin{eqnarray*} L(\alpha) &=& \sum_{k!=i,j}^N\alpha_k + \alpha_i + \alpha_j - \frac {1}{2}[\alpha_i\alpha_i y_iy_iK_{i,i} + \alpha_j\alpha_jy_jy_jK_{j,j} + 2\alpha_i\alpha_jy_iy_jK_{i,j} + 2\sum_{k!=i,j}^N\alpha_i\alpha_ky_iy_kK_{i,k} + 2\sum_{k!=i,j}^N\alpha_j\alpha_ky_jy_kK_{j,k} + \sum_{l!=i,j}^N \sum_{k!=i,j}^N\alpha_l\alpha_ky_ly_kK_{l,k}] \\                                                               &=& B + A - S\alpha_j + \alpha_j - \frac{1}{2} [2\alpha_i\alpha_jSK_{i,j} + \alpha_i^2K_{i,i} + \alpha_j^2K_{j,j} + 2\alpha_iy_iV_i + 2\alpha_jy_jV_j +  \sum_{l!=i,j}^N \sum_{k!=i,j}^N\alpha_l\alpha_ky_ly_kK_{l,k}]    \\                                                          &=&-S\alpha_j + \alpha_j  - \frac{1}{2}K_{i,i}(A-S\alpha_j)^2 - \frac{1}{2} K_{j,j}\alpha_j^2 - K_{i,j}\alpha_j(A-S\alpha_j)S - \alpha_jy_jV_j - (A-S\alpha_j)y_iV_i + \varepsilon_{constant} \end{eqnarray*}
+
+其中，\(\varepsilon_{constant}\)为一些常量，在求极值点是可以忽略，上式对\(\alpha_j\)求导，有：
+
+\begin{eqnarray*} \frac {\partial_{L(\alpha_j)}} {\partial_{\alpha_j}} &=& -S + 1 + ASK_{i,i} -K_{i,i}\alpha_j - K_{j,j}\alpha_j -ASK_{i,j} + 2K_{i,j}\alpha_j -y_jV_j + Sy_iV_i=0 \\ \alpha_j&=& \frac {-S + 1 + AS(K_{i,i}-K_{i,j}) + y_j(V_i-V_j)}{K_{i,i} + K_{j,j} - 2K_{i,j}} \end{eqnarray*}
+
+又有优化\(\alpha_i,\alpha_j\)的时候，其他参数没有被改变。
+
+\begin{eqnarray*}\alpha_iy_i+\alpha_jy_j&=& -\sum_{k!=i,j}\alpha_k^{old}y_k=\alpha_i^{old}y_i + \alpha_j^{old}y_j \\ V_i &=& \sum_{k!=i,j}\alpha_ky_kK_{i,k}=\sum_{k!=i,j}\alpha_k^{old}y_kK_{i,k} = \sum_{k=1}^N\alpha_k^{old}y_kK_{i,k} + b - b - \alpha_i^{old}y_iK_{i,i} - \alpha_j^{old}y_jK_{i,j} \\ V_j & = &\sum_{k!=i,j}\alpha_ky_kK_{j,k}=\sum_{k!=i,j}\alpha_k^{old}y_kK_{j,k} = \sum_{k=1}^N\alpha_k^{old}y_kK_{j,k} + b - b - \alpha_j^{old}y_jK_{j,j} - \alpha_i^{old}y_iK_{i,j}  \end{eqnarray*}
+
+且\(g(x_i) = \sum_{k=1}^N\alpha_k^{old}y_kK_{i,k} + b\)，\(g(x_j) = \sum_{k=1}^N\alpha_k^{old}y_kK_{j,k} + b\)，所以：
+
+\[V_i - V_j = g(x_i) - g(x_j) - \alpha_i^{old}y_iK_{i,i} + \alpha_j^{old}y_jK_{j,j} - \alpha_j^{old}y_jK_{i,j} + \alpha_i^{old}y_iK_{i,j} \]
+
+然后，将A = \(\alpha_i^{old}+S\alpha_j^{old}\)，S=\(y_iy_j\)代入\(\alpha_j\)表达式，可得：
+
+\begin{eqnarray*}\alpha_j &=& \frac {y_jy_j - y_iy_j +(\alpha_i^{old}+y_iy_j\alpha_j^{old})y_iy_j(K_{i,i}-K_{i,j}) + y_j(g(x_i) - g(x_j) - \alpha_i^{old}y_iK_{i,i} + \alpha_j^{old}y_jK_{j,j} - \alpha_j^{old}y_jK_{i,j} + \alpha_i^{old}y_iK_{i,j})} {K_{i,i} + K_{j,j} - 2K_{i,j}} \\ &=& \frac {y_j[y_j-y_i + y_j\alpha_j^{old}(K_{i,i} + K_{j,j} - 2K_{i,j} + g(x_i) - g(x_j) ]} {K_{i,i} + K_{j,j} - 2K_{i,j}}\\ &=& \alpha_j^{old} + \frac{y_j[y_j-y_i + g(x_i)-g(x_j)]} {K_{i,i} + K_{j,j} - 2K_{i,j}}\end{eqnarray*}
+
+然后令\(E_i = g(x_i) - y_i\)，\(\eta = K_{i,i} + K_{j,j} - 2K{i,j}\)，\(\alpha_j^{new,unc} = \alpha_j^{old} + \frac {y_j(E_i - E_j)} {\eta}\)，此时求出的\(\alpha_j\)还需要经过边界判定，对\(\alpha_i,\alpha_j\)有\(\alpha_iy_i + \alpha_jy_j = \alpha_i^{old} + \alpha_j^{old}\)和\(0<=\alpha_i<=C\)，\(0<=\alpha_j<=C\)的条件限制，所以必须对\(\alpha_i, \alpha_j\)的上下边界\(L,H\)进行确认。
+
+如果\(y_i = y_j\)，那么\(L= max(0, \alpha_j^{old} - \alpha_i^{old})\)，\(H=min(C,C+\alpha_j^{old} - \alpha_i^{old})\)
+如果\(y_i!=y_j\)，那么\(L=max(0, \alpha_j^{old} + \alpha_i^{old} - C)\)，\(H=min(C,\alpha_j^{old} + \alpha_i^{old})\)
+根据上式可以得到\(\alpha_j^{new}\)为：
+
+\[\alpha_j^{new} = \begin{cases} H,~~~\alpha_j^{new,unc} > H \\ \alpha_j^{new,unc},~~~~~ L<=\alpha_j^{new,unc}<=H \\ L,~~~~~\alpha_j^{new,unc} < L \end{cases}\]
+
+由此可以得到\(\alpha_i^{new}= \alpha_i^{old} + y_iy_j(\alpha_j^{old} - \alpha_j^{new})\)。
+
+关于\(alpha_i, \alpha_j\)的更新策略完成，但是对于上式中的bias也需要进行更新，以保证KKT条件\(\alpha_j(y_j(\sum_{i=1}^N\alpha_iy_iK_{i,j} + b) - 1) = 0\)成立。
+
+当\(0< \alpha_i^{new} < C\)，\(y_i(\sum_{k=1}^N\alpha_ky_kK_{i,k}+b) = 1\) ，所以\(b_1^{new} = y_i - \sum_{k!=i,j}^N\alpha_ky_kK_{i,k} - \alpha_i^{new}y_iK_{i,i} - \alpha_j^{new}y_jK_{i,j}\)，又知\(E_i = g(x_i) - y_i = \sum_{k=1}^N\alpha_ky_kK_{i,k} + b^{old} - y_i\)，此时除\(\alpha_i,\alpha_j\)以外的都不会发生变化，所以\(E_i = \sum_{k!=i,j}^N\alpha_ky_kK_{k,i} + \alpha_i^{old}y_iKii + \alpha_j^{old}y_jK_{i,j} + b^{old} - y_i\)，也即 \(b_i^{new} = -E_i - y_iK_{i,i}(\alpha_i^{new} - \alpha_i^{old}) - y_jK_{i,j}(\alpha_j^{new} - \alpha_j^{old}) + b^{old}\)
+同1，当\(0< \alpha_j^{new} < C\)，则\(b_2^{new} = -E_j - y_iK_{i,j}(\alpha_i^{new} - \alpha_i^{old}) - y_jK_{j,j}(\alpha_j^{new} - \alpha_j^{old}) + b^{old}\)
+如果\(\alpha_i^{new}\)和\(\alpha_j^{new}\)都满足条件，则\(b_1^{new}\)=\(b_2^{new}\)
+如果\(\alpha_i^{new}\)、\(\alpha_j^{new}\)为0或者C，那么取\(b_1^{new}\)和\(b_2^{new}\)的中值即可
+至此，SMO算法结束，不过实际中，需要实时更新\(E_i\)，所以在更新完bias之后，再利用已有的信息重新更新\(E_i\)即可。
+
+最终实现见：SVM@GITHUB
+
+参考资料
+
+李航 《统计学习方法》
+
+http://www.cnblogs.com/jerrylead/archive/2011/03/18/1988419.html
+
+
+
+[jekyll]:      http://jekyllrb.com
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-help]: https://github.com/jekyll/jekyll-help
+
