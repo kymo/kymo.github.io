@@ -4,8 +4,22 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll tsdfafheme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Master In Wuhan University, and believe that technology will change the world and help prolong the human civilization.
 
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
+I love cooking, reading, handwriting, and I am learning Gita right now.
 
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+Currently, I just focus on the application(performance optimization & product oriented) of Machine Learning and Statistics Theory.
+
+Email: kymowind@gmail.com
+
+Weibo: [Aron](http://weibo.com/aronlovesong)
+
+Facebook: Aron
+
+Github: [Aron](https://github.com/kymo)
+
+LinkedIn: Aron
+
+Douban: Aron
+
+CV: [Aron](/public/file/cv.pdf)
