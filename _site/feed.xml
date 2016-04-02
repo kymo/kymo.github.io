@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 02 Apr 2016 23:42:11 +0800</pubDate>
-    <lastBuildDate>Sat, 02 Apr 2016 23:42:11 +0800</lastBuildDate>
+    <pubDate>Sat, 02 Apr 2016 23:55:14 +0800</pubDate>
+    <lastBuildDate>Sat, 02 Apr 2016 23:55:14 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -38,6 +38,58 @@
         
         
         <category>machinelearning</category>
+        
+      </item>
+    
+      <item>
+        <title>Probability Latent Semantic Analysis</title>
+        <description>&lt;p&gt;pLSA是一种Topic Model，全称概率潜在语义分析，将文本的高维稀疏向量表示成低位维稠密向量。它是一种无监督学习方法，假设整个文档集合是由若干个主题组成，某一篇文章都以一定的概率(p(z|d))属于某一主题，在给定主题的情况下，每个词汇都以一定的概率(p(w|z))产生。
+pLSA是基于这样一个假设，假设文档和主题的分布以及主题和词汇的分布都是多项式分布，因此一个词汇的生成过程可以表示为：
+	以一定的概率生成一篇文档
+	在该文档中按照文档主题分布选择一个主题
+	在该主题下面，按照主题-词汇分布生成一个词汇
+可以得到如下模型：(p(w,d)=p(d)p(w|d);~~~~p(w|d)=\sum_{z=1}p(z|d)p(w|z))，其中z为主题，w为词，d为文档。其实这个过程也很容易理解，假设现在我们要写篇paper，在动笔之前，会列好提纲，大概选择几个点(也就是主题)去稀疏，在充实这些主题的过程中，我们会去选择和这个主题相关的词进行修饰，比如写到关于pLSA的文章的时候，我们会选择”建模、概率、主题模型、极大似然“等词去完善这个主题。在得到模型之后，我们就需要进行Model Inference，也就是参数估计了，pLSA作为概率学派的经典之一，一般是采用MLE作为inference的tool。
+首先构造极大似然函数：(L(\theta) = \prod_{i=1}^N\prod_{j=1}^Np(d_i,w_j)^{n(d_i,w_j)})，其中(n(d_i,w_j))表示的是词(w_j)在和文档(d_i)的共现频率，由于我们(p(w|z))和(p(z|d))都是多项式分布，&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    接着，是参数估计，一般而言，此时可以选用极大似然估计。极大对数似然函数如下：
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果直接求导的话，很明显就得需要求解(n+m)个方程， 明显不可取。
+可以采用EM算法，EM算法的基本思想，随机初始化相关参数。随后，在E步，计算潜在变量的后验概率。M步，利用潜在变量的后验概率去更新未知参数。
+问题：为什么可以收敛？
+在e步：&lt;/p&gt;
+
+&lt;p&gt;M步，最大化极大似然期望：&lt;/p&gt;
+
+&lt;p&gt;又由于此时：&lt;/p&gt;
+
+&lt;p&gt;所以：&lt;/p&gt;
+
+&lt;p&gt;利用Jensen不等式，对于凸函数有：&lt;/p&gt;
+
+&lt;p&gt;可以得到：&lt;/p&gt;
+
+&lt;p&gt;此时即转化为，对于约束条件： ，求E’(L)的最大值。
+很显然可以构造拉格朗日乘法进行求解：&lt;/p&gt;
+
+&lt;p&gt;分别对 求导可得：&lt;/p&gt;
+
+&lt;p&gt;联立方程组(1),(2),(3),(4)求解可得：&lt;/p&gt;
+
+&lt;p&gt;因此，在M步更求新参数，通过不断迭代，如果求得的极大似然趋近收敛，则训练结束。
+总结一下：
+E步：求当前估计的参数条件下的后验概率：p(z|w,d)
+M步：最大化complete data(加上隐藏变量主题)极大似然估计的期望
+E步和M步循环迭代，直至收敛。
+实现的源码见：plsa.cpp plsa.h ，由于切词用到了公司的lib库，所以切词的初始化和切词的过程在源码中被删去，可以去中科院nlp主页获取相关模块。&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
+        <link>http://kymo.github.io/naturallanguageprocessing/2016/04/02/pLSA.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/naturallanguageprocessing/2016/04/02/pLSA.html</guid>
+        
+        
+        <category>naturallanguageprocessing</category>
         
       </item>
     
@@ -297,11 +349,11 @@ Beta[t][i] = sigma(j=1,N){Beta[t+1][j] * A[j][i] * B[j][t+1]}&lt;/p&gt;
 
 </description>
         <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
-        <link>http://kymo.github.io/tt/2016/04/02/HMM.html</link>
-        <guid isPermaLink="true">http://kymo.github.io/tt/2016/04/02/HMM.html</guid>
+        <link>http://kymo.github.io/machinelearning/2016/04/02/HMM.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/HMM.html</guid>
         
         
-        <category>tt</category>
+        <category>machinelearning</category>
         
       </item>
     
@@ -340,6 +392,159 @@ Beta[t][i] = sigma(j=1,N){Beta[t+1][j] * A[j][i] * B[j][t+1]}&lt;/p&gt;
         
         
         <category>machinelearning</category>
+        
+      </item>
+    
+      <item>
+        <title>Dynamic Programming</title>
+        <description>&lt;h3 id=&quot;dp&quot;&gt;状态压缩DP&lt;/h3&gt;
+&lt;p&gt;状态压缩一般适用于状态非常多的动态规划问题，之所以叫状态压缩DP，是因为在动态规划的过程中，通过位压缩技术，可以压缩状态空间，而状态压缩问题一般都伴随着问题的条件限制，比如说相邻不能相同，或者相隔n个单元不能相同等。&lt;/p&gt;
+
+&lt;p&gt;来个例子说明这个问题&lt;/p&gt;
+
+&lt;p&gt;对于poj 3254，问题抽离出来的大意是，有个一部分空格无法填入值的矩阵，然后让你在剩余空格中填入0或者1，并且相邻空格不能填1，问最终由多少种填法。&lt;/p&gt;
+
+&lt;p&gt;我们将一行填入0,1之后看成一个二进制数state，但是此时如果列数很多的情况的话，时间复杂度还是不可小觑的，所以当加入一些条件，比如上述问题中的相邻空格不能为1，就可以将状态进一步压缩，对于某个状态i，如果i &amp;amp; (i « 1) 不为0 的话，说明此时i的二进制格式中，必然有相邻的1。所以进一步压缩，新的状态总数必然要减少很多。而新的state可以作为这一行的此时的状态，当然是否合法还需要按照当前行的可填入空格的情况而论的。&lt;/p&gt;
+
+&lt;p&gt;稍微分析可知，当第i行状态为state时，此时总的方案数必然是第i-1行合法状态的累加。&lt;/p&gt;
+
+&lt;p&gt;状态表示：dp[i][state] 表示第i行的状态为state，此时获得的最大方案数；&lt;/p&gt;
+
+&lt;p&gt;状态方程转移：dp[i][state] = Add(dp[i - 1][_state])，此时state为第i行状态，_state为第i-1行状态；&lt;/p&gt;
+
+&lt;p&gt;代码见：https://github.com/kymo/acm/blob/master/POJ/ztysdp_3254.cpp&lt;/p&gt;
+
+&lt;h3 id=&quot;dp-1&quot;&gt;树形DP&lt;/h3&gt;
+
+&lt;p&gt;由于树本身的递归特性，所以在树上进行DP则是再好不过的了，父节点的状态在递归的时候，通过栈返回的子节点的状态得到更新。这里举出两个例子。&lt;/p&gt;
+
+&lt;p&gt;例(poj2432):
+有n个人，每个人有个给定的价值，并给出两两之间的上下级关系，求一个集合，使得集合元素不存在上下级关系，且他们的价值和最大？&lt;/p&gt;
+
+&lt;p&gt;稍微分析一下，得知某个节点的状态有两种，选入集合或者不选入集合。由此我们可以令：
+D[i][0]表示不选节点i，以i节点为根节点的子树得到的最大值
+D[i][1]表示选了节点i，以i节点为根节点的子树得到的最大值
+由此可以得到我们的DP方程如下：&lt;/p&gt;
+
+&lt;p&gt;代码:&lt;a href=&quot;https://github.com/kymo/acm/blob/master/POJ/2342.cpp&quot;&gt;https://github.com/kymo/acm/blob/master/POJ/2342.cpp&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;POJ 1463题目大意如此，只不过在本题是安排士兵的位置，状态方程和&lt;/p&gt;
+
+&lt;p&gt;例(HDU 2196)
+有n(n 最大为10^4)个节点的树，每条边有一定的距离，求距离每一个节点最远的距离值。
+按照常规思路的话，可能是用最短路算法，但是n的数据范围不允许我们如此暴力。仔细分析下，在树的父子结构一定的情况下，每个节点最长的距离的值必然和子节点和父节点相关，&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
+        <link>http://kymo.github.io/algorithm/2016/04/02/DP.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/algorithm/2016/04/02/DP.html</guid>
+        
+        
+        <category>algorithm</category>
+        
+      </item>
+    
+      <item>
+        <title>Bit Manupulation</title>
+        <description>&lt;p&gt;Using bit manupulation to solve the Eight-Queen &amp;amp; Sudoku Problems. Sometime it seems that using bit manupulation can make the problem easy to be interpretated.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Sodoku Problem&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;01 class Solution {
+02     public: bool dfs(vector &amp;lt; int &amp;gt; &amp;amp;empty_sells, vector &amp;lt; vector &amp;lt; char &amp;gt; &amp;gt;&amp;amp;board, int start, int * col, int * row, int* grid) {
+03         if (start == empty_sells.size()) return true;
+04         int r = empty_sells[start] / 9;
+05         int c = empty_sells[start] % 9;
+06         int cur_val = col
+[c][/c]
+ | row[r] | grid[(r / 3) * 3 + c / 3];
+07
+08         for (int j = 1; j &amp;lt;= 9; j++) {
+09             if ((cur_val | (1 « (j - 1))) ^ cur_val) {
+10                 col
+[c][/c]
+ |= (1 « (j - 1));
+11                 row[r] |= (1 « (j - 1));
+12                 grid[(r / 3) * 3 + c / 3] |= (1 « (j - 1));
+13                 board[r]
+[c][/c]
+ = ‘0’ + j;
+14                 if (dfs(empty_sells, board, start + 1, col, row, grid)) {
+15                     return true;
+16                 }
+17                 board[r]
+[c][/c]
+ = ‘.’;
+18                 col
+[c][/c]
+ ^= (1 « (j - 1));
+19                 row[r] ^= (1 « (j - 1));
+20                 grid[(r / 3) * 3 + c / 3] ^= (1 « (j - 1));
+21             }
+22         }
+23         return false;
+24
+25     }
+26     void solveSudoku(vector &amp;lt; vector &amp;lt; char &amp;gt; &amp;gt;&amp;amp;board) {
+27         int col[9],
+28         row[9],
+29         grid[9];
+30         memset(col, 0, sizeof(col));
+31         memset(row, 0, sizeof(row));
+32         memset(grid, 0, sizeof(grid));
+33         vector &amp;lt; int &amp;gt; empty_sells;
+34         for (int j = 0; j &amp;lt; board.size(); j++) {
+35             for (int k = 0; k &amp;lt; board[0].size(); k++) {
+36                 if (board[j][k] != ‘.’) {
+37                     row[j] |= (1 « (board[j][k] - ‘0’ - 1));
+38                     col[k] |= (1 « (board[j][k] - ‘0’ - 1));
+39                     grid[(j / 3) * 3 + k / 3] |= (1 « (board[j][k] - ‘0’ - 1));
+40                 } else {
+41                     empty_sells.push_back(j * 9 + k);
+42                 }
+43             }
+44         }
+45         dfs(empty_sells, board, 0, col, row, grid);
+46     }
+47 };&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Eight Queens&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;01 void search(int n, vector&lt;string&gt; &amp;amp;matrix, int cur, int col, int left, int right) {
+02         if (cur == n) {
+03             ans.push_back(matrix);
+04             return;
+05         }
+06         for (int j = 0; j &amp;lt; n; j ++) {
+07             if (((col &amp;gt;&amp;gt; j) % 2) || ((left &amp;gt;&amp;gt; (cur + j)) % 2) || ((right &amp;gt;&amp;gt; (cur + n - 1 - j)) % 2)) continue;
+08             matrix[cur][j] = &#39;Q&#39;;
+09             search(n, matrix, cur + 1, col | (1 &amp;lt;&amp;lt; j), left | (1 &amp;lt;&amp;lt; (cur + j)), right | (1 &amp;lt;&amp;lt; (cur + n - 1 - j)));
+10             matrix[cur][j] = &#39;.&#39;;
+11         }
+12     }
+13     vector&amp;lt;vector&lt;string&gt; &amp;gt; solveNQueens(int n) {
+14         col = left = right = 0;
+15         vector&lt;string&gt; matrix;
+16         string str = &quot;&quot;;
+17         for (int j = 0; j &amp;lt; n; j ++) str += &quot;.&quot;;
+18         for (int i = 0; i &amp;lt; n; i ++) {
+19             matrix.push_back(str);
+20         }
+21         search(n, matrix, 0, 0, 0, 0);
+22         return ans;
+23     }&lt;/string&gt;&lt;/string&gt;&lt;/string&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
+        <link>http://kymo.github.io/algorithm/2016/04/02/Bit.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/algorithm/2016/04/02/Bit.html</guid>
+        
+        
+        <category>algorithm</category>
         
       </item>
     

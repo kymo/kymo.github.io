@@ -1,0 +1,100 @@
+---
+layout: post
+title:  "Bit Manupulation"
+date:  2016-04-01 19:24:56
+categories: algorithm
+---
+Using bit manupulation to solve the Eight-Queen & Sudoku Problems. Sometime it seems that using bit manupulation can make the problem easy to be interpretated.
+
+1. Sodoku Problem
+
+01 class Solution {
+02     public: bool dfs(vector < int > &empty_sells, vector < vector < char > >&board, int start, int * col, int * row, int* grid) {
+03         if (start == empty_sells.size()) return true;
+04         int r = empty_sells[start] / 9;
+05         int c = empty_sells[start] % 9;
+06         int cur_val = col
+[c][/c]
+ | row[r] | grid[(r / 3) * 3 + c / 3];
+07
+08         for (int j = 1; j <= 9; j++) {
+09             if ((cur_val | (1 << (j - 1))) ^ cur_val) {
+10                 col
+[c][/c]
+ |= (1 << (j - 1));
+11                 row[r] |= (1 << (j - 1));
+12                 grid[(r / 3) * 3 + c / 3] |= (1 << (j - 1));
+13                 board[r]
+[c][/c]
+ = '0' + j;
+14                 if (dfs(empty_sells, board, start + 1, col, row, grid)) {
+15                     return true;
+16                 }
+17                 board[r]
+[c][/c]
+ = '.';
+18                 col
+[c][/c]
+ ^= (1 << (j - 1));
+19                 row[r] ^= (1 << (j - 1));
+20                 grid[(r / 3) * 3 + c / 3] ^= (1 << (j - 1));
+21             }
+22         }
+23         return false;
+24
+25     }
+26     void solveSudoku(vector < vector < char > >&board) {
+27         int col[9],
+28         row[9],
+29         grid[9];
+30         memset(col, 0, sizeof(col));
+31         memset(row, 0, sizeof(row));
+32         memset(grid, 0, sizeof(grid));
+33         vector < int > empty_sells;
+34         for (int j = 0; j < board.size(); j++) {
+35             for (int k = 0; k < board[0].size(); k++) {
+36                 if (board[j][k] != '.') {
+37                     row[j] |= (1 << (board[j][k] - '0' - 1));
+38                     col[k] |= (1 << (board[j][k] - '0' - 1));
+39                     grid[(j / 3) * 3 + k / 3] |= (1 << (board[j][k] - '0' - 1));
+40                 } else {
+41                     empty_sells.push_back(j * 9 + k);
+42                 }
+43             }
+44         }
+45         dfs(empty_sells, board, 0, col, row, grid);
+46     }
+47 };
+
+2. Eight Queens
+
+
+01 void search(int n, vector<string> &matrix, int cur, int col, int left, int right) {
+02         if (cur == n) {
+03             ans.push_back(matrix);
+04             return;
+05         }
+06         for (int j = 0; j < n; j ++) {
+07             if (((col >> j) % 2) || ((left >> (cur + j)) % 2) || ((right >> (cur + n - 1 - j)) % 2)) continue;
+08             matrix[cur][j] = 'Q';
+09             search(n, matrix, cur + 1, col | (1 << j), left | (1 << (cur + j)), right | (1 << (cur + n - 1 - j)));
+10             matrix[cur][j] = '.';
+11         }
+12     }
+13     vector<vector<string> > solveNQueens(int n) {
+14         col = left = right = 0;
+15         vector<string> matrix;
+16         string str = "";
+17         for (int j = 0; j < n; j ++) str += ".";
+18         for (int i = 0; i < n; i ++) {
+19             matrix.push_back(str);
+20         }
+21         search(n, matrix, 0, 0, 0, 0);
+22         return ans;
+23     }
+
+
+[jekyll]:      http://jekyllrb.com
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-help]: https://github.com/jekyll/jekyll-help
+
