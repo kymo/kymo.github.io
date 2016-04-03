@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 03 Apr 2016 09:31:57 +0800</pubDate>
-    <lastBuildDate>Sun, 03 Apr 2016 09:31:57 +0800</lastBuildDate>
+    <pubDate>Sun, 03 Apr 2016 16:53:14 +0800</pubDate>
+    <lastBuildDate>Sun, 03 Apr 2016 16:53:14 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -18,18 +18,24 @@
 
 &lt;p&gt;一般模型的性能某种程度取决于数据集的大小，也即观测样本的覆盖度。数据集过大对于一般模型可能会导致训练过拟合或者训练性能瓶颈，此时则可以切分数据集，在子数据集上单独训练模型，然后按照某种组合策略构建committee。数据集过小对于一般模型则会欠拟合，此时可以使用bootstrap等抽样方法，在每一份抽样样本中单独训练模型，组成committee。&lt;/p&gt;
 
-&lt;p&gt;一般而言，样本的分类边界十分复杂，如果仅仅使用一般的模型，则很难学习出能够较好拟合样本的分类边界。但是如果使用集成学习框架，通过学习多个子模型，则能够很好的学习出该分类边界。&lt;/p&gt;
+&lt;p&gt;一般而言，样本的分类边界十分复杂，如果仅仅使用一般的模型，则很难学习出能够较好拟合样本的分类边界。
+但是如果使用集成学习框架，通过学习多个子模型，则能够很好的学习出该分类边界。&lt;/p&gt;
 
-&lt;p&gt;另外，如果我们收集到的数据来源很多，导致数据的类型、维度不同，如果将所有来源的数据都放在同一个向量中，可能会降低模型的学习能力。但是假如我们在不同来源的数据中根据该数据特性或者其他先验知识单独训练模型，则效果一般都会好很多。今天看了一篇关于新浪微博垃圾用户检测的论文，研究现状里就提到了采用这种思想的方法，通过观测，发现垃圾用户一般有三种行为：广告、重复转发和恶意关注，然后根据这三种类型去抽取特征，得到三种类型的特征向量之后，然后分别在三种特征上进行子模型训练，最后效果也还不错。&lt;/p&gt;
+&lt;p&gt;另外，如果我们收集到的数据来源很多，导致数据的类型、维度不同，如果将所有来源的数据都放在同一个向量中，可能会降低模型的学习能力。
+但是假如我们在不同来源的数据中根据该数据特性或者其他先验知识单独训练模型，则效果一般都会好很多。
+今天看了一篇关于新浪微博垃圾用户检测的论文，研究现状里就提到了采用这种思想的方法，通过观测，发现垃圾用户一般有三种行为：广告、重复转发和恶意关注，然后根据这三种类型去抽取特征，得到三种类型的特征向量之后，然后分别在三种特征上进行子模型训练，最后效果也还不错。&lt;/p&gt;
 
 &lt;p&gt;此外，集成学习框架还可以用来对结果进行评估，可以根据committee中的子模型的vote去计算。&lt;/p&gt;
 
 &lt;p&gt;有人总结了使用ensemble learning的三大原因：&lt;/p&gt;
 
-&lt;p&gt;统计学，已知样本无法完成的表达原始数据的生成分布，通过bootstrap等方法，可以尽量的拟合原始分布训练模型。
-可计算，体现于模型选择，通过模型融合的解决方案将缺乏模型先验知识的人从单模型调优中解放出来。
-任意拟合，单模型无法拟合出复杂分类边界，则模型融合则很好的解决了这一问题。
-参考文献 http://www.scholarpedia.org/article/Ensemble_learning&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;统计学，已知样本无法完成的表达原始数据的生成分布，通过bootstrap等方法，可以尽量的拟合原始分布训练模型。&lt;/li&gt;
+  &lt;li&gt;可计算，体现于模型选择，通过模型融合的解决方案将缺乏模型先验知识的人从单模型调优中解放出来。&lt;/li&gt;
+  &lt;li&gt;任意拟合，单模型无法拟合出复杂分类边界，则模型融合则很好的解决了这一问题。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参考文献 &lt;a href=&quot;http://www.scholarpedia.org/article/Ensemble_learning&quot;&gt;http://www.scholarpedia.org/article/Ensemble_learning&lt;/a&gt;&lt;/p&gt;
 
 </description>
         <pubDate>Sun, 03 Apr 2016 03:24:56 +0800</pubDate>
@@ -43,45 +49,84 @@
     
       <item>
         <title>Probability Latent Semantic Analysis</title>
-        <description>&lt;p&gt;pLSA是一种Topic Model，全称概率潜在语义分析，将文本的高维稀疏向量表示成低位维稠密向量。它是一种无监督学习方法，假设整个文档集合是由若干个主题组成，某一篇文章都以一定的概率(p(z|d))属于某一主题，在给定主题的情况下，每个词汇都以一定的概率(p(w|z))产生。
-pLSA是基于这样一个假设，假设文档和主题的分布以及主题和词汇的分布都是多项式分布，因此一个词汇的生成过程可以表示为：
-	以一定的概率生成一篇文档
-	在该文档中按照文档主题分布选择一个主题
-	在该主题下面，按照主题-词汇分布生成一个词汇
-可以得到如下模型：(p(w,d)=p(d)p(w|d);~~~~p(w|d)=\sum_{z=1}p(z|d)p(w|z))，其中z为主题，w为词，d为文档。其实这个过程也很容易理解，假设现在我们要写篇paper，在动笔之前，会列好提纲，大概选择几个点(也就是主题)去稀疏，在充实这些主题的过程中，我们会去选择和这个主题相关的词进行修饰，比如写到关于pLSA的文章的时候，我们会选择”建模、概率、主题模型、极大似然“等词去完善这个主题。在得到模型之后，我们就需要进行Model Inference，也就是参数估计了，pLSA作为概率学派的经典之一，一般是采用MLE作为inference的tool。
-首先构造极大似然函数：(L(\theta) = \prod_{i=1}^N\prod_{j=1}^Np(d_i,w_j)^{n(d_i,w_j)})，其中(n(d_i,w_j))表示的是词(w_j)在和文档(d_i)的共现频率，由于我们(p(w|z))和(p(z|d))都是多项式分布，&lt;/p&gt;
+        <description>&lt;p&gt;pLSA是一种主题模型(Topic Model)，全称概率潜在语义分析，是一种将文本的高维稀疏向量表示成低位维稠密向量的映射方法。
+它是一种无监督学习方法，假设整个文档集合是由若干个主题组成，某一篇文章都以一定的概率&lt;script type=&quot;math/tex&quot;&gt;p(z \mid d)&lt;/script&gt;属于某一主题;在给定主题的情况下，以&lt;script type=&quot;math/tex&quot;&gt;p(w \mid z)&lt;/script&gt;的概率产生文档的词。
+pLSA是基于这样一个假设，假设文档和主题的分布以及主题和词汇的分布都是多项式分布，因此一个词汇的生成过程可以表示为：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;    接着，是参数估计，一般而言，此时可以选用极大似然估计。极大对数似然函数如下：
-&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+  &lt;li&gt;以一定的概率生成一篇文档&lt;/li&gt;
+  &lt;li&gt;在该文档中按照文档主题分布选择一个主题&lt;/li&gt;
+  &lt;li&gt;在该主题下面，按照主题-词汇分布生成一个词汇&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;如果直接求导的话，很明显就得需要求解(n+m)个方程， 明显不可取。
-可以采用EM算法，EM算法的基本思想，随机初始化相关参数。随后，在E步，计算潜在变量的后验概率。M步，利用潜在变量的后验概率去更新未知参数。
-问题：为什么可以收敛？
-在e步：&lt;/p&gt;
+&lt;p&gt;可以得到如下模型&lt;script type=&quot;math/tex&quot;&gt;p(w,d)=p(d)p(w \mid d); p(w \mid d)=\sum_{z=1}p(z \mid d)p(w \mid z)&lt;/script&gt;，其中z为主题，w为词，d为文档。
+其实这个过程也很容易理解，假设现在我们要写篇paper，在动笔之前，会列好提纲，大概选择几个点(也就是主题)。
+在完善这些主题的过程中，我们会在积累的词典中去选择和这个主题相适应的词进行修饰。
+比如写到关于pLSA的文章的时候，我们会选择”建模、概率、主题模型、极大似然“等词去完善这个主题。
+在得到模型之后，我们就需要进行Model Inference，也就是参数估计了，pLSA作为概率图模型，一般是采用MLE作为inference的tool。
+首先构造极大似然函数：&lt;script type=&quot;math/tex&quot;&gt;L(\theta) = \prod_{i=1}^N\prod_{j=1}^Np(d_i,w_j)^{n(d_i,w_j)}&lt;/script&gt;，其中&lt;script type=&quot;math/tex&quot;&gt;n(d_i,w_j)&lt;/script&gt;表示的是词&lt;script type=&quot;math/tex&quot;&gt;w_j&lt;/script&gt;在和文档&lt;script type=&quot;math/tex&quot;&gt;d_i&lt;/script&gt;的共现频率，由于我们&lt;script type=&quot;math/tex&quot;&gt;p(w \mid z)&lt;/script&gt;和&lt;script type=&quot;math/tex&quot;&gt;p(z \mid d)&lt;/script&gt;都是多项式分布，&lt;br /&gt;
+接着，是参数估计，一般而言，此时可以选用极大似然估计。极大对数似然函数如下：&lt;/p&gt;
 
-&lt;p&gt;M步，最大化极大似然期望：&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) = \prod_{i=1}^N\prod_{j=1}^Np(d_i,w_j)^{n(d_i,w_j)}&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;ln(L(\theta)) = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)logp(d_i,w_j) \\
+=  \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(p(d_i)\sum_{k=1}^Kp(z_k \mid d_i)p(w_j \mid z_k)) \\
+= \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(p(d_i))+\sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(\sum_{k=1}^Kp(z_k\mid d_i)p(w_j \mid z_k))&lt;/script&gt;
+
+&lt;p&gt;如果直接求导的话，很明显就得需要求解(n+m)个方程，几乎是不可能完成的任务。
+一般采用最大期望算法(Maximum Expection， ME)，EM算法的基本思想很直观，即随机初始化相关参数；随后，在E步，计算潜在变量的后验概率；M步，
+利用潜在变量的后验概率去更新未知参数。循环迭代直至达到最大迭代次数算法退出。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;问题：为什么可以收敛？&lt;/h3&gt;
+
+&lt;p&gt;在e步&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(z_k \mid w_j, d_i) = \frac{p(z_k \mid w_j)p(w_j \mid z_k)} {\sum_{k=1}^Kp(z_k \mid w_j)p(w_j\mid z_k)}&lt;/script&gt;
+
+&lt;p&gt;M步，最大化极大似然&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(\sum_{k=1}^Kp(z_k\mid d_i)p(w_j \mid z_k))&lt;/script&gt;
 
 &lt;p&gt;又由于此时：&lt;/p&gt;
 
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{k=1}^K p(z_k|d_i)p(w_j|z_k) &gt; \sum_{k=1}^K p(z_k \mid d_i) p(z_k \mid d_i )p(w_j\mid z_k); \sum_{k=1}^Kp(z_k \mid d_i,w_j) = 1&lt;/script&gt;
+
 &lt;p&gt;所以：&lt;/p&gt;
 
-&lt;p&gt;利用Jensen不等式，对于凸函数有：&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) &gt; \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log( \sum_{k=1}^K p(z_k \mid d_i) p(z_k \mid d_i )p(w_j\mid z_k) )&lt;/script&gt;
 
-&lt;p&gt;可以得到：&lt;/p&gt;
+&lt;p&gt;利用Jensen不等式，对于凸函数&lt;script type=&quot;math/tex&quot;&gt;f(x)&lt;/script&gt;有：&lt;script type=&quot;math/tex&quot;&gt;f(\sum_{i=1}^Nw_ix_i)&gt;=\sum_{i=1}^Nw_if(x_i)&lt;/script&gt;可以得到：&lt;/p&gt;
 
-&lt;p&gt;此时即转化为，对于约束条件： ，求E’(L)的最大值。
-很显然可以构造拉格朗日乘法进行求解：&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) &gt; \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)\sum_{k=1}^K p(z_k \mid d_i) log(p(z_k \mid d_i )p(w_j\mid z_k) ) = L&#39;(\theta)&lt;/script&gt;
 
-&lt;p&gt;分别对 求导可得：&lt;/p&gt;
+&lt;p&gt;此时即转化为，对于约束条件：&lt;script type=&quot;math/tex&quot;&gt;\sum_{k=1}^Kp(z_k|d_i)=1[1],\sum_{j=1}^Mp(w_j|z_k)=1[2]&lt;/script&gt; ，求&lt;script type=&quot;math/tex&quot;&gt;L&#39;(\theta)&lt;/script&gt;的最大值。
+对于这种带等式约束的优化问题，很显然可以构造拉格朗日乘法进行求解：&lt;/p&gt;
 
-&lt;p&gt;联立方程组(1),(2),(3),(4)求解可得：&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;H = L&#39;(\theta) + \sum_{i=1}^N\alpha_i(\sum_{k=1}^Kp(z_k|d_i)-1)+\sum_{k=1}^K\beta_k(\sum_{j=1}^Mp(w_j|z_k)-1)&lt;/script&gt;
 
-&lt;p&gt;因此，在M步更求新参数，通过不断迭代，如果求得的极大似然趋近收敛，则训练结束。
-总结一下：
-E步：求当前估计的参数条件下的后验概率：p(z|w,d)
-M步：最大化complete data(加上隐藏变量主题)极大似然估计的期望
-E步和M步循环迭代，直至收敛。
-实现的源码见：plsa.cpp plsa.h ，由于切词用到了公司的lib库，所以切词的初始化和切词的过程在源码中被删去，可以去中科院nlp主页获取相关模块。&lt;/p&gt;
+&lt;p&gt;分别对 &lt;script type=&quot;math/tex&quot;&gt;p(z_k\mid d_i),p(w_j\mid z_k)&lt;/script&gt;求导可得：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;=\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)-\alpha_ip(z_k|d_i) = 0      [3] \\
+	= \sum_{i=1}^Nn(d_i,w_j)p(z_k|d_i,w_j)-\beta_kp(w_j|z_k) = 0     [4]&lt;/script&gt;
+
+&lt;p&gt;联立方程组[1],[2],[3],[4]求解可得：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(z_k|d_i) = \frac {\sum_{i=1}^N n(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(w_j|z_k) = \frac {\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{j=1}^M\sum_{k=1}^Kn(d_i,w_j)p(z_k|d_i,w_j)} \\
+ = \frac{\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{n(d_i)}&lt;/script&gt;
+
+&lt;p&gt;因此，在M步更求新参数，通过不断迭代，如果求得的极大似然趋近收敛，则训练结束。&lt;/p&gt;
+
+&lt;p&gt;总结一下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;E步：求当前估计的参数条件下的后验概率：p(z \mid w,d)&lt;/li&gt;
+  &lt;li&gt;M步：最大化complete data(加上隐藏变量主题)极大似然估计的期望&lt;/li&gt;
+  &lt;li&gt;E步和M步循环迭代，直至收敛。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;实现的源码见：plsa.cpp plsa.h ，由于切词用到了公司的lib库，所以切词的初始化和切词的过程在源码中被删去，可以去中科院nlp主页获取相关模块。&lt;/p&gt;
 
 </description>
         <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
@@ -104,21 +149,11 @@ E步和M步循环迭代，直至收敛。
 &lt;p&gt;在分类任务中，样本label为&lt;script type=&quot;math/tex&quot;&gt;{-1,1}&lt;/script&gt;，关于从sign distance转换到geometry distance的过程其实很容易理解，
 sign distance可以衡量某个样本被分类的置信，如果sign distance越大，那么该样本被分为该类别的可信度就更大；
 而geometry distance可以理解为样本距离超平面&lt;script type=&quot;math/tex&quot;&gt;Y = w^TX + b&lt;/script&gt;的距离，是sign distance归一化的结果，
-求解目标为&lt;script type=&quot;math/tex&quot;&gt;argmax(\frac {|w^Tx + b|} {||w||})&lt;/script&gt;，并且需要满足约束：&lt;script type=&quot;math/tex&quot;&gt;y_i(w^Tx_i + b) \geq 1&lt;/script&gt;，为了求解方便，可以不加证明的令&lt;script type=&quot;math/tex&quot;&gt;|w^Tx+b|=1&lt;/script&gt;，形式化如下：&lt;/p&gt;
+求解目标为&lt;script type=&quot;math/tex&quot;&gt;argmax(\frac { \mid w^Tx + b \mid } { \mid  \mid w \mid  \mid })&lt;/script&gt;，并且需要满足约束：&lt;script type=&quot;math/tex&quot;&gt;y_i(w^Tx_i + b) \geq 1&lt;/script&gt;，为了求解方便，可以不加证明的令&lt;script type=&quot;math/tex&quot;&gt;\mid w^Tx+b \mid =1&lt;/script&gt;，形式化如下：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{cases}argmax \frac{1}{||w||} \\ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{cases}argmax \frac{1}{ \mid  \mid w \mid  \mid } \\ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases}&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;而此时最大化 $$\frac{1}{&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt;w&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt;}&lt;script type=&quot;math/tex&quot;&gt;等价于最小化&lt;/script&gt;w&lt;script type=&quot;math/tex&quot;&gt;，并且最小化和最小化&lt;/script&gt;\frac {1}{2} w^Tw$$等价，&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;而此时最大化 &lt;script type=&quot;math/tex&quot;&gt;\frac{1}{ \mid  \mid w \mid  \mid }&lt;/script&gt;等价于最小化 &lt;script type=&quot;math/tex&quot;&gt;w&lt;/script&gt; ，并且最小化和最小化&lt;script type=&quot;math/tex&quot;&gt;\frac {1}{2} w^Tw&lt;/script&gt;等价，&lt;/p&gt;
 
 &lt;p&gt;所以1.1可以变为：&lt;/p&gt;
 
@@ -158,7 +193,7 @@ L(w,\alpha,b)&amp;amp;=&amp;amp;\frac {1}{2} w^Tw - \sum_{i=1}^N\alpha_i[y_i(w^T
 
 &lt;p&gt;[\begin{cases}argmin \frac {1}{2} w^Tw + C\sum_{i=1}^N\varepsilon_i \s.t ~~ y_i(w^Tx_i+b) \geq 1 - \varepsilon_i ~~i=1,2,\cdot \cdot ,n \ \sum_{i=1}^N\varepsilon_i \geq C \end{cases}]&lt;/p&gt;
 
-&lt;p&gt;关于上式，可以看成是利用hinge loss加l2范数正则项的结果，SVM此时的损失函数可以表示为 &lt;script type=&quot;math/tex&quot;&gt;min_{w,b} \sum_{i=1}^N [1-y_i(w^Tx_i+b)]_{+} + \lambda\|w\|^2&lt;/script&gt;，其中如果&lt;script type=&quot;math/tex&quot;&gt;z&gt;0&lt;/script&gt;，那么&lt;script type=&quot;math/tex&quot;&gt;z_{+}&lt;/script&gt;=z，否则等于0。如果令&lt;script type=&quot;math/tex&quot;&gt;\varepsilon_i=1-y_i(w^Tx_i+b),\varepsilon_i \geq 0&lt;/script&gt;，那么此时最优化问题为 &lt;script type=&quot;math/tex&quot;&gt;min_{w,b} \sum_{i=1}^N\varepsilon_i + \lambda\|w\|^2&lt;/script&gt;，如果取&lt;script type=&quot;math/tex&quot;&gt;\lambda=\frac {1}{2C}&lt;/script&gt;，那么就和上述优化目标等价，所以可以看出，软间隔实际上是在ERM的基础上加了SRM~&lt;/p&gt;
+&lt;p&gt;关于上式，可以看成是利用hinge loss加l2范数正则项的结果，SVM此时的损失函数可以表示为 &lt;script type=&quot;math/tex&quot;&gt;min_{w,b} \sum_{i=1}^N [1-y_i(w^Tx_i+b)]_{+} + \lambda\ \mid w\ \mid ^2&lt;/script&gt;，其中如果&lt;script type=&quot;math/tex&quot;&gt;z&gt;0&lt;/script&gt;，那么&lt;script type=&quot;math/tex&quot;&gt;z_{+}&lt;/script&gt;=z，否则等于0。如果令&lt;script type=&quot;math/tex&quot;&gt;\varepsilon_i=1-y_i(w^Tx_i+b),\varepsilon_i \geq 0&lt;/script&gt;，那么此时最优化问题为 &lt;script type=&quot;math/tex&quot;&gt;min_{w,b} \sum_{i=1}^N\varepsilon_i + \lambda\ \mid w\ \mid ^2&lt;/script&gt;，如果取&lt;script type=&quot;math/tex&quot;&gt;\lambda=\frac {1}{2C}&lt;/script&gt;，那么就和上述优化目标等价，所以可以看出，软间隔实际上是在ERM的基础上加了SRM~&lt;/p&gt;
 
 &lt;p&gt;之后的推导没有多大差别，只不过在求导的过程中出现了&lt;script type=&quot;math/tex&quot;&gt;\alpha_i = C - \varepsilon_i&lt;/script&gt;，又有前面在对偶转换使用的KKT条件之一&lt;script type=&quot;math/tex&quot;&gt;\alpha_i(y_i(w^Tx_i+b) - 1) =0&lt;/script&gt;可得，在分类超平面上的点，也即满足&lt;script type=&quot;math/tex&quot;&gt;y_i(w^Tx_i+b)-1 + \varepsilon_i = 0&lt;/script&gt;，而那些不在超平面的点，必然有&lt;script type=&quot;math/tex&quot;&gt;\alpha_i=0&lt;/script&gt;，而在超平面上的，则有&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
 0&lt; \alpha_i &lt; C %]]&gt;&lt;/script&gt;，在超平面之外的则是&lt;script type=&quot;math/tex&quot;&gt;\alpha_i=C&lt;/script&gt;。&lt;/p&gt;
@@ -308,33 +343,36 @@ K(p,q) = &lt;\phi(\eta_1,\eta_2), \phi(\gamma_1, \gamma_2)&gt; %]]&gt;&lt;/scrip
     
       <item>
         <title>HMM</title>
-        <description>&lt;h1 id=&quot;hmm&quot;&gt;HMM&lt;/h1&gt;
-
-&lt;p&gt;在了解隐马尔科夫模型之前，先得了解马尔科夫过程，一般而言，在理解一个模型的时候，最好是能够知道该模型提出的初衷，站在设计者的角度来思考模型总能达到事半功倍的效果。
+        <description>&lt;p&gt;在了解隐马尔科夫模型之前，先得了解马尔科夫过程，一般而言，在理解一个模型的时候，最好是能够知道该模型提出的初衷，站在设计者的角度来思考模型总能达到事半功倍的效果。
 n阶马尔科夫过过程的当前状态只依赖于前n个时刻的状态，通常而言，n一般为1，也即常见的马尔科夫过程。##&lt;/p&gt;
 
 &lt;p&gt;隐马尔科夫模型在基础的马尔科夫过程中做了简单的变换，将状态作为一种隐含状态，观测序列作为观测状态，并且状态之间有概率转移关系，状态到观测序列之间也有概率转移关系。
-由此可以得到隐马尔科夫模型的形式化表示：&lt;/p&gt;
+由此可以得到隐马尔科夫模型的形式化表示：HMM=(pi,A,B)&lt;/p&gt;
 
-&lt;blockquote&gt;
-  &lt;p&gt;HMM=(pi,A,B)HMM=(pi,A,B)&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;其中，pi为系统的初始状态，A为状态转移矩阵，其中AijAij表示从隐含状态i变成隐含状态j的概率，B为混淆矩阵或者观测状态生成矩阵，B)ijB)ij表示隐含状态i生成观测序列元素j的概率。
+&lt;p&gt;其中，pi为系统的初始状态，A为状态转移矩阵，其中&lt;script type=&quot;math/tex&quot;&gt;A_{i,j}&lt;/script&gt;表示从隐含状态i变成隐含状态j的概率，B为混淆矩阵或者观测状态生成矩阵，
+&lt;script type=&quot;math/tex&quot;&gt;B_{i,j}&lt;/script&gt;表示隐含状态i生成观测序列元素j的概率。
 在实例讲解隐马尔科夫模型的例子中，有一个较为经典，也即海藻和天气。海藻的状态我们随时可以观测得到，而天气的状态是一种未知的变量。假设我们知道天气之间变化的概率A，也知道当海藻处于某种观测状态的前提下各种天气状态的出现概率B，同时也有初始状态，也即给出了一个HMM模型，那么我们可以解决以下两种问题：&lt;/p&gt;
 
-&lt;p&gt;1.给定海藻的观测状态序列，求出该观测序列出现的概率，对应于HMM三大问题之概率计算问题&lt;br /&gt;
-2.给定某种观测状态序列，求出该观测序列出现的最大的状态概率，对应于HMM三大问题之预测问题&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;给定海藻的观测状态序列，求出该观测序列出现的概率，对应于HMM三大问题之概率计算问题&lt;/li&gt;
+  &lt;li&gt;给定某种观测状态序列，求出该观测序列出现的最大的状态概率，对应于HMM三大问题之预测问题&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;对于第一种问题，可以使用最为原始的暴力出奇迹，枚举所有的状态，求出状态和观测序列的联合概率分布，然后进行求和，即可得到最后的结果，也可以使用更为优雅的算法，比如即将介绍的基于动态规划的forward-backward算法，这两种算法也是HMM这类概率图模型所特有的一种求解方法，就像是BP之于NN一般。
-1&amp;gt; forword-algorithm
-前向算法，是一种动态规划算法，之前看NLP的另外一个算法中也使用了动态规划的思想，它具有许多独特的性质，比如子问题最优，也即全局最优可以通过枚举子问题最优得到，联想到HMM的图模型结构，我们不难得知，在时刻t处于状态i的情况(此时观测序列为O1,O2,O3,…,Ot)下，它可以由多种子状态按照HMM的性质转化而来，即可以由时刻t-1处于状态j的情况(此时观测序列为O1,O2,O3,…,Ot-1)首先从状态i转换到j，然后生成观测序列Ot得到，所以可以得到如下的DP状态转移方程：
-Alpha[t][i] = sigma(j=1,N){Alpha[t-1][j] * A[j][i]} * B[i][t]
-上述方程也可以通过贝叶斯公式推出来。由此，问题1可以通过累加Alpha[T][i]得到。&lt;/p&gt;
+&lt;p&gt;对于第一种问题，可以使用最为原始的暴力出奇迹，枚举所有的状态，求出状态和观测序列的联合概率分布，然后进行求和，即可得到最后的结果，也可以使用更为优雅的算法，比如即将介绍的基于动态规划的forward-backward算法，这两种算法也是HMM这类概率图模型所特有的一种求解方法，就像是BP之于NN一般。&lt;/p&gt;
 
-&lt;p&gt;2&amp;gt; Backward-algorithm
-有了前向算法，后向算法就很容易理解了，在时刻t处于状态i的前提下，观测序列为O(t+1)…O(T)的情况可以由在时刻t+1处于状态j的前提下的情况，首先从状态j转移到状态i，然后生成观测序列O(t+1)的过程得到，也即：
-Beta[t][i] = sigma(j=1,N){Beta[t+1][j] * A[j][i] * B[j][t+1]}&lt;/p&gt;
+&lt;h4 id=&quot;forword-algorithm&quot;&gt;1&amp;gt; forword-algorithm&lt;/h4&gt;
+
+&lt;p&gt;前向算法，是一种动态规划算法，之前看NLP的另外一个算法中也使用了动态规划的思想，它具有许多独特的性质，比如子问题最优，也即全局最优可以通过枚举子问题最优得到，联想到HMM的图模型结构，我们不难得知，在时刻t处于状态i的情况(此时观测序列为O1,O2,O3,…,Ot)下，它可以由多种子状态按照HMM的性质转化而来，即可以由时刻t-1处于状态j的情况(此时观测序列为O1,O2,O3,…,Ot-1)首先从状态i转换到j，然后生成观测序列Ot得到，所以可以得到如下的DP状态转移方程：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha[t][i] = \sum_{j=1}^N{\alpha[t-1][j] * A[j][i]} * B[i][t]&lt;/script&gt;
+
+&lt;p&gt;上述方程也可以通过贝叶斯公式推出来。由此，问题1可以通过累加Alpha[T][i]得到。&lt;/p&gt;
+
+&lt;h3 id=&quot;backward-algorithm&quot;&gt;2&amp;gt; Backward-algorithm&lt;/h3&gt;
+
+&lt;p&gt;有了前向算法，后向算法就很容易理解了，在时刻t处于状态i的前提下，观测序列为O(t+1)…O(T)的情况可以由在时刻t+1处于状态j的前提下的情况，首先从状态j转移到状态i，然后生成观测序列O(t+1)的过程得到，也即：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\beta[t][i] = \sum_{j=1}^N{\beta[t+1][j] * A[j][i] * B[j][t+1]}&lt;/script&gt;
 
 &lt;p&gt;由此，问题1也可以通过Beta计算得到.&lt;/p&gt;
 
@@ -352,13 +390,14 @@ Beta[t][i] = sigma(j=1,N){Beta[t+1][j] * A[j][i] * B[j][t+1]}&lt;/p&gt;
     
       <item>
         <title>ESL Notes</title>
-        <description>&lt;p&gt;对ml的大部分模型有了了解之后，混沌中遇到师兄赠书，便要了ESL，度厂实习期间，看的晕晕乎乎，英文略显晦涩，但是坚持至今，现在最大的障碍是太多细节和精髓无法掌握，只好做些笔记，帮助理解。借助豆瓣笔记强大的latex支持，以后的笔记都会发在豆瓣，这里只是提供外链~&lt;/p&gt;
+        <description>&lt;p&gt;对ml的大部分模型有了了解之后，混沌中遇到师兄赠书，便要了ESL，度厂实习期间，看的晕晕乎乎，英文略显晦涩，但是坚持至今，
+现在最大的障碍是太多细节和精髓无法掌握，只好做些笔记，帮助理解。&lt;/p&gt;
 
 &lt;p&gt;第1章 略&lt;/p&gt;
 
-&lt;p&gt;第2章 Overview of Supervised Learning&lt;/p&gt;
+&lt;p&gt;第2章 &lt;a href=&quot;&quot;&gt;Overview of Supervised Learning&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;第3章 Linear Methods for Regression&lt;/p&gt;
+&lt;p&gt;第3章 [Linear Methods for Regression]&lt;/p&gt;
 
 &lt;p&gt;第4章 Linear Methods for Classification&lt;/p&gt;
 

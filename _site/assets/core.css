@@ -172,6 +172,7 @@ ol {
   padding-left: 50px; }
   ul li,
   ol li {
+    font-size: 15px;
     word-wrap: break-word; }
   ul img,
   ol img {

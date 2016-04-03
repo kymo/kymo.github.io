@@ -5,13 +5,14 @@ date:  2016-04-01 19:24:56
 categories: MachineLearning
 ---
 
-对ml的大部分模型有了了解之后，混沌中遇到师兄赠书，便要了ESL，度厂实习期间，看的晕晕乎乎，英文略显晦涩，但是坚持至今，现在最大的障碍是太多细节和精髓无法掌握，只好做些笔记，帮助理解。借助豆瓣笔记强大的latex支持，以后的笔记都会发在豆瓣，这里只是提供外链~
+对ml的大部分模型有了了解之后，混沌中遇到师兄赠书，便要了ESL，度厂实习期间，看的晕晕乎乎，英文略显晦涩，但是坚持至今，
+现在最大的障碍是太多细节和精髓无法掌握，只好做些笔记，帮助理解。
 
 第1章 略
 
-第2章 Overview of Supervised Learning
+第2章 [Overview of Supervised Learning]()
 
-第3章 Linear Methods for Regression 
+第3章 [Linear Methods for Regression]
 
 第4章 Linear Methods for Classification
 

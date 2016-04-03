@@ -14,11 +14,11 @@ $$a^2 + b^2 = c^2$$
 在分类任务中，样本label为$${-1,1}$$，关于从sign distance转换到geometry distance的过程其实很容易理解，
 sign distance可以衡量某个样本被分类的置信，如果sign distance越大，那么该样本被分为该类别的可信度就更大；
 而geometry distance可以理解为样本距离超平面$$Y = w^TX + b$$的距离，是sign distance归一化的结果，
-求解目标为$$argmax(\frac {|w^Tx + b|} {||w||})$$，并且需要满足约束：$$y_i(w^Tx_i + b) \geq 1$$，为了求解方便，可以不加证明的令$$|w^Tx+b|=1$$，形式化如下：
+求解目标为$$argmax(\frac { \mid w^Tx + b \mid } { \mid  \mid w \mid  \mid })$$，并且需要满足约束：$$y_i(w^Tx_i + b) \geq 1$$，为了求解方便，可以不加证明的令$$ \mid w^Tx+b \mid =1$$，形式化如下：
 
-$$\begin{cases}argmax \frac{1}{||w||} \\ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases} $$
+$$\begin{cases}argmax \frac{1}{ \mid  \mid w \mid  \mid } \\ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases} $$
 
-而此时最大化 $$\frac{1}{||w||}$$等价于最小化 $$w$$ ，并且最小化和最小化$$\frac {1}{2} w^Tw$$等价，
+而此时最大化 $$\frac{1}{ \mid  \mid w \mid  \mid }$$等价于最小化 $$w$$ ，并且最小化和最小化$$\frac {1}{2} w^Tw$$等价，
 
 所以1.1可以变为：
 
@@ -58,7 +58,7 @@ L(w,\alpha,b)&=&\frac {1}{2} w^Tw - \sum_{i=1}^N\alpha_i[y_i(w^Tx_i+b)-1]\\&=&\f
 
 \[\begin{cases}argmin \frac {1}{2} w^Tw + C\sum_{i=1}^N\varepsilon_i \\s.t ~~ y_i(w^Tx_i+b) \geq 1 - \varepsilon_i ~~i=1,2,\cdot \cdot ,n \\ \sum_{i=1}^N\varepsilon_i \geq C \end{cases}\]
 
-关于上式，可以看成是利用hinge loss加l2范数正则项的结果，SVM此时的损失函数可以表示为 $$min_{w,b} \sum_{i=1}^N [1-y_i(w^Tx_i+b)]_{+} + \lambda\|w\|^2 $$，其中如果$$z>0$$，那么$$z_{+}$$=z，否则等于0。如果令$$\varepsilon_i=1-y_i(w^Tx_i+b),\varepsilon_i \geq 0$$，那么此时最优化问题为 $$min_{w,b} \sum_{i=1}^N\varepsilon_i + \lambda\|w\|^2$$，如果取$$\lambda=\frac {1}{2C}$$，那么就和上述优化目标等价，所以可以看出，软间隔实际上是在ERM的基础上加了SRM~
+关于上式，可以看成是利用hinge loss加l2范数正则项的结果，SVM此时的损失函数可以表示为 $$min_{w,b} \sum_{i=1}^N [1-y_i(w^Tx_i+b)]_{+} + \lambda\ \mid w\ \mid ^2 $$，其中如果$$z>0$$，那么$$z_{+}$$=z，否则等于0。如果令$$\varepsilon_i=1-y_i(w^Tx_i+b),\varepsilon_i \geq 0$$，那么此时最优化问题为 $$min_{w,b} \sum_{i=1}^N\varepsilon_i + \lambda\ \mid w\ \mid ^2$$，如果取$$\lambda=\frac {1}{2C}$$，那么就和上述优化目标等价，所以可以看出，软间隔实际上是在ERM的基础上加了SRM~
 
 之后的推导没有多大差别，只不过在求导的过程中出现了$$\alpha_i = C - \varepsilon_i$$，又有前面在对偶转换使用的KKT条件之一$$\alpha_i(y_i(w^Tx_i+b) - 1) =0 $$可得，在分类超平面上的点，也即满足$$y_i(w^Tx_i+b)-1 + \varepsilon_i = 0$$，而那些不在超平面的点，必然有$$\alpha_i=0$$，而在超平面上的，则有$$0< \alpha_i < C$$，在超平面之外的则是$$\alpha_i=C$$。
 
