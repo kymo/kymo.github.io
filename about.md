@@ -8,7 +8,7 @@ Master In Wuhan University, and believe that technology will change the world an
 
 I love cooking, reading, handwriting, and I am learning Gita right now.
 
-Currently, I just focus on the application(performance optimization & product oriented) of Machine Learning and Statistics Theory.
+Currently, I just a new comer of the application(performance optimization & product oriented) of Machine Learning and Natural Language Processing.
 
 Email: kymowind@gmail.com
 
