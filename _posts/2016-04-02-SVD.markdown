@@ -1,0 +1,113 @@
+---
+layout: post
+title:  "SVD"
+date:  2016-04-01 19:24:56
+categories: MachineLearning
+---
+
+奇异值分解作为一种矩阵分解的算法，广泛的应用于数据分析、信号处理、模式识别、图片压缩、天气预测以及潜在概率语义分析等应用。其实质是通过分解矩阵，找到矩阵行列之间的某种潜在关系。如在推荐系统中利用SVD分解用户-商品的评分矩阵，便可以得到用户和商品之间的关联。
+
+### 特征值分解
+一般矩阵乘以某个向量，代表着对该向量进行某种线性变换：拉伸、平移以及旋转，在计算机图形学中经常对三维场景的物体在各种不同的坐标系下进行变换也利用了该种性质，直接利用物体的三维坐标乘以变换矩阵即可实现。如果对向量的线性变换仅仅只是对向量进行了缩放，那么这种情况便是特征值分解，既有$$Ax=\lambda x$$. 特征值分解的物理意义在不同的应用场景下有不同的解释。不过一般都是对对称矩阵$$A$$进行分解，得到一组正交的特征向量作为正交基，使得矩阵$$A$$能够被投射到以该正交基为基底的空间中，特征值则表示在不同的正交基下的投射距离，特征值越大说明矩阵在对应的特征向量上的方差越大，功率越大，信息熵也越大，在PCA(principal  component analysis)中，即可以利用特征值分解，获取最重要的K个成分对数据进行降维，保证在数据规模可控的情况下获得足够的信息量。
+
+### 奇异值分解
+奇异值分解可以认为是特征值分解的扩充，即解决对于矩阵$$A(m \times n)$$能否在原始空间$$R^n$$中找到一组正交基$$(v_1, v_2, v_3, \cdot \cdot \cdot , v_n)$$，使得经过该线性变换矩阵投射得新的空间$$R^m$$中的向量仍然正交的问题，即当$$i!=j ，v_i^T \times v_j = 0 $$时，$$(Av_i,Av_j) = 0$$. 
+
+对于矩阵$$A^TA(n \times n)$$，该矩阵为对称矩阵，且有$$r(A^TA)=r$$，则可以通过特征值分解得到对应的一组正交基$$(v_1, v_2, v_3, \cdot \cdot \cdot , v_r)$$，使得$$A^TAv_i=\lambda v_i$$.
+对于经过$$A$$线性变化投射到新的空间的向量$$Av_i$$，容易推知当$$i!=j$$时，$$(Av_i,Av_j)$$=0. 从而可以得到投射之后的新的一组正交基$$U$$为$$(Av_1,Av_2,  \cdot  \cdot  \cdot  Av_r)$$，对其进行标准化，有
+
+$$u_i=\frac{Av_i}{\mid Av_i\mid} =\frac{1}{\sqrt {\lambda_i}} Av_i => Av_i = \sqrt {\lambda_i}u_i = \delta_i u_i$$ 
+
+则有 
+
+$A(v_1, v_2, v_3, \cdot \cdot \cdot, v_r) = (\delta_1 u_1 , \delta_2 u_2 , \delta_3 u_3, \cdot \cdot \cdot , \delta_r u_r) = (u_1, u_2, \cdot \cdot \cdot, u_r) \times [
+\begin {matrix}
+\delta_1, \cdot \cdot \cdot, 0 \\\
+0, \cdot \cdot \cdot, 0 \\\
+0, \cdot \cdot \cdot, \delta_r
+\end {matrix}
+]
+$
+
+即$$AV = U\Sigma => AVV^T = U\Sigma V^T => A =  U\Sigma V^T (VV^T=E)$$ ，其中，$\Sigma$的对角元素为特征值的开平方，表示$$V$$向量经过$$A$$方阵变换之后与$$U$$向量之间的缩放对应关系，此时$$U$$矩阵大小为$$m \times r$$，$$V$$矩阵大小为$$ n \times r $$，也可以将$$U$$扩充为$$ m \times m $$，$$V$$扩充为 $$ n \times n$$，此时$$\Sigma$$大小则为$$ m \times n$$，即在原来的基础之上增加若干个0行和0列.
+
+从另外一个角度，对于任意矩阵$$A$$，可以分解为$$A= U\Sigma V^T$$的形式，于是可以得到：
+
+$$AA^T=U\Sigma V^T V\Sigma^TU^T = U\Sigma \Sigma^TU^T $$
+
+$$A^TA= V\Sigma^TU^T  U\Sigma V^T = V\Sigma \Sigma^TV^T $$
+
+所以，$$U$$可以看成是对矩阵$$AA^T$$进行特征值分解得到的正交基，$$V$$可以看成是对矩阵$$A^TA$$进行分解得到的正交基。
+
+### SVD 在LSA中的应用
+
+奇异值分解在诸多方面都有十分成功的应用，在数据压缩中，可以通过将原始的矩阵进行奇异值分解，去除奇异值较小的部分得到低阶近似，从而实现对数据的降维；在语义分析中，通过对构造的文档-词汇矩阵$$D$$进行奇异值分解$$D=U \Sigma V^T$$
+
+$$ D = [
+\begin{array}{ccc}
+x_{1,1}  , \cdot \cdot  \cdot  ,  x_{1,n} \\\
+\cdot \cdot  \cdot   ,  \cdot \cdot  \cdot  ,  \cdot \cdot  \cdot \\\
+x_{m,1}   ,  \cdot \cdot  \cdot  ,  x_{m,n} 
+\end{array}
+]
+= [t_1 , t_2, \cdot \cdot \cdot , t_n]^T = [d_1 , d_2, \cdot \cdot \cdot , d_m]
+$$
+
+其中，$$ t_i^T = (x_{i,1}, x_{i,2}, \cdot \cdot \cdot , x_{i,n}) , d_j^T = (x_{1,j}, x_{2,j}, \cdot \cdot \cdot , x_{m,j}) $$。
+
+进行SVD分解之后
+
+$$D=U\Sigma V^T = (u_1, u_2,  \cdot \cdot \cdot, u_r) \times [
+\begin {matrix}
+\delta_1, \cdot \cdot \cdot, 0 \\\
+0, \cdot \cdot \cdot, 0 \\\
+0, \cdot \cdot \cdot, \delta_r
+\end {matrix}
+]
+\times 
+(v_1, v_2, \cdot \cdot \cdot , v_r)^T$$
+
+随后进行k-阶近似，取最大的k个奇异值$$\Sigma_k$$以及对应的奇异向量$$U_k,V_k$$，便可以对$$D$$进行降维，将词汇-文档空间映射到语义空间中去，此时k值可以认为是语义空间中的主题数，$$U_k$$可以看做在该语义空间中，文档上的主题分布，而$$V_k$$则可以看成是主题上的词汇分布。
+
+$$D_k = U_k \Sigma_k V_k^T = (u_1, u_2,  \cdot \cdot \cdot, u_k) \times [
+\begin {matrix}
+\delta_1, \cdot \cdot \cdot, 0 \\\
+0, \cdot \cdot \cdot, 0 \\\
+0, \cdot \cdot \cdot, \delta_k
+\end {matrix}
+]
+\times 
+(v_1, v_2, \cdot \cdot \cdot , v_k)^T$$
+
+此时，$$d_j^T = (v_{1,j}，v_{2,j}, \cdot \cdot \cdot ,v_{k,j})$$, $$t_i^T =  (u_{1,j}，u_{2,j}, \cdot \cdot \cdot ,u_{k,j})$$
+此时D仍然是$$m \times n$$，得到对词汇-文档原始矩阵的奇异值分解结果之后，变可以完成包括词汇相似度计算、文档相似度计算等任务。
+
+#### 1. 词汇相似度计算，计算语料中的两个词汇$$p$$，$$q$$的语义相似度
+分别计算$$\Sigma_k \times t_i $$以及$$\Sigma_k \times t_j $$(i和j为词汇p,q对应的ID)，可以得到两个列向量，然后通过某种距离计算方式可以得到两者的语义距离.
+
+#### 2. 文档相似度计算，计算语料中的两篇文档$$p$$, $$q$$的语义相似度
+分别计算$$\Sigma_k \times d_i $$以及$$\Sigma_k \times d_j $$(i和j为词汇p,q对应的ID)，可以得到两个列向量，然后通过某种距离计算方式可以得到两者的语义距离.
+
+#### 3. 分本聚类
+低阶降维之后可以的到语义空间的文档特征，从而可以利用一些无监督的聚类算法进行文档聚类，当然也可以作为分档分类的特征。
+
+
+#### 4. LSA 缺点
+
+* 新生成的矩阵的解释性比较差.造成这种难以解释的结果是因为SVD只是一种数学变换，并无法对应成现实中的概念。
+* LSA无法扑捉一词多以的现象。在原始词-向量矩阵中，每个文档的每个词只能有一个含义。比如同一篇文章中的“The Chair of Board"和"the chair maker"的chair会被认为一样。在语义空间中，含有一词多意现象的词其向量会呈现多个语义的平均。相应的，如果有其中一个含义出现的特别频繁，则语义向量会向其倾斜。
+* LSA具有词袋模型的缺点，即在一篇文章，或者一个句子中忽略词语的先后顺序。
+* LSA的概率模型假设文档和词的分布是服从联合正态分布的，但从观测数据来看是服从泊松分布的。因此LSA算法的一个改进PLSA使用了多项分布，其效果要好于LSA。
+
+
+
+
+### 参考资料
+* [Singular Value Decomposition (SVD) Tutorial](http://www.puffinwarellc.com/index.php/news-and-articles/articles/30-singular-value-decomposition-tutorial.html?showall=1)
+* [奇异值分解(SVD) --- 几何意义](http://blog.sciencenet.cn/blog-696950-699432.html)
+* [如何理解矩阵特征值？](https://www.zhihu.com/question/21874816)
+* [漫谈奇异值分解](http://charlesx.top/2016/03/Singularly-Valuable-Decomposition/)
+* [Dan Kalman. A singularly valuable decomposition: The SVD of a matrix[J]. College Mathematics Journal, 1996, 27(1):2--23.](http://www.math.washington.edu/~morrow/464_14/svd.pdf)
+* [LSA潜在语义分析](http://blog.csdn.net/roger__wong/article/details/41175967)
+
+
