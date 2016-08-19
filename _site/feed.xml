@@ -1,14 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Aron&#39;s blog</title>
+    <title>Aron's blog</title>
     <description>nihao
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 08 Apr 2016 19:49:57 +0800</pubDate>
-    <lastBuildDate>Fri, 08 Apr 2016 19:49:57 +0800</lastBuildDate>
-    <generator>Jekyll v2.5.3</generator>
+    <pubDate>Fri, 19 Aug 2016 21:25:43 +0800</pubDate>
+    <lastBuildDate>Fri, 19 Aug 2016 21:25:43 +0800</lastBuildDate>
+    <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Paper Reading Note</title>
+        <description>&lt;h3 id=&quot;learning-n-best-correction-models-from-implicit-user-feedback-in-a-muti-modal-local-search-application&quot;&gt;Learning N-best Correction Models from Implicit User Feedback in a Muti-Modal Local Search Application&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;通过用户的反馈对语音识别的结果进行纠错，通过点击数据构造result confusion matrix,然后利用该矩阵对结果进行重排&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;通常而言，用户的点击数据可以用来对已有的声学模型或者语言模型进行概率，当然也可以利用这些数据对语言识别的结果进行纠正，本文作者想要构建的就是基于用户数据的纠错模型。&lt;/p&gt;
+
+&lt;p&gt;本文的工作和主流的改写流程差不多，主要包含了两个方面：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;语音识别系统首先会给出n-best候选，不同于一般的候选，这里会增加一部分通过点击数据统计出来的额外的候选。&lt;/li&gt;
+  &lt;li&gt;接着进行ReScore，构建更加精确的n-best list&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对于第一步，需要从user click data中统计出result confusion matrix,该矩阵揭示了当展现某一个query的时候，用户点击其他query的频次，比如对于识别系统识别出来的n-best list:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;table&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;td&gt;Sterling&lt;/td&gt;
+        &lt;td&gt;Stirling&lt;/td&gt;
+        &lt;td&gt;Burlington&lt;/td&gt;
+        &lt;td&gt;Cooling&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;通过点击数据可以构造如下的result confusion matrix:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Bar&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Bowling&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Burgerking&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;…&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Burlington&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Sterling&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Burlington&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;13&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;…&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;15&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Cooling&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;7&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;…&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Sterling&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;…&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;10&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Stirling&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;…&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;4&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;得到这个result confusion matrix之后，就可以将原有的n-best list进行扩充(在矩阵中共现过便可加入），得到如下结果：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;table&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;td&gt;Sterling&lt;/td&gt;
+        &lt;td&gt;Striling&lt;/td&gt;
+        &lt;td&gt;Burlington&lt;/td&gt;
+        &lt;td&gt;Cooling&lt;/td&gt;
+        &lt;td&gt;Bar&lt;/td&gt;
+        &lt;td&gt;Bowling&lt;/td&gt;
+        &lt;td&gt;Burgetking&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;对于第二步，需要利用矩阵的统计频次.$Score(word_i)=\sum_{i=0}C(word_i, otherword)$，其中$word_i$表示第$i$个n-best list的元素，$otherword$表示用户在展现$word_i$之后点击的$word$.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 16 Aug 2016 03:24:56 +0800</pubDate>
+        <link>http://kymo.github.io/machinelearning/2016/08/16/PaperReadingNote.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/08/16/PaperReadingNote.html</guid>
+        
+        
+        <category>MachineLearning</category>
+        
+      </item>
     
       <item>
         <title>Ensemble Learning Methods</title>
@@ -43,7 +158,7 @@
         <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/03/EnsembleLearningMethods.html</guid>
         
         
-        <category>machinelearning</category>
+        <category>MachineLearning</category>
         
       </item>
     
@@ -97,12 +212,12 @@ pLSA是基于这样一个假设，假设文档和主题的分布以及主题和�
 
 &lt;p&gt;利用Jensen不等式，对于凸函数&lt;script type=&quot;math/tex&quot;&gt;f(x)&lt;/script&gt;有：&lt;script type=&quot;math/tex&quot;&gt;f(\sum_{i=1}^Nw_ix_i)&gt;=\sum_{i=1}^Nw_if(x_i)&lt;/script&gt;可以得到：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) &gt; \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)\sum_{k=1}^K p(z_k \mid d_i) log(p(z_k \mid d_i )p(w_j\mid z_k) ) = L&#39;(\theta)&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) &gt; \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)\sum_{k=1}^K p(z_k \mid d_i) log(p(z_k \mid d_i )p(w_j\mid z_k) ) = L'(\theta)&lt;/script&gt;
 
-&lt;p&gt;此时即转化为，对于约束条件：&lt;script type=&quot;math/tex&quot;&gt;\sum_{k=1}^Kp(z_k|d_i)=1[1],\sum_{j=1}^Mp(w_j|z_k)=1[2]&lt;/script&gt; ，求&lt;script type=&quot;math/tex&quot;&gt;L&#39;(\theta)&lt;/script&gt;的最大值。
+&lt;p&gt;此时即转化为，对于约束条件：&lt;script type=&quot;math/tex&quot;&gt;\sum_{k=1}^Kp(z_k|d_i)=1[1],\sum_{j=1}^Mp(w_j|z_k)=1[2]&lt;/script&gt; ，求&lt;script type=&quot;math/tex&quot;&gt;L'(\theta)&lt;/script&gt;的最大值。
 对于这种带等式约束的优化问题，很显然可以构造拉格朗日乘法进行求解：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;H = L&#39;(\theta) + \sum_{i=1}^N\alpha_i(\sum_{k=1}^Kp(z_k|d_i)-1)+\sum_{k=1}^K\beta_k(\sum_{j=1}^Mp(w_j|z_k)-1)&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;H = L'(\theta) + \sum_{i=1}^N\alpha_i(\sum_{k=1}^Kp(z_k|d_i)-1)+\sum_{k=1}^K\beta_k(\sum_{j=1}^Mp(w_j|z_k)-1)&lt;/script&gt;
 
 &lt;p&gt;分别对 &lt;script type=&quot;math/tex&quot;&gt;p(z_k\mid d_i),p(w_j\mid z_k)&lt;/script&gt;求导可得：&lt;/p&gt;
 
@@ -134,7 +249,7 @@ pLSA是基于这样一个假设，假设文档和主题的分布以及主题和�
         <guid isPermaLink="true">http://kymo.github.io/naturallanguageprocessing/2016/04/02/pLSA.html</guid>
         
         
-        <category>naturallanguageprocessing</category>
+        <category>NaturalLanguageProcessing</category>
         
       </item>
     
@@ -251,7 +366,7 @@ K(p,q) = &lt;\phi(\eta_1,\eta_2), \phi(\gamma_1, \gamma_2)&gt; %]]&gt;&lt;/scrip
 如果&lt;script type=&quot;math/tex&quot;&gt;y_i!=y_j&lt;/script&gt;，那么&lt;script type=&quot;math/tex&quot;&gt;L=max(0, \alpha_j^{old} + \alpha_i^{old} - C)&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;H=min(C,\alpha_j^{old} + \alpha_i^{old})&lt;/script&gt;
 根据上式可以得到&lt;script type=&quot;math/tex&quot;&gt;\alpha_j^{new}&lt;/script&gt;为：&lt;/p&gt;
 
-&lt;p&gt;[\alpha_j^{new} = \begin{cases} H,~~~\alpha_j^{new,unc} &amp;gt; H \ \alpha_j^{new,unc},~~~~~ L&amp;lt;=\alpha_j^{new,unc}&amp;lt;=H \ L,~~~~~\alpha_j^{new,unc} &amp;lt; L \end{cases}]&lt;/p&gt;
+&lt;p&gt;[\alpha_j^{new} = \begin{cases} H,~&lt;del&gt;\alpha_j^{new,unc} &amp;gt; H \ \alpha_j^{new,unc},&lt;/del&gt;~~~ L&amp;lt;=\alpha_j^{new,unc}&amp;lt;=H \ L,~~~~~\alpha_j^{new,unc} &amp;lt; L \end{cases}]&lt;/p&gt;
 
 &lt;p&gt;由此可以得到&lt;script type=&quot;math/tex&quot;&gt;\alpha_i^{new}= \alpha_i^{old} + y_iy_j(\alpha_j^{old} - \alpha_j^{new})&lt;/script&gt;。&lt;/p&gt;
 
@@ -279,7 +394,7 @@ K(p,q) = &lt;\phi(\eta_1,\eta_2), \phi(\gamma_1, \gamma_2)&gt; %]]&gt;&lt;/scrip
         <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/SVM.html</guid>
         
         
-        <category>machinelearning</category>
+        <category>MachineLearning</category>
         
       </item>
     
@@ -395,7 +510,7 @@ x_{m,1}   ,  \cdot \cdot  \cdot  ,  x_{m,n}
         <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/SVD.html</guid>
         
         
-        <category>machinelearning</category>
+        <category>MachineLearning</category>
         
       </item>
     
@@ -403,7 +518,7 @@ x_{m,1}   ,  \cdot \cdot  \cdot  ,  x_{m,n}
         <title>Random Forest</title>
         <description>&lt;p&gt;一般我们提到序列标注问题，会有三种模型很引人瞩目，最大熵马尔科夫模型、隐马尔科夫模型和条件穗机场模型。三种的联系和区别详见：隐马尔可夫模型 最大熵马尔可夫模型 条件随机场 区别和联系。&lt;/p&gt;
 
-&lt;h3 id=&quot;hmm&quot;&gt;HMM简单介绍&lt;/h3&gt;
+&lt;p&gt;###HMM简单介绍&lt;/p&gt;
 
 &lt;p&gt;在介绍CRF建模过程，我们先简单的了解下HMM，因为HMM可以认为是CRF的子集，任何可以由HMM解决的问题都可以由CRF解决~&lt;/p&gt;
 
@@ -434,7 +549,7 @@ x_{m,1}   ,  \cdot \cdot  \cdot  ,  x_{m,n}
 
 &lt;p&gt;途中蓝色部分为隐含状态之间的转移概率矩阵，蓝线表示状态的转移。红线表示由隐含状态生成观测状态。计算的时候，我们可以根据迭代公式计算出前向概率，然后反向递推，得到生成该序列最大概率的隐含状态序列。比如上图中最后最有可能得到的生成“我、来、自、武、汉”这一观测序列的隐含状态序列为“SBEBE”，也即分词结果为”我\来自\武汉”。&lt;/p&gt;
 
-&lt;h3 id=&quot;crf&quot;&gt;CRF&lt;/h3&gt;
+&lt;p&gt;###CRF&lt;/p&gt;
 
 &lt;p&gt;HMM的假设简单粗暴，却行之有效，然而在分词或者词性标注这些应用上，却无法达到CRF所取得的效果，原因之一正是在于其假设。HMM过于local，导致其损失了非常多global的信息，而CRF却可以利用这些信息，从而可以得到更好的结果。&lt;/p&gt;
 
@@ -453,7 +568,7 @@ x_{m,1}   ,  \cdot \cdot  \cdot  ,  x_{m,n}
         <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/RandomForests.html</guid>
         
         
-        <category>machinelearning</category>
+        <category>MachineLearning</category>
         
       </item>
     
@@ -500,7 +615,7 @@ n阶马尔科夫过过程的当前状态只依赖于前n个时刻的状态，通
         <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/HMM.html</guid>
         
         
-        <category>machinelearning</category>
+        <category>MachineLearning</category>
         
       </item>
     
@@ -539,7 +654,7 @@ n阶马尔科夫过过程的当前状态只依赖于前n个时刻的状态，通
         <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/ESL_Notes.html</guid>
         
         
-        <category>machinelearning</category>
+        <category>MachineLearning</category>
         
       </item>
     
@@ -669,9 +784,9 @@ D[i][1]表示选了节点i，以i节点为根节点的子树得到的最大值
 05         }
 06         for (int j = 0; j &amp;lt; n; j ++) {
 07             if (((col &amp;gt;&amp;gt; j) % 2) || ((left &amp;gt;&amp;gt; (cur + j)) % 2) || ((right &amp;gt;&amp;gt; (cur + n - 1 - j)) % 2)) continue;
-08             matrix[cur][j] = &#39;Q&#39;;
+08             matrix[cur][j] = 'Q';
 09             search(n, matrix, cur + 1, col | (1 &amp;lt;&amp;lt; j), left | (1 &amp;lt;&amp;lt; (cur + j)), right | (1 &amp;lt;&amp;lt; (cur + n - 1 - j)));
-10             matrix[cur][j] = &#39;.&#39;;
+10             matrix[cur][j] = '.';
 11         }
 12     }
 13     vector&amp;lt;vector&lt;string&gt; &amp;gt; solveNQueens(int n) {
