@@ -1,3 +1,9 @@
+---
+layout: post
+title:  "Paper Reading Note"
+date:  2016-04-01 19:24:56
+categories: MachineLearning
+---
 ### Learning N-best Correction Models from Implicit User Feedback in a Muti-Modal Local Search Application
 
 > 通过用户的反馈对语音识别的结果进行纠错，通过点击数据构造result confusion matrix,然后利用该矩阵对结果进行重排
