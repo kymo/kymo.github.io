@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Paper Reading Note"
-date:  2016-04-01 19:24:56
+date:  2016-08-15 19:24:56
 categories: MachineLearning
 ---
 ### Learning N-best Correction Models from Implicit User Feedback in a Muti-Modal Local Search Application
