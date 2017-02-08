@@ -17,7 +17,7 @@ categories: MachineLearning
 
 对于第一步，需要从user click data中统计出result confusion matrix,该矩阵揭示了当展现某一个query的时候，用户点击其他query的频次，比如对于识别系统识别出来的n-best list:
 
-> Sterling | Stirling | Burlington | Cooling
+> Sterling  Stirling  Burlington  Cooling
 
 通过点击数据可以构造如下的result confusion matrix:
 
@@ -30,6 +30,6 @@ categories: MachineLearning
 
 得到这个result confusion matrix之后，就可以将原有的n-best list进行扩充(在矩阵中共现过便可加入），得到如下结果：
 
-> Sterling | Striling | Burlington | Cooling | Bar | Bowling  | Burgetking
+> Sterling  Striling  Burlington  Cooling  Bar  Bowling   Burgetking
 
 对于第二步，需要利用矩阵的统计频次.$Score(word_i)=\sum_{i=0}C(word_i, otherword)$，其中$word_i$表示第$i$个n-best list的元素，$otherword$表示用户在展现$word_i$之后点击的$word$.

@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 19 Aug 2016 21:25:43 +0800</pubDate>
-    <lastBuildDate>Fri, 19 Aug 2016 21:25:43 +0800</lastBuildDate>
+    <pubDate>Fri, 19 Aug 2016 23:36:29 +0800</pubDate>
+    <lastBuildDate>Fri, 19 Aug 2016 23:36:29 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -30,16 +30,7 @@
 &lt;p&gt;对于第一步，需要从user click data中统计出result confusion matrix,该矩阵揭示了当展现某一个query的时候，用户点击其他query的频次，比如对于识别系统识别出来的n-best list:&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;table&gt;
-    &lt;tbody&gt;
-      &lt;tr&gt;
-        &lt;td&gt;Sterling&lt;/td&gt;
-        &lt;td&gt;Stirling&lt;/td&gt;
-        &lt;td&gt;Burlington&lt;/td&gt;
-        &lt;td&gt;Cooling&lt;/td&gt;
-      &lt;/tr&gt;
-    &lt;/tbody&gt;
-  &lt;/table&gt;
+  &lt;p&gt;Sterling  Stirling  Burlington  Cooling&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;通过点击数据可以构造如下的result confusion matrix:&lt;/p&gt;
@@ -99,19 +90,7 @@
 &lt;p&gt;得到这个result confusion matrix之后，就可以将原有的n-best list进行扩充(在矩阵中共现过便可加入），得到如下结果：&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;table&gt;
-    &lt;tbody&gt;
-      &lt;tr&gt;
-        &lt;td&gt;Sterling&lt;/td&gt;
-        &lt;td&gt;Striling&lt;/td&gt;
-        &lt;td&gt;Burlington&lt;/td&gt;
-        &lt;td&gt;Cooling&lt;/td&gt;
-        &lt;td&gt;Bar&lt;/td&gt;
-        &lt;td&gt;Bowling&lt;/td&gt;
-        &lt;td&gt;Burgetking&lt;/td&gt;
-      &lt;/tr&gt;
-    &lt;/tbody&gt;
-  &lt;/table&gt;
+  &lt;p&gt;Sterling  Striling  Burlington  Cooling  Bar  Bowling   Burgetking&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;对于第二步，需要利用矩阵的统计频次.$Score(word_i)=\sum_{i=0}C(word_i, otherword)$，其中$word_i$表示第$i$个n-best list的元素，$otherword$表示用户在展现$word_i$之后点击的$word$.&lt;/p&gt;
