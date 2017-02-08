@@ -4,7 +4,7 @@ title: Aron
 permalink: /about/
 ---
 
-Master In Wuhan University, and believe that technology will change the world and help prolong the human civilization. Currently, I just a new comer of the application(performance optimization & product oriented) of Machine Learning and Natural Language Processing.
+Graduate from Wuhan University, and believe that technology will change the world and help prolong the human civilization. Currently, I work in a internet company, I focus on application(performance optimization & product oriented) on Machine Learning and Natural Language Processing and be willing to be a Algorithm architector.
 
 Email: kymowind@gmail.com
 
