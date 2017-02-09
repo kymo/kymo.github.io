@@ -6,12 +6,35 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 08 Feb 2017 23:22:16 +0800</pubDate>
-    <lastBuildDate>Wed, 08 Feb 2017 23:22:16 +0800</lastBuildDate>
+    <pubDate>Thu, 09 Feb 2017 09:51:21 +0800</pubDate>
+    <lastBuildDate>Thu, 09 Feb 2017 09:51:21 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
-        <title>Paper Reading Note</title>
+        <title>CRF 笔记</title>
+        <description>&lt;h1 id=&quot;crf-&quot;&gt;CRF 笔记&lt;/h1&gt;
+
+&lt;h5 id=&quot;dgmugm&quot;&gt;DGM转换成UGM&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;节点之间连接&lt;/li&gt;
+  &lt;li&gt;节点的双亲连接，有节点都指向同一个节点，说明两者之间有关联&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;两者之间还是有关联的&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 16 Aug 2016 03:24:56 +0800</pubDate>
+        <link>http://kymo.github.io/machinelearning/2016/08/16/CRF.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/08/16/CRF.html</guid>
+        
+        
+        <category>MachineLearning</category>
+        
+      </item>
+    
+      <item>
+        <title>论文阅读笔记</title>
         <description>&lt;h3 id=&quot;learning-n-best-correction-models-from-implicit-user-feedback-in-a-muti-modal-local-search-application&quot;&gt;Learning N-best Correction Models from Implicit User Feedback in a Muti-Modal Local Search Application&lt;/h3&gt;
 
 &lt;blockquote&gt;
@@ -680,110 +703,6 @@ D[i][1]表示选了节点i，以i节点为根节点的子树得到的最大值
         <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
         <link>http://kymo.github.io/algorithm/2016/04/02/DP.html</link>
         <guid isPermaLink="true">http://kymo.github.io/algorithm/2016/04/02/DP.html</guid>
-        
-        
-        <category>algorithm</category>
-        
-      </item>
-    
-      <item>
-        <title>Bit Manupulation</title>
-        <description>&lt;p&gt;Using bit manupulation to solve the Eight-Queen &amp;amp; Sudoku Problems. Sometime it seems that using bit manupulation can make the problem easy to be interpretated.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Sodoku Problem&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;01 class Solution {
-02     public: bool dfs(vector &amp;lt; int &amp;gt; &amp;amp;empty_sells, vector &amp;lt; vector &amp;lt; char &amp;gt; &amp;gt;&amp;amp;board, int start, int * col, int * row, int* grid) {
-03         if (start == empty_sells.size()) return true;
-04         int r = empty_sells[start] / 9;
-05         int c = empty_sells[start] % 9;
-06         int cur_val = col
-[c][/c]
- | row[r] | grid[(r / 3) * 3 + c / 3];
-07
-08         for (int j = 1; j &amp;lt;= 9; j++) {
-09             if ((cur_val | (1 « (j - 1))) ^ cur_val) {
-10                 col
-[c][/c]
- |= (1 « (j - 1));
-11                 row[r] |= (1 « (j - 1));
-12                 grid[(r / 3) * 3 + c / 3] |= (1 « (j - 1));
-13                 board[r]
-[c][/c]
- = ‘0’ + j;
-14                 if (dfs(empty_sells, board, start + 1, col, row, grid)) {
-15                     return true;
-16                 }
-17                 board[r]
-[c][/c]
- = ‘.’;
-18                 col
-[c][/c]
- ^= (1 « (j - 1));
-19                 row[r] ^= (1 « (j - 1));
-20                 grid[(r / 3) * 3 + c / 3] ^= (1 « (j - 1));
-21             }
-22         }
-23         return false;
-24
-25     }
-26     void solveSudoku(vector &amp;lt; vector &amp;lt; char &amp;gt; &amp;gt;&amp;amp;board) {
-27         int col[9],
-28         row[9],
-29         grid[9];
-30         memset(col, 0, sizeof(col));
-31         memset(row, 0, sizeof(row));
-32         memset(grid, 0, sizeof(grid));
-33         vector &amp;lt; int &amp;gt; empty_sells;
-34         for (int j = 0; j &amp;lt; board.size(); j++) {
-35             for (int k = 0; k &amp;lt; board[0].size(); k++) {
-36                 if (board[j][k] != ‘.’) {
-37                     row[j] |= (1 « (board[j][k] - ‘0’ - 1));
-38                     col[k] |= (1 « (board[j][k] - ‘0’ - 1));
-39                     grid[(j / 3) * 3 + k / 3] |= (1 « (board[j][k] - ‘0’ - 1));
-40                 } else {
-41                     empty_sells.push_back(j * 9 + k);
-42                 }
-43             }
-44         }
-45         dfs(empty_sells, board, 0, col, row, grid);
-46     }
-47 };&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Eight Queens&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;01 void search(int n, vector&lt;string&gt; &amp;amp;matrix, int cur, int col, int left, int right) {
-02         if (cur == n) {
-03             ans.push_back(matrix);
-04             return;
-05         }
-06         for (int j = 0; j &amp;lt; n; j ++) {
-07             if (((col &amp;gt;&amp;gt; j) % 2) || ((left &amp;gt;&amp;gt; (cur + j)) % 2) || ((right &amp;gt;&amp;gt; (cur + n - 1 - j)) % 2)) continue;
-08             matrix[cur][j] = 'Q';
-09             search(n, matrix, cur + 1, col | (1 &amp;lt;&amp;lt; j), left | (1 &amp;lt;&amp;lt; (cur + j)), right | (1 &amp;lt;&amp;lt; (cur + n - 1 - j)));
-10             matrix[cur][j] = '.';
-11         }
-12     }
-13     vector&amp;lt;vector&lt;string&gt; &amp;gt; solveNQueens(int n) {
-14         col = left = right = 0;
-15         vector&lt;string&gt; matrix;
-16         string str = &quot;&quot;;
-17         for (int j = 0; j &amp;lt; n; j ++) str += &quot;.&quot;;
-18         for (int i = 0; i &amp;lt; n; i ++) {
-19             matrix.push_back(str);
-20         }
-21         search(n, matrix, 0, 0, 0, 0);
-22         return ans;
-23     }&lt;/string&gt;&lt;/string&gt;&lt;/string&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
-        <link>http://kymo.github.io/algorithm/2016/04/02/Bit.html</link>
-        <guid isPermaLink="true">http://kymo.github.io/algorithm/2016/04/02/Bit.html</guid>
         
         
         <category>algorithm</category>
