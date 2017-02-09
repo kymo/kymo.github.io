@@ -1,0 +1,16 @@
+---
+layout: post
+title:  "CRF 笔记"
+date:  2016-08-15 19:24:56
+categories: MachineLearning
+tags: [CRF, NLP]
+---
+# CRF 笔记
+
+##### DGM转换成UGM
+
+* 节点之间连接
+* 节点的双亲连接，有节点都指向同一个节点，说明两者之间有关联
+
+两者之间还是有关联的
+

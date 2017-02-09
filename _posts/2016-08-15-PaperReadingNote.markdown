@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Paper Reading Note"
+title:  "论文阅读笔记"
 date:  2016-08-15 19:24:56
 categories: MachineLearning
 ---

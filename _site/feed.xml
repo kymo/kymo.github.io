@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 09 Feb 2017 09:51:21 +0800</pubDate>
-    <lastBuildDate>Thu, 09 Feb 2017 09:51:21 +0800</lastBuildDate>
+    <pubDate>Thu, 09 Feb 2017 19:49:11 +0800</pubDate>
+    <lastBuildDate>Thu, 09 Feb 2017 19:49:11 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -27,6 +27,10 @@
         <pubDate>Tue, 16 Aug 2016 03:24:56 +0800</pubDate>
         <link>http://kymo.github.io/machinelearning/2016/08/16/CRF.html</link>
         <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/08/16/CRF.html</guid>
+        
+        <category>CRF</category>
+        
+        <category>NLP</category>
         
         
         <category>MachineLearning</category>
