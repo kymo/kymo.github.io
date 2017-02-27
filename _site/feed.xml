@@ -6,9 +6,113 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 09 Feb 2017 19:49:11 +0800</pubDate>
-    <lastBuildDate>Thu, 09 Feb 2017 19:49:11 +0800</lastBuildDate>
+    <pubDate>Mon, 27 Feb 2017 10:00:05 +0800</pubDate>
+    <lastBuildDate>Mon, 27 Feb 2017 10:00:05 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>RNN</title>
+        <description>&lt;h4 id=&quot;section&quot;&gt;从神经网络谈起&lt;/h4&gt;
+
+&lt;p&gt;了解神经网络的都知道，神经网络作为一种非线性模型，在监督学习领域取得了state-of-art的效果，其中反向传播算法的提出居功至伟，到如今仍然是主流的优化神经网络参数的算法. 递归神经网络、卷积神经网络以及深度神经网络作为人工神经网络的”变种”，仍然延续了ANN的诸多特质，如权值连接，激励函数，以神经元为计算单元等，只不过因为应用场景的不同衍生了不同的特性，如：处理变长数据、权值共享等。&lt;/p&gt;
+
+&lt;p&gt;为了介绍RNN，先简单的介绍ANN. ANN的结构很容易理解，一般是三层结构（输入层-隐含层-输出层）. 隐含层输出&lt;script type=&quot;math/tex&quot;&gt;O_j&lt;/script&gt; 和输出层输出&lt;script type=&quot;math/tex&quot;&gt;O_k&lt;/script&gt;如下。其中&lt;script type=&quot;math/tex&quot;&gt;net_j&lt;/script&gt;为隐含层第&lt;script type=&quot;math/tex&quot;&gt;j&lt;/script&gt;个神经元的输入,&lt;script type=&quot;math/tex&quot;&gt;u&lt;/script&gt;为输入层和隐含层的连接权值矩阵，&lt;script type=&quot;math/tex&quot;&gt;v&lt;/script&gt;为隐含层和输出层之间的连接权值矩阵.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;O_j=f(net_j)&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;O_k=f(net_k)&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;net_j=\sum_i(x_{i}*u_{i,j})+b_j&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;net_k=\sum_j(O_{j}*v_{j,k})+b_k&lt;/script&gt;
+
+&lt;p&gt;定义损失函数为&lt;script type=&quot;math/tex&quot;&gt;E=\sum_p\sum_k (y_k^p - d_k^p)^2&lt;/script&gt; ,其中&lt;script type=&quot;math/tex&quot;&gt;p​&lt;/script&gt;为样本下标，&lt;script type=&quot;math/tex&quot;&gt;y^p​&lt;/script&gt;为第&lt;script type=&quot;math/tex&quot;&gt;p​&lt;/script&gt;个样本的预测值,&lt;script type=&quot;math/tex&quot;&gt;d^p​&lt;/script&gt;为样本&lt;script type=&quot;math/tex&quot;&gt;p​&lt;/script&gt;的的真实值。然后分别对参数&lt;script type=&quot;math/tex&quot;&gt;v_{j,k}​&lt;/script&gt;、&lt;script type=&quot;math/tex&quot;&gt;u_{i,j}​&lt;/script&gt; 进行求导，可得：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial E}{\partial v_{j,k}} = \\
+= df \\
+= ni \\&lt;/script&gt;
+
+</description>
+        <pubDate>Fri, 02 Dec 2016 03:24:56 +0800</pubDate>
+        <link>http://kymo.github.io/machinelearning/2016/12/02/RNN.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/12/02/RNN.html</guid>
+        
+        
+        <category>MachineLearning</category>
+        
+      </item>
+    
+      <item>
+        <title>轻量应用服务器架构</title>
+        <description>&lt;h1 id=&quot;sub&quot;&gt;SUB&lt;/h1&gt;
+
+&lt;h2 id=&quot;socket&quot;&gt;SOCKET&lt;/h2&gt;
+
+&lt;h3 id=&quot;selecteoll-io&quot;&gt;设置为非阻塞模式，可以设置SELECT/EOLL IO模型.将&lt;/h3&gt;
+&lt;p&gt;Read, Write, Accept作为Reactor函数传递给IO模型&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;有新的连接发过来数据，利用解析任务解析该任务，然&lt;/h3&gt;
+&lt;p&gt;后将解析出来的数据按照类型生成新的对应任务丢到队
+列中. 任务处理完成之后，设置该FD为写，并将写的容
+一并返回.&lt;/p&gt;
+
+&lt;h2 id=&quot;io&quot;&gt;IO&lt;/h2&gt;
+
+&lt;h3 id=&quot;select&quot;&gt;Select&lt;/h3&gt;
+
+&lt;h4 id=&quot;readsetwriteset&quot;&gt;使用read_set和write_set处理连接和读写，并接受&lt;/h4&gt;
+&lt;p&gt;server 传递过来的回调函数指针作为事件处理方法&lt;/p&gt;
+
+&lt;h3 id=&quot;epoll&quot;&gt;Epoll&lt;/h3&gt;
+
+&lt;h4 id=&quot;todo&quot;&gt;TODO&lt;/h4&gt;
+
+&lt;h2 id=&quot;taskmgr&quot;&gt;TaskMgr&lt;/h2&gt;
+
+&lt;h3 id=&quot;task&quot;&gt;task&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-1&quot;&gt;对任务的封装，单个任务会有自己运行的回掉函数，以&lt;/h4&gt;
+&lt;p&gt;及运行时的参数空间,运行run完成之后，这个run会将
+数据写回缓冲区. 然后调用call_back函数，将结果写
+会fd,不同的任务会继承该task, 计算任务可以由用户指
+定运行的回调函数.&lt;/p&gt;
+
+&lt;h3 id=&quot;taskhandler&quot;&gt;task_handler&lt;/h3&gt;
+
+&lt;h4 id=&quot;theadhandler&quot;&gt;作为线程池的thead_handler，每次都会从任务队列&lt;/h4&gt;
+&lt;p&gt;中取一个任务进行运行&lt;/p&gt;
+
+&lt;h2 id=&quot;threadmgr&quot;&gt;ThreadMgr&lt;/h2&gt;
+
+&lt;h3 id=&quot;thread&quot;&gt;thread&lt;/h3&gt;
+
+&lt;h4 id=&quot;threadhandler&quot;&gt;对线程的封装，线程运行函数由thread_handler指定&lt;/h4&gt;
+
+&lt;h3 id=&quot;threadhandler-1&quot;&gt;thread_handler&lt;/h3&gt;
+
+&lt;h4 id=&quot;handl&quot;&gt;线程真正的实现逻辑，不同类型的线程有不同的handl&lt;/h4&gt;
+&lt;p&gt;er去处理，对于线程池中的handler会不断的从taskM
+gr中取task进行处理&lt;/p&gt;
+
+&lt;h3 id=&quot;threadpool&quot;&gt;thread_pool&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-2&quot;&gt;线程池模型,根据配置中的线程数启动每个线程分配一&lt;/h4&gt;
+&lt;p&gt;个handler&lt;/p&gt;
+
+&lt;h2 id=&quot;pluginmgr&quot;&gt;PluginMgr&lt;/h2&gt;
+
+&lt;h2 id=&quot;dictmgr&quot;&gt;DictMgr&lt;/h2&gt;
+
+&lt;h2 id=&quot;configmgr&quot;&gt;ConfigMgr&lt;/h2&gt;
+
+&lt;h2 id=&quot;memorymgr&quot;&gt;MemoryMgr&lt;/h2&gt;
+</description>
+        <pubDate>Tue, 20 Sep 2016 00:00:00 +0800</pubDate>
+        <link>http://kymo.github.io/2016/09/20/%E8%BD%BB%E9%87%8F%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%9E%B6%E6%9E%84.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/2016/09/20/%E8%BD%BB%E9%87%8F%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%9E%B6%E6%9E%84.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>CRF 笔记</title>
@@ -622,94 +726,6 @@ n阶马尔科夫过过程的当前状态只依赖于前n个时刻的状态，通
         
         
         <category>MachineLearning</category>
-        
-      </item>
-    
-      <item>
-        <title>ESL Notes</title>
-        <description>&lt;p&gt;对ml的大部分模型有了了解之后，混沌中遇到师兄赠书，便要了ESL，度厂实习期间，看的晕晕乎乎，英文略显晦涩，但是坚持至今，
-现在最大的障碍是太多细节和精髓无法掌握，只好做些笔记，帮助理解。&lt;/p&gt;
-
-&lt;p&gt;第1章 略&lt;/p&gt;
-
-&lt;p&gt;第2章 &lt;a href=&quot;&quot;&gt;Overview of Supervised Learning&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;第3章 [Linear Methods for Regression]&lt;/p&gt;
-
-&lt;p&gt;第4章 Linear Methods for Classification&lt;/p&gt;
-
-&lt;p&gt;第5章 Basis Expansions And Regularization&lt;/p&gt;
-
-&lt;p&gt;第6章 Kernel Methods&lt;/p&gt;
-
-&lt;p&gt;第7章 Model Assessment And Selection&lt;/p&gt;
-
-&lt;p&gt;第8章 Model Inference And Averaging&lt;/p&gt;
-
-&lt;p&gt;第9章 Additive Models And Trees&lt;/p&gt;
-
-&lt;p&gt;第10章 Boosting And Additive Trees&lt;/p&gt;
-
-&lt;p&gt;第11章 Neural Networks&lt;/p&gt;
-
-&lt;p&gt;第12-14章节 略&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
-        <link>http://kymo.github.io/machinelearning/2016/04/02/ESL_Notes.html</link>
-        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/ESL_Notes.html</guid>
-        
-        
-        <category>MachineLearning</category>
-        
-      </item>
-    
-      <item>
-        <title>Dynamic Programming</title>
-        <description>&lt;h3 id=&quot;dp&quot;&gt;状态压缩DP&lt;/h3&gt;
-&lt;p&gt;状态压缩一般适用于状态非常多的动态规划问题，之所以叫状态压缩DP，是因为在动态规划的过程中，通过位压缩技术，可以压缩状态空间，而状态压缩问题一般都伴随着问题的条件限制，比如说相邻不能相同，或者相隔n个单元不能相同等。&lt;/p&gt;
-
-&lt;p&gt;来个例子说明这个问题&lt;/p&gt;
-
-&lt;p&gt;对于poj 3254，问题抽离出来的大意是，有个一部分空格无法填入值的矩阵，然后让你在剩余空格中填入0或者1，并且相邻空格不能填1，问最终由多少种填法。&lt;/p&gt;
-
-&lt;p&gt;我们将一行填入0,1之后看成一个二进制数state，但是此时如果列数很多的情况的话，时间复杂度还是不可小觑的，所以当加入一些条件，比如上述问题中的相邻空格不能为1，就可以将状态进一步压缩，对于某个状态i，如果i &amp;amp; (i « 1) 不为0 的话，说明此时i的二进制格式中，必然有相邻的1。所以进一步压缩，新的状态总数必然要减少很多。而新的state可以作为这一行的此时的状态，当然是否合法还需要按照当前行的可填入空格的情况而论的。&lt;/p&gt;
-
-&lt;p&gt;稍微分析可知，当第i行状态为state时，此时总的方案数必然是第i-1行合法状态的累加。&lt;/p&gt;
-
-&lt;p&gt;状态表示：dp[i][state] 表示第i行的状态为state，此时获得的最大方案数；&lt;/p&gt;
-
-&lt;p&gt;状态方程转移：dp[i][state] = Add(dp[i - 1][_state])，此时state为第i行状态，_state为第i-1行状态；&lt;/p&gt;
-
-&lt;p&gt;代码见：https://github.com/kymo/acm/blob/master/POJ/ztysdp_3254.cpp&lt;/p&gt;
-
-&lt;h3 id=&quot;dp-1&quot;&gt;树形DP&lt;/h3&gt;
-
-&lt;p&gt;由于树本身的递归特性，所以在树上进行DP则是再好不过的了，父节点的状态在递归的时候，通过栈返回的子节点的状态得到更新。这里举出两个例子。&lt;/p&gt;
-
-&lt;p&gt;例(poj2432):
-有n个人，每个人有个给定的价值，并给出两两之间的上下级关系，求一个集合，使得集合元素不存在上下级关系，且他们的价值和最大？&lt;/p&gt;
-
-&lt;p&gt;稍微分析一下，得知某个节点的状态有两种，选入集合或者不选入集合。由此我们可以令：
-D[i][0]表示不选节点i，以i节点为根节点的子树得到的最大值
-D[i][1]表示选了节点i，以i节点为根节点的子树得到的最大值
-由此可以得到我们的DP方程如下：&lt;/p&gt;
-
-&lt;p&gt;代码:&lt;a href=&quot;https://github.com/kymo/acm/blob/master/POJ/2342.cpp&quot;&gt;https://github.com/kymo/acm/blob/master/POJ/2342.cpp&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;POJ 1463题目大意如此，只不过在本题是安排士兵的位置，状态方程和&lt;/p&gt;
-
-&lt;p&gt;例(HDU 2196)
-有n(n 最大为10^4)个节点的树，每条边有一定的距离，求距离每一个节点最远的距离值。
-按照常规思路的话，可能是用最短路算法，但是n的数据范围不允许我们如此暴力。仔细分析下，在树的父子结构一定的情况下，每个节点最长的距离的值必然和子节点和父节点相关，&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
-        <link>http://kymo.github.io/algorithm/2016/04/02/DP.html</link>
-        <guid isPermaLink="true">http://kymo.github.io/algorithm/2016/04/02/DP.html</guid>
-        
-        
-        <category>algorithm</category>
         
       </item>
     
