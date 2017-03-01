@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Aron's blog</title>
+    <title>Aron blog</title>
     <description>nihao
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 28 Feb 2017 10:00:21 +0800</pubDate>
-    <lastBuildDate>Tue, 28 Feb 2017 10:00:21 +0800</lastBuildDate>
+    <pubDate>Wed, 01 Mar 2017 11:08:22 +0800</pubDate>
+    <lastBuildDate>Wed, 01 Mar 2017 11:08:22 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
         <title>RNN</title>
-        <description>&lt;h4 id=&quot;section&quot;&gt;从神经网络谈起&lt;/h4&gt;
+        <description>&lt;h4 id=&quot;从神经网络谈起&quot;&gt;从神经网络谈起&lt;/h4&gt;
 
 &lt;p&gt;了解神经网络的都知道，神经网络作为一种非线性模型，在监督学习领域取得了state-of-art的效果，其中反向传播算法的提出居功至伟，到如今仍然是主流的优化神经网络参数的算法. 递归神经网络、卷积神经网络以及深度神经网络作为人工神经网络的”变种”，仍然延续了ANN的诸多特质，如权值连接，激励函数，以神经元为计算单元等，只不过因为应用场景的不同衍生了不同的特性，如：处理变长数据、权值共享等。&lt;/p&gt;
 
-&lt;p&gt;为了介绍RNN，先简单的介绍ANN. ANN的结构很容易理解，一般是三层结构（输入层-隐含层-输出层）. 隐含层输出&lt;script type=&quot;math/tex&quot;&gt;O_j&lt;/script&gt; 和输出层输出&lt;script type=&quot;math/tex&quot;&gt;O_k&lt;/script&gt;如下。其中&lt;script type=&quot;math/tex&quot;&gt;net_j&lt;/script&gt;为隐含层第&lt;script type=&quot;math/tex&quot;&gt;j&lt;/script&gt;个神经元的输入,&lt;script type=&quot;math/tex&quot;&gt;u&lt;/script&gt;为输入层和隐含层的连接权值矩阵，&lt;script type=&quot;math/tex&quot;&gt;v&lt;/script&gt;为隐含层和输出层之间的连接权值矩阵.&lt;/p&gt;
+&lt;p&gt;为了介绍RNN，先简单的介绍ANN. ANN的结构很容易理解，一般是三层结构（输入层-隐含层-输出层）. 隐含层输出&lt;script type=&quot;math/tex&quot;&gt;o_j&lt;/script&gt; 和输出层输出&lt;script type=&quot;math/tex&quot;&gt;o_k&lt;/script&gt;如下。其中&lt;script type=&quot;math/tex&quot;&gt;net_j&lt;/script&gt;为隐含层第&lt;script type=&quot;math/tex&quot;&gt;j&lt;/script&gt;个神经元的输入,&lt;script type=&quot;math/tex&quot;&gt;u&lt;/script&gt;为输入层和隐含层的连接权值矩阵，&lt;script type=&quot;math/tex&quot;&gt;v&lt;/script&gt;为隐含层和输出层之间的连接权值矩阵.&lt;/p&gt;
 
-&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;O_j=f(net_j)&lt;/script&gt;
-&lt;script type=&quot;math/tex&quot;&gt;O_k=f(net_k)&lt;/script&gt;
-&lt;script type=&quot;math/tex&quot;&gt;net_j=\sum_i(x_{i}u_{i,j})+b_j&lt;/script&gt;
-&lt;script type=&quot;math/tex&quot;&gt;net_k=\sum_j(O_{j}v_{j,k})+b_k&lt;/script&gt;&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;o_j=f(net_j)&lt;/script&gt;
 
-&lt;p&gt;定义损失函数为&lt;script type=&quot;math/tex&quot;&gt;E=\frac{1}{2}\sum_p\sum_k (O_k^p - d_k^p)^2&lt;/script&gt; ,其中&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;为样本下标，&lt;script type=&quot;math/tex&quot;&gt;y^p&lt;/script&gt;为第&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;个样本的预测值,&lt;script type=&quot;math/tex&quot;&gt;d^p&lt;/script&gt;为样本&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;的的真实值。然后分别对参数&lt;script type=&quot;math/tex&quot;&gt;v_{j,k}&lt;/script&gt;、&lt;script type=&quot;math/tex&quot;&gt;u_{i,j}&lt;/script&gt; 进行求导，可得：&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;o_k=f(net_k)&lt;/script&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial E}{\partial v_{j,k}} = \frac{\partial E}{\partial net_k} \frac{\partial net_k}{\partial v_{j,k}} \\
-= \frac{\partial E}{\partial net_k}O_j \\
-= \frac{\partial E}{\partial O_k}\frac{\partial O_k}{\partial net_k}O_j \\
-= \sum_p (O_k^p-d_k^p)f(net_k)(1-f(net_k))O_j&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;net_j=\sum_i(x_{i}u_{i,j})+b_j&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;net_k=\sum_j(o_{j}v_{j,k})+b_k&lt;/script&gt;
+
+&lt;p&gt;定义损失函数为&lt;script type=&quot;math/tex&quot;&gt;E_p=\frac{1}{2}\sum_k (o_k - d_k)^2&lt;/script&gt; ,其中&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;为样本下标，&lt;script type=&quot;math/tex&quot;&gt;o^k&lt;/script&gt;为第&lt;script type=&quot;math/tex&quot;&gt;k&lt;/script&gt;个输出层神经元的输出,&lt;script type=&quot;math/tex&quot;&gt;d^k&lt;/script&gt;为样本在第$k$个编码值。然后分别对参数&lt;script type=&quot;math/tex&quot;&gt;v_{j,k}&lt;/script&gt;、&lt;script type=&quot;math/tex&quot;&gt;u_{i,j}&lt;/script&gt; 进行求导，可得：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial E_p}{\partial v_{j,k}} \\
+= \frac{\partial E_p}{\partial net_k} \frac{\partial net_k}{\partial v_{j,k}} \\
+= \frac{\partial E_p}{\partial net_k}o_j \\
+= \frac{\partial E_p}{\partial o_k}\frac{\partial o_k}{\partial net_k}o_j \\
+= (o_k-d_k)o_k(1-o_k)O_j&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align}
+\sqrt{37} &amp; = \sqrt{\frac{73^2-1}{12^2}} \\
+ &amp; = \sqrt{\frac{73^2}{12^2}\cdot\frac{73^2-1}{73^2}} \\ 
+ &amp; = \sqrt{\frac{73^2}{12^2}}\sqrt{\frac{73^2-1}{73^2}} \\
+ &amp; = \frac{73}{12}\sqrt{1 - \frac{1}{73^2}} \\ 
+ &amp; \approx \frac{73}{12}\left(1 - \frac{1}{2\cdot73^2}\right)
+\end{align} %]]&gt;&lt;/script&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial E}{\partial net_k} = \\
 = ni \\
 = nhao \\&lt;/script&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{array}{c|clr}
-n &amp; \text{Left} &amp; \text{Center} &amp; \text{Right} \\
-\hline
-1 &amp; 0.24 &amp; 1 &amp; 125 \\
-2 &amp; -1 &amp; 189 &amp; -8 \\
-3 &amp; -20 &amp; 2000 &amp; 1+10i \\
-\end{array} %]]&gt;&lt;/script&gt;
 
 </description>
         <pubDate>Fri, 02 Dec 2016 03:24:56 +0800</pubDate>
@@ -59,10 +63,10 @@ n &amp; \text{Left} &amp; \text{Center} &amp; \text{Right} \\
 
 &lt;h2 id=&quot;socket&quot;&gt;SOCKET&lt;/h2&gt;
 
-&lt;h3 id=&quot;selecteoll-io&quot;&gt;设置为非阻塞模式，可以设置SELECT/EOLL IO模型.将&lt;/h3&gt;
+&lt;h3 id=&quot;设置为非阻塞模式可以设置selecteoll-io模型将&quot;&gt;设置为非阻塞模式，可以设置SELECT/EOLL IO模型.将&lt;/h3&gt;
 &lt;p&gt;Read, Write, Accept作为Reactor函数传递给IO模型&lt;/p&gt;
 
-&lt;h3 id=&quot;section&quot;&gt;有新的连接发过来数据，利用解析任务解析该任务，然&lt;/h3&gt;
+&lt;h3 id=&quot;有新的连接发过来数据利用解析任务解析该任务然&quot;&gt;有新的连接发过来数据，利用解析任务解析该任务，然&lt;/h3&gt;
 &lt;p&gt;后将解析出来的数据按照类型生成新的对应任务丢到队
 列中. 任务处理完成之后，设置该FD为写，并将写的容
 一并返回.&lt;/p&gt;
@@ -71,7 +75,7 @@ n &amp; \text{Left} &amp; \text{Center} &amp; \text{Right} \\
 
 &lt;h3 id=&quot;select&quot;&gt;Select&lt;/h3&gt;
 
-&lt;h4 id=&quot;readsetwriteset&quot;&gt;使用read_set和write_set处理连接和读写，并接受&lt;/h4&gt;
+&lt;h4 id=&quot;使用read_set和write_set处理连接和读写并接受&quot;&gt;使用read_set和write_set处理连接和读写，并接受&lt;/h4&gt;
 &lt;p&gt;server 传递过来的回调函数指针作为事件处理方法&lt;/p&gt;
 
 &lt;h3 id=&quot;epoll&quot;&gt;Epoll&lt;/h3&gt;
@@ -82,32 +86,32 @@ n &amp; \text{Left} &amp; \text{Center} &amp; \text{Right} \\
 
 &lt;h3 id=&quot;task&quot;&gt;task&lt;/h3&gt;
 
-&lt;h4 id=&quot;section-1&quot;&gt;对任务的封装，单个任务会有自己运行的回掉函数，以&lt;/h4&gt;
+&lt;h4 id=&quot;对任务的封装单个任务会有自己运行的回掉函数以&quot;&gt;对任务的封装，单个任务会有自己运行的回掉函数，以&lt;/h4&gt;
 &lt;p&gt;及运行时的参数空间,运行run完成之后，这个run会将
 数据写回缓冲区. 然后调用call_back函数，将结果写
 会fd,不同的任务会继承该task, 计算任务可以由用户指
 定运行的回调函数.&lt;/p&gt;
 
-&lt;h3 id=&quot;taskhandler&quot;&gt;task_handler&lt;/h3&gt;
+&lt;h3 id=&quot;task_handler&quot;&gt;task_handler&lt;/h3&gt;
 
-&lt;h4 id=&quot;theadhandler&quot;&gt;作为线程池的thead_handler，每次都会从任务队列&lt;/h4&gt;
+&lt;h4 id=&quot;作为线程池的thead_handler每次都会从任务队列&quot;&gt;作为线程池的thead_handler，每次都会从任务队列&lt;/h4&gt;
 &lt;p&gt;中取一个任务进行运行&lt;/p&gt;
 
 &lt;h2 id=&quot;threadmgr&quot;&gt;ThreadMgr&lt;/h2&gt;
 
 &lt;h3 id=&quot;thread&quot;&gt;thread&lt;/h3&gt;
 
-&lt;h4 id=&quot;threadhandler&quot;&gt;对线程的封装，线程运行函数由thread_handler指定&lt;/h4&gt;
+&lt;h4 id=&quot;对线程的封装线程运行函数由thread_handler指定&quot;&gt;对线程的封装，线程运行函数由thread_handler指定&lt;/h4&gt;
 
-&lt;h3 id=&quot;threadhandler-1&quot;&gt;thread_handler&lt;/h3&gt;
+&lt;h3 id=&quot;thread_handler&quot;&gt;thread_handler&lt;/h3&gt;
 
-&lt;h4 id=&quot;handl&quot;&gt;线程真正的实现逻辑，不同类型的线程有不同的handl&lt;/h4&gt;
+&lt;h4 id=&quot;线程真正的实现逻辑不同类型的线程有不同的handl&quot;&gt;线程真正的实现逻辑，不同类型的线程有不同的handl&lt;/h4&gt;
 &lt;p&gt;er去处理，对于线程池中的handler会不断的从taskM
 gr中取task进行处理&lt;/p&gt;
 
-&lt;h3 id=&quot;threadpool&quot;&gt;thread_pool&lt;/h3&gt;
+&lt;h3 id=&quot;thread_pool&quot;&gt;thread_pool&lt;/h3&gt;
 
-&lt;h4 id=&quot;section-2&quot;&gt;线程池模型,根据配置中的线程数启动每个线程分配一&lt;/h4&gt;
+&lt;h4 id=&quot;线程池模型根据配置中的线程数启动每个线程分配一&quot;&gt;线程池模型,根据配置中的线程数启动每个线程分配一&lt;/h4&gt;
 &lt;p&gt;个handler&lt;/p&gt;
 
 &lt;h2 id=&quot;pluginmgr&quot;&gt;PluginMgr&lt;/h2&gt;
@@ -127,9 +131,9 @@ gr中取task进行处理&lt;/p&gt;
     
       <item>
         <title>CRF 笔记</title>
-        <description>&lt;h1 id=&quot;crf-&quot;&gt;CRF 笔记&lt;/h1&gt;
+        <description>&lt;h1 id=&quot;crf-笔记&quot;&gt;CRF 笔记&lt;/h1&gt;
 
-&lt;h5 id=&quot;dgmugm&quot;&gt;DGM转换成UGM&lt;/h5&gt;
+&lt;h5 id=&quot;dgm转换成ugm&quot;&gt;DGM转换成UGM&lt;/h5&gt;
 
 &lt;ul&gt;
   &lt;li&gt;节点之间连接&lt;/li&gt;
@@ -313,7 +317,7 @@ pLSA是基于这样一个假设，假设文档和主题的分布以及主题和�
 一般采用最大期望算法(Maximum Expection， ME)，EM算法的基本思想很直观，即随机初始化相关参数；随后，在E步，计算潜在变量的后验概率；M步，
 利用潜在变量的后验概率去更新未知参数。循环迭代直至达到最大迭代次数算法退出。&lt;/p&gt;
 
-&lt;h3 id=&quot;section&quot;&gt;问题：为什么可以收敛？&lt;/h3&gt;
+&lt;h3 id=&quot;问题为什么可以收敛&quot;&gt;问题：为什么可以收敛？&lt;/h3&gt;
 
 &lt;p&gt;在e步&lt;/p&gt;
 
@@ -380,7 +384,7 @@ pLSA是基于这样一个假设，假设文档和主题的分布以及主题和�
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;a^2 + b^2 = c^2&lt;/script&gt;
 
-&lt;h3 id=&quot;linear-svm&quot;&gt;1. linear SVM&lt;/h3&gt;
+&lt;h3 id=&quot;1-linear-svm&quot;&gt;1. linear SVM&lt;/h3&gt;
 
 &lt;p&gt;在分类任务中，样本label为&lt;script type=&quot;math/tex&quot;&gt;{-1,1}&lt;/script&gt;，关于从sign distance转换到geometry distance的过程其实很容易理解，
 sign distance可以衡量某个样本被分类的置信，如果sign distance越大，那么该样本被分为该类别的可信度就更大；
@@ -523,10 +527,10 @@ K(p,q) = &lt;\phi(\eta_1,\eta_2), \phi(\gamma_1, \gamma_2)&gt; %]]&gt;&lt;/scrip
         <title>SVD</title>
         <description>&lt;p&gt;奇异值分解作为一种矩阵分解的算法，广泛的应用于数据分析、信号处理、模式识别、图片压缩、天气预测以及潜在概率语义分析等应用。其实质是通过分解矩阵，找到矩阵行列之间的某种潜在关系。如在推荐系统中利用SVD分解用户-商品的评分矩阵，便可以得到用户和商品之间的关联。&lt;/p&gt;
 
-&lt;h3 id=&quot;section&quot;&gt;特征值分解&lt;/h3&gt;
+&lt;h3 id=&quot;特征值分解&quot;&gt;特征值分解&lt;/h3&gt;
 &lt;p&gt;一般矩阵乘以某个向量，代表着对该向量进行某种线性变换：拉伸、平移以及旋转，在计算机图形学中经常对三维场景的物体在各种不同的坐标系下进行变换也利用了该种性质，直接利用物体的三维坐标乘以变换矩阵即可实现。如果对向量的线性变换仅仅只是对向量进行了缩放，那么这种情况便是特征值分解，既有&lt;script type=&quot;math/tex&quot;&gt;Ax=\lambda x&lt;/script&gt;. 特征值分解的物理意义在不同的应用场景下有不同的解释。不过一般都是对对称矩阵&lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt;进行分解，得到一组正交的特征向量作为正交基，使得矩阵&lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt;能够被投射到以该正交基为基底的空间中，特征值则表示在不同的正交基下的投射距离，特征值越大说明矩阵在对应的特征向量上的方差越大，功率越大，信息熵也越大，在PCA(principal  component analysis)中，即可以利用特征值分解，获取最重要的K个成分对数据进行降维，保证在数据规模可控的情况下获得足够的信息量。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;奇异值分解&lt;/h3&gt;
+&lt;h3 id=&quot;奇异值分解&quot;&gt;奇异值分解&lt;/h3&gt;
 &lt;p&gt;奇异值分解可以认为是特征值分解的扩充，即解决对于矩阵&lt;script type=&quot;math/tex&quot;&gt;A(m \times n)&lt;/script&gt;能否在原始空间&lt;script type=&quot;math/tex&quot;&gt;R^n&lt;/script&gt;中找到一组正交基&lt;script type=&quot;math/tex&quot;&gt;(v_1, v_2, v_3, \cdot \cdot \cdot , v_n)&lt;/script&gt;，使得经过该线性变换矩阵投射得新的空间&lt;script type=&quot;math/tex&quot;&gt;R^m&lt;/script&gt;中的向量仍然正交的问题，即当&lt;script type=&quot;math/tex&quot;&gt;i!=j ，v_i^T \times v_j = 0&lt;/script&gt;时，&lt;script type=&quot;math/tex&quot;&gt;(Av_i,Av_j) = 0&lt;/script&gt;.&lt;/p&gt;
 
 &lt;p&gt;对于矩阵&lt;script type=&quot;math/tex&quot;&gt;A^TA(n \times n)&lt;/script&gt;，该矩阵为对称矩阵，且有&lt;script type=&quot;math/tex&quot;&gt;r(A^TA)=r&lt;/script&gt;，则可以通过特征值分解得到对应的一组正交基&lt;script type=&quot;math/tex&quot;&gt;(v_1, v_2, v_3, \cdot \cdot \cdot , v_r)&lt;/script&gt;，使得&lt;script type=&quot;math/tex&quot;&gt;A^TAv_i=\lambda v_i&lt;/script&gt;.
@@ -555,7 +559,7 @@ $&lt;/p&gt;
 
 &lt;p&gt;所以，&lt;script type=&quot;math/tex&quot;&gt;U&lt;/script&gt;可以看成是对矩阵&lt;script type=&quot;math/tex&quot;&gt;AA^T&lt;/script&gt;进行特征值分解得到的正交基，&lt;script type=&quot;math/tex&quot;&gt;V&lt;/script&gt;可以看成是对矩阵&lt;script type=&quot;math/tex&quot;&gt;A^TA&lt;/script&gt;进行分解得到的正交基。&lt;/p&gt;
 
-&lt;h3 id=&quot;svd-lsa&quot;&gt;SVD 在LSA中的应用&lt;/h3&gt;
+&lt;h3 id=&quot;svd-在lsa中的应用&quot;&gt;SVD 在LSA中的应用&lt;/h3&gt;
 
 &lt;p&gt;奇异值分解在诸多方面都有十分成功的应用，在数据压缩中，可以通过将原始的矩阵进行奇异值分解，去除奇异值较小的部分得到低阶近似，从而实现对数据的降维；在语义分析中，通过对构造的文档-词汇矩阵&lt;script type=&quot;math/tex&quot;&gt;D&lt;/script&gt;进行奇异值分解&lt;script type=&quot;math/tex&quot;&gt;D=U \Sigma V^T&lt;/script&gt;&lt;/p&gt;
 
@@ -597,16 +601,16 @@ x_{m,1}   ,  \cdot \cdot  \cdot  ,  x_{m,n}
 &lt;p&gt;此时，&lt;script type=&quot;math/tex&quot;&gt;d_j^T = (v_{1,j}，v_{2,j}, \cdot \cdot \cdot ,v_{k,j})&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;t_i^T =  (u_{1,j}，u_{2,j}, \cdot \cdot \cdot ,u_{k,j})&lt;/script&gt;
 此时D仍然是&lt;script type=&quot;math/tex&quot;&gt;m \times n&lt;/script&gt;，得到对词汇-文档原始矩阵的奇异值分解结果之后，变可以完成包括词汇相似度计算、文档相似度计算等任务。&lt;/p&gt;
 
-&lt;h4 id=&quot;pq&quot;&gt;1. 词汇相似度计算，计算语料中的两个词汇&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;q&lt;/script&gt;的语义相似度&lt;/h4&gt;
+&lt;h4 id=&quot;1-词汇相似度计算计算语料中的两个词汇pq的语义相似度&quot;&gt;1. 词汇相似度计算，计算语料中的两个词汇&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;q&lt;/script&gt;的语义相似度&lt;/h4&gt;
 &lt;p&gt;分别计算&lt;script type=&quot;math/tex&quot;&gt;\Sigma_k \times t_i&lt;/script&gt;以及&lt;script type=&quot;math/tex&quot;&gt;\Sigma_k \times t_j&lt;/script&gt;(i和j为词汇p,q对应的ID)，可以得到两个列向量，然后通过某种距离计算方式可以得到两者的语义距离.&lt;/p&gt;
 
-&lt;h4 id=&quot;p-q&quot;&gt;2. 文档相似度计算，计算语料中的两篇文档&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;q&lt;/script&gt;的语义相似度&lt;/h4&gt;
+&lt;h4 id=&quot;2-文档相似度计算计算语料中的两篇文档p-q的语义相似度&quot;&gt;2. 文档相似度计算，计算语料中的两篇文档&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;q&lt;/script&gt;的语义相似度&lt;/h4&gt;
 &lt;p&gt;分别计算&lt;script type=&quot;math/tex&quot;&gt;\Sigma_k \times d_i&lt;/script&gt;以及&lt;script type=&quot;math/tex&quot;&gt;\Sigma_k \times d_j&lt;/script&gt;(i和j为词汇p,q对应的ID)，可以得到两个列向量，然后通过某种距离计算方式可以得到两者的语义距离.&lt;/p&gt;
 
-&lt;h4 id=&quot;section-2&quot;&gt;3. 分本聚类&lt;/h4&gt;
+&lt;h4 id=&quot;3-分本聚类&quot;&gt;3. 分本聚类&lt;/h4&gt;
 &lt;p&gt;低阶降维之后可以的到语义空间的文档特征，从而可以利用一些无监督的聚类算法进行文档聚类，当然也可以作为分档分类的特征。&lt;/p&gt;
 
-&lt;h4 id=&quot;lsa-&quot;&gt;4. LSA 缺点&lt;/h4&gt;
+&lt;h4 id=&quot;4-lsa-缺点&quot;&gt;4. LSA 缺点&lt;/h4&gt;
 
 &lt;ul&gt;
   &lt;li&gt;新生成的矩阵的解释性比较差.造成这种难以解释的结果是因为SVD只是一种数学变换，并无法对应成现实中的概念。&lt;/li&gt;
@@ -615,7 +619,7 @@ x_{m,1}   ,  \cdot \cdot  \cdot  ,  x_{m,n}
   &lt;li&gt;LSA的概率模型假设文档和词的分布是服从联合正态分布的，但从观测数据来看是服从泊松分布的。因此LSA算法的一个改进PLSA使用了多项分布，其效果要好于LSA。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;参考资料&lt;/h3&gt;
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;http://www.puffinwarellc.com/index.php/news-and-articles/articles/30-singular-value-decomposition-tutorial.html?showall=1&quot;&gt;Singular Value Decomposition (SVD) Tutorial&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;http://blog.sciencenet.cn/blog-696950-699432.html&quot;&gt;奇异值分解(SVD) — 几何意义&lt;/a&gt;&lt;/li&gt;
@@ -712,7 +716,7 @@ n阶马尔科夫过过程的当前状态只依赖于前n个时刻的状态，通
 
 &lt;p&gt;对于第一种问题，可以使用最为原始的暴力出奇迹，枚举所有的状态，求出状态和观测序列的联合概率分布，然后进行求和，即可得到最后的结果，也可以使用更为优雅的算法，比如即将介绍的基于动态规划的forward-backward算法，这两种算法也是HMM这类概率图模型所特有的一种求解方法，就像是BP之于NN一般。&lt;/p&gt;
 
-&lt;h4 id=&quot;forword-algorithm&quot;&gt;1&amp;gt; forword-algorithm&lt;/h4&gt;
+&lt;h4 id=&quot;1-forword-algorithm&quot;&gt;1&amp;gt; forword-algorithm&lt;/h4&gt;
 
 &lt;p&gt;前向算法，是一种动态规划算法，之前看NLP的另外一个算法中也使用了动态规划的思想，它具有许多独特的性质，比如子问题最优，也即全局最优可以通过枚举子问题最优得到，联想到HMM的图模型结构，我们不难得知，在时刻t处于状态i的情况(此时观测序列为O1,O2,O3,…,Ot)下，它可以由多种子状态按照HMM的性质转化而来，即可以由时刻t-1处于状态j的情况(此时观测序列为O1,O2,O3,…,Ot-1)首先从状态i转换到j，然后生成观测序列Ot得到，所以可以得到如下的DP状态转移方程：&lt;/p&gt;
 
@@ -720,7 +724,7 @@ n阶马尔科夫过过程的当前状态只依赖于前n个时刻的状态，通
 
 &lt;p&gt;上述方程也可以通过贝叶斯公式推出来。由此，问题1可以通过累加Alpha[T][i]得到。&lt;/p&gt;
 
-&lt;h3 id=&quot;backward-algorithm&quot;&gt;2&amp;gt; Backward-algorithm&lt;/h3&gt;
+&lt;h3 id=&quot;2-backward-algorithm&quot;&gt;2&amp;gt; Backward-algorithm&lt;/h3&gt;
 
 &lt;p&gt;有了前向算法，后向算法就很容易理解了，在时刻t处于状态i的前提下，观测序列为O(t+1)…O(T)的情况可以由在时刻t+1处于状态j的前提下的情况，首先从状态j转移到状态i，然后生成观测序列O(t+1)的过程得到，也即：&lt;/p&gt;
 
