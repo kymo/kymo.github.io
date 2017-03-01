@@ -5,7 +5,11 @@ date:  2016-12-01 19:24:56
 categories: MachineLearning
 ---
 
-#### 从神经网络谈起
+
+递归神经网络的一些小事儿
+-----
+
+### 1. 从神经网络谈起
 
 了解神经网络的都知道，神经网络作为一种非线性模型，在监督学习领域取得了state-of-art的效果，其中反向传播算法的提出居功至伟，到如今仍然是主流的优化神经网络参数的算法. 递归神经网络、卷积神经网络以及深度神经网络作为人工神经网络的"变种"，仍然延续了ANN的诸多特质，如权值连接，激励函数，以神经元为计算单元等，只不过因为应用场景的不同衍生了不同的特性，如：处理变长数据、权值共享等。
 
@@ -28,17 +32,24 @@ $$
 \frac{\partial E_p}{\partial v_{j,k}} & = \frac{\partial E_p}{\partial net_k} \frac{\partial net_k}{\partial v_{j,k}} \\
 & = \frac{\partial E_p}{\partial net_k}o_j \\
 & = \frac{\partial E_p}{\partial o_k}\frac{\partial o_k}{\partial net_k}o_j \\
-& = (o_k-d_k)o_k(1-o_k)O_j
+& = (o_k-d_k)o_k(1-o_k)o_j
+\end{align}
+$$
+</p>
+
+<p>
+$$
+\begin{align}
+\frac{\partial E_p} {\partial u_{i,j}} & = \frac{\partial E_p} {\partial net_j} \frac{\partial net_j} {\partial u_{i,j}} \\
+& = \sum_k \frac{\partial E_p}{\partial net_k} \frac{\partial net_k}{\partial o_j} \frac{\partial o_j}{\partial u_{i,j}}  \\
+& = \sum_k \frac{\partial E_p}{\partial net_k} v_ \frac{\partial o_j}{\partial u_{i,j}} \\
+& = \frac{\partial E_p}{\partial o_k}\frac{\partial o_k}{\partial net_k}o_j \\
+& = (o_k-d_k)o_k(1-o_k)o_j
 \end{align}
 $$
 </p>
 
 
-$$
-\frac{\partial E}{\partial net_k} = \\
-= ni \\
-= nhao \\
-$$
 
 
 

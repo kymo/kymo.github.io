@@ -6,13 +6,15 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 01 Mar 2017 22:19:58 +0800</pubDate>
-    <lastBuildDate>Wed, 01 Mar 2017 22:19:58 +0800</lastBuildDate>
+    <pubDate>Thu, 02 Mar 2017 00:01:55 +0800</pubDate>
+    <lastBuildDate>Thu, 02 Mar 2017 00:01:55 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
         <title>RNN</title>
-        <description>&lt;h4 id=&quot;从神经网络谈起&quot;&gt;从神经网络谈起&lt;/h4&gt;
+        <description>&lt;h2 id=&quot;递归神经网络的一些小事儿&quot;&gt;递归神经网络的一些小事儿&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-从神经网络谈起&quot;&gt;1. 从神经网络谈起&lt;/h3&gt;
 
 &lt;p&gt;了解神经网络的都知道，神经网络作为一种非线性模型，在监督学习领域取得了state-of-art的效果，其中反向传播算法的提出居功至伟，到如今仍然是主流的优化神经网络参数的算法. 递归神经网络、卷积神经网络以及深度神经网络作为人工神经网络的”变种”，仍然延续了ANN的诸多特质，如权值连接，激励函数，以神经元为计算单元等，只不过因为应用场景的不同衍生了不同的特性，如：处理变长数据、权值共享等。&lt;/p&gt;
 
@@ -35,14 +37,22 @@ $$
 \frac{\partial E_p}{\partial v_{j,k}} &amp;amp; = \frac{\partial E_p}{\partial net_k} \frac{\partial net_k}{\partial v_{j,k}} \\
 &amp;amp; = \frac{\partial E_p}{\partial net_k}o_j \\
 &amp;amp; = \frac{\partial E_p}{\partial o_k}\frac{\partial o_k}{\partial net_k}o_j \\
-&amp;amp; = (o_k-d_k)o_k(1-o_k)O_j
+&amp;amp; = (o_k-d_k)o_k(1-o_k)o_j
 \end{align}
 $$
 &lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial E}{\partial net_k} = \\
-= ni \\
-= nhao \\&lt;/script&gt;
+&lt;p&gt;
+$$
+\begin{align}
+\frac{\partial E_p} {\partial u_{i,j}} &amp;amp; = \frac{\partial E_p} {\partial net_j} \frac{\partial net_j} {\partial u_{i,j}} \\
+&amp;amp; = \sum_k \frac{\partial E_p}{\partial net_k} \frac{\partial net_k}{\partial o_j} \frac{\partial o_j}{\partial u_{i,j}}  \\
+&amp;amp; = \sum_k \frac{\partial E_p}{\partial net_k} v_ \frac{\partial o_j}{\partial u_{i,j}} \\
+&amp;amp; = \frac{\partial E_p}{\partial o_k}\frac{\partial o_k}{\partial net_k}o_j \\
+&amp;amp; = (o_k-d_k)o_k(1-o_k)o_j
+\end{align}
+$$
+&lt;/p&gt;
 
 </description>
         <pubDate>Fri, 02 Dec 2016 03:24:56 +0800</pubDate>
