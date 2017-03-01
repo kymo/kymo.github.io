@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 01 Mar 2017 11:08:22 +0800</pubDate>
-    <lastBuildDate>Wed, 01 Mar 2017 11:08:22 +0800</lastBuildDate>
+    <pubDate>Wed, 01 Mar 2017 22:19:58 +0800</pubDate>
+    <lastBuildDate>Wed, 01 Mar 2017 22:19:58 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -17,31 +17,28 @@
 &lt;p&gt;了解神经网络的都知道，神经网络作为一种非线性模型，在监督学习领域取得了state-of-art的效果，其中反向传播算法的提出居功至伟，到如今仍然是主流的优化神经网络参数的算法. 递归神经网络、卷积神经网络以及深度神经网络作为人工神经网络的”变种”，仍然延续了ANN的诸多特质，如权值连接，激励函数，以神经元为计算单元等，只不过因为应用场景的不同衍生了不同的特性，如：处理变长数据、权值共享等。&lt;/p&gt;
 
 &lt;p&gt;为了介绍RNN，先简单的介绍ANN. ANN的结构很容易理解，一般是三层结构（输入层-隐含层-输出层）. 隐含层输出&lt;script type=&quot;math/tex&quot;&gt;o_j&lt;/script&gt; 和输出层输出&lt;script type=&quot;math/tex&quot;&gt;o_k&lt;/script&gt;如下。其中&lt;script type=&quot;math/tex&quot;&gt;net_j&lt;/script&gt;为隐含层第&lt;script type=&quot;math/tex&quot;&gt;j&lt;/script&gt;个神经元的输入,&lt;script type=&quot;math/tex&quot;&gt;u&lt;/script&gt;为输入层和隐含层的连接权值矩阵，&lt;script type=&quot;math/tex&quot;&gt;v&lt;/script&gt;为隐含层和输出层之间的连接权值矩阵.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;o_j=f(net_j)&lt;/script&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;o_k=f(net_k)&lt;/script&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;net_j=\sum_i(x_{i}u_{i,j})+b_j&lt;/script&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;net_k=\sum_j(o_{j}v_{j,k})+b_k&lt;/script&gt;
+&lt;p&gt;
+$$
+\begin{align}
+o_j &amp;amp; =f(net_j) \\
+o_k &amp;amp; =f(net_k) \\ 
+net_j &amp;amp; =\sum_i(x_{i}u_{i,j})+b_j \\
+net_k &amp;amp; =\sum_j(o_{j}v_{j,k})+b_k
+\end{align}
+$$
+&lt;/p&gt;
 
 &lt;p&gt;定义损失函数为&lt;script type=&quot;math/tex&quot;&gt;E_p=\frac{1}{2}\sum_k (o_k - d_k)^2&lt;/script&gt; ,其中&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;为样本下标，&lt;script type=&quot;math/tex&quot;&gt;o^k&lt;/script&gt;为第&lt;script type=&quot;math/tex&quot;&gt;k&lt;/script&gt;个输出层神经元的输出,&lt;script type=&quot;math/tex&quot;&gt;d^k&lt;/script&gt;为样本在第$k$个编码值。然后分别对参数&lt;script type=&quot;math/tex&quot;&gt;v_{j,k}&lt;/script&gt;、&lt;script type=&quot;math/tex&quot;&gt;u_{i,j}&lt;/script&gt; 进行求导，可得：&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial E_p}{\partial v_{j,k}} \\
-= \frac{\partial E_p}{\partial net_k} \frac{\partial net_k}{\partial v_{j,k}} \\
-= \frac{\partial E_p}{\partial net_k}o_j \\
-= \frac{\partial E_p}{\partial o_k}\frac{\partial o_k}{\partial net_k}o_j \\
-= (o_k-d_k)o_k(1-o_k)O_j&lt;/script&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+&lt;p&gt;
+$$
 \begin{align}
-\sqrt{37} &amp; = \sqrt{\frac{73^2-1}{12^2}} \\
- &amp; = \sqrt{\frac{73^2}{12^2}\cdot\frac{73^2-1}{73^2}} \\ 
- &amp; = \sqrt{\frac{73^2}{12^2}}\sqrt{\frac{73^2-1}{73^2}} \\
- &amp; = \frac{73}{12}\sqrt{1 - \frac{1}{73^2}} \\ 
- &amp; \approx \frac{73}{12}\left(1 - \frac{1}{2\cdot73^2}\right)
-\end{align} %]]&gt;&lt;/script&gt;
+\frac{\partial E_p}{\partial v_{j,k}} &amp;amp; = \frac{\partial E_p}{\partial net_k} \frac{\partial net_k}{\partial v_{j,k}} \\
+&amp;amp; = \frac{\partial E_p}{\partial net_k}o_j \\
+&amp;amp; = \frac{\partial E_p}{\partial o_k}\frac{\partial o_k}{\partial net_k}o_j \\
+&amp;amp; = (o_k-d_k)o_k(1-o_k)O_j
+\end{align}
+$$
+&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial E}{\partial net_k} = \\
 = ni \\
