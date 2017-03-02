@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 02 Mar 2017 00:01:55 +0800</pubDate>
-    <lastBuildDate>Thu, 02 Mar 2017 00:01:55 +0800</lastBuildDate>
+    <pubDate>Thu, 02 Mar 2017 23:57:15 +0800</pubDate>
+    <lastBuildDate>Thu, 02 Mar 2017 23:57:15 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -46,13 +46,34 @@ $$
 $$
 \begin{align}
 \frac{\partial E_p} {\partial u_{i,j}} &amp;amp; = \frac{\partial E_p} {\partial net_j} \frac{\partial net_j} {\partial u_{i,j}} \\
-&amp;amp; = \sum_k \frac{\partial E_p}{\partial net_k} \frac{\partial net_k}{\partial o_j} \frac{\partial o_j}{\partial u_{i,j}}  \\
-&amp;amp; = \sum_k \frac{\partial E_p}{\partial net_k} v_ \frac{\partial o_j}{\partial u_{i,j}} \\
-&amp;amp; = \frac{\partial E_p}{\partial o_k}\frac{\partial o_k}{\partial net_k}o_j \\
-&amp;amp; = (o_k-d_k)o_k(1-o_k)o_j
+&amp;amp; =x_i \sum_k \frac{\partial E_p} {\partial net_k} \frac{\partial net_k}{\partial o_j} \frac{\partial o_j}{\partial net_j}  \\
+&amp;amp; =x_i \sum_k \frac{\partial E_p}{\partial net_k} v_{j,k} o_j(1-o_j) \\
+&amp;amp; = x_i o_j(1-o_j) \sum_k \frac{\partial E_p}{\partial net_k} v_{j,k} 
 \end{align}
 $$
 &lt;/p&gt;
+
+&lt;p&gt;从对$\frac{\partial E_p} {\partial u_{i,j}}$的推导可以得到反向传播的核心思路，令误差项$\beta_k = \frac{\partial E_p} {\partial net_k}$, 则有：&lt;/p&gt;
+
+&lt;p&gt;
+$$
+\beta_k=o_l(1-o_l)\sum_l\beta_lw_{lk}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;反向传播的实质是基于梯度下降的优化方法，只不过在优化的过程使用了一种更为优雅的权值更新方式。&lt;/p&gt;
+
+&lt;h3 id=&quot;2-循环神经网络&quot;&gt;2. 循环神经网络&lt;/h3&gt;
+
+&lt;p&gt;传统的神经网络一般都是全连接结构，且非相邻两层之间是没有连接的。一般而言，定长输入的样本很容易通过神经网络来解决，但是类似于NLP中的序列标注这样的非定长输入，前向神经网络却无能为力。&lt;/p&gt;
+
+&lt;p&gt;于是有人提出了循环神经网络(Recurrent Neural Network)，这是一种无法像前向神经网络一样有可以具象的网络结构的模型，一般认为是网络隐层节点之间有相互作用的连接，其实质可以认为是多个具有相同结构和参数的前向神经网络的stacking, 前向神经网络的数目和输入序列的长度一致，且序列中毗邻的元素对应的前向神经网络的隐层之间有互联结构，其图示( &lt;a href=&quot;http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/&quot;&gt;来源&lt;/a&gt; )如下.
+:&lt;img src=&quot;http://d3kbpzbmcynnmx.cloudfront.net/wp-content/uploads/2015/09/rnn.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上图只是一个比较抽象的结构，下面是一个以时间展开的更为具体的结构(&lt;a href=&quot;http://www.cnblogs.com/YiXiaoZhou/p/6058890.html&quot;&gt;来源&lt;/a&gt;)~
+:&lt;img src=&quot;http://images2015.cnblogs.com/blog/1027162/201611/1027162-20161113162111280-1753976877.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从图中可以看出，每个输出层神经元的输出和前向神经网络&lt;/p&gt;
 
 </description>
         <pubDate>Fri, 02 Dec 2016 03:24:56 +0800</pubDate>
