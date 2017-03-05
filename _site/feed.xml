@@ -6,15 +6,13 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 02 Mar 2017 23:57:15 +0800</pubDate>
-    <lastBuildDate>Thu, 02 Mar 2017 23:57:15 +0800</lastBuildDate>
+    <pubDate>Sun, 05 Mar 2017 16:09:04 +0800</pubDate>
+    <lastBuildDate>Sun, 05 Mar 2017 16:09:04 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
-        <title>RNN</title>
-        <description>&lt;h2 id=&quot;递归神经网络的一些小事儿&quot;&gt;递归神经网络的一些小事儿&lt;/h2&gt;
-
-&lt;h3 id=&quot;1-从神经网络谈起&quot;&gt;1. 从神经网络谈起&lt;/h3&gt;
+        <title>递归神经网络的一些小事儿</title>
+        <description>&lt;h3 id=&quot;1-从神经网络谈起&quot;&gt;1. 从神经网络谈起&lt;/h3&gt;
 
 &lt;p&gt;了解神经网络的都知道，神经网络作为一种非线性模型，在监督学习领域取得了state-of-art的效果，其中反向传播算法的提出居功至伟，到如今仍然是主流的优化神经网络参数的算法. 递归神经网络、卷积神经网络以及深度神经网络作为人工神经网络的”变种”，仍然延续了ANN的诸多特质，如权值连接，激励函数，以神经元为计算单元等，只不过因为应用场景的不同衍生了不同的特性，如：处理变长数据、权值共享等。&lt;/p&gt;
 
@@ -67,13 +65,47 @@ $$
 
 &lt;p&gt;传统的神经网络一般都是全连接结构，且非相邻两层之间是没有连接的。一般而言，定长输入的样本很容易通过神经网络来解决，但是类似于NLP中的序列标注这样的非定长输入，前向神经网络却无能为力。&lt;/p&gt;
 
-&lt;p&gt;于是有人提出了循环神经网络(Recurrent Neural Network)，这是一种无法像前向神经网络一样有可以具象的网络结构的模型，一般认为是网络隐层节点之间有相互作用的连接，其实质可以认为是多个具有相同结构和参数的前向神经网络的stacking, 前向神经网络的数目和输入序列的长度一致，且序列中毗邻的元素对应的前向神经网络的隐层之间有互联结构，其图示( &lt;a href=&quot;http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/&quot;&gt;来源&lt;/a&gt; )如下.
-:&lt;img src=&quot;http://d3kbpzbmcynnmx.cloudfront.net/wp-content/uploads/2015/09/rnn.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;于是有人提出了循环神经网络(Recurrent Neural Network)，这是一种无法像前向神经网络一样有可以具象的网络结构的模型，一般认为是网络隐层节点之间有相互作用的连接，其实质可以认为是多个具有相同结构和参数的前向神经网络的stacking, 前向神经网络的数目和输入序列的长度一致，且序列中毗邻的元素对应的前向神经网络的隐层之间有互联结构，其图示( &lt;a href=&quot;http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/&quot;&gt;图片来源&lt;/a&gt; )如下.
+&lt;img src=&quot;http://d3kbpzbmcynnmx.cloudfront.net/wp-content/uploads/2015/09/rnn.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;上图只是一个比较抽象的结构，下面是一个以时间展开的更为具体的结构(&lt;a href=&quot;http://www.cnblogs.com/YiXiaoZhou/p/6058890.html&quot;&gt;来源&lt;/a&gt;)~
-:&lt;img src=&quot;http://images2015.cnblogs.com/blog/1027162/201611/1027162-20161113162111280-1753976877.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;上图只是一个比较抽象的结构，下面是一个以时间展开的更为具体的结构(&lt;a href=&quot;http://www.cnblogs.com/YiXiaoZhou/p/6058890.html&quot;&gt;图片来源&lt;/a&gt;).
+&lt;img src=&quot;http://images2015.cnblogs.com/blog/1027162/201611/1027162-20161113162111280-1753976877.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;从图中可以看出，每个输出层神经元的输出和前向神经网络&lt;/p&gt;
+&lt;p&gt;从图中可以看出，输出层神经元的输入输出和前向神经网络中没有什么差异，仅仅在于隐层除了要接收输入层的输入外，还需要接受来自于自身的输入(可以理解为t时刻的隐层需要接收来自于t-1时刻隐层的输入, 当然这仅限于单向RNN的情况，在双向RNN还需要接受来自t+1时刻的输入).&lt;/p&gt;
+
+&lt;p&gt;RNN的隐层是控制信息传递的重要单元，不同时刻隐层之间的连接权值决定了过去时刻对当前时刻的影响，所以会存在时间跨度过大而导致这种影响会削弱甚至消失的现象，称之为梯度消失，改进一般都是针对隐层做文章，LSTM(控制输入量，补充新的信息然后输出)，GRU(更新信息然后输出)等都是这类的改进算法.&lt;/p&gt;
+
+&lt;p&gt;下图为某时刻隐层单元的结构示意图(&lt;a href=&quot;http://www.cnblogs.com/YiXiaoZhou/p/6058890.html&quot;&gt;图片来源&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://images2015.cnblogs.com/blog/1027162/201611/1027162-20161113162105295-307972897.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;虽说处理的是不定长输入数据，但是某个时刻的输入还是定长的。令t时刻:输入$x_t \in R^{xdim}$ ,t隐层输出&lt;script type=&quot;math/tex&quot;&gt;h_t\in R^{hdim}&lt;/script&gt;, 输出层$y_t \in R^{ydim}$, RNN和CNN有着同样的共享权值的属性，输入层到隐层的权值矩阵$V\in R^{xdim\times hdim}$, 隐层到输出层的权值矩阵$W \in R^{hdim\times ydim}$, 不同时刻隐层自连接权值矩阵$U\in R^{hdim\times hdim}$[1]. RNN有着类似于CNN的权值共享特点，所以不同时刻的U,V,W都是相同的，所有整个网络的学习目标就是优化这些参数以及偏置. RNN和普通神经网络一样，也有超过三层的结构，下文的推导仅以三层为例.&lt;/p&gt;
+
+&lt;p&gt;令隐含层的激励函数$f(x)$, 输出层的激励函数为$g(x)$. 则有：&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align}
+h^t &amp;amp; = f(net_h^t) \\
+net_h^t &amp;amp; = x^tV + h^{t-1}U + b_h \\
+y^t &amp;amp; = g(net_y^t) \\
+net_y^t &amp;amp; = h^tW + b^y
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;对于单个样本，定义我们的cost function $E^t = \frac{1}{2}||d^t- y^t ||^2$，则对权值$W_{j,k}$、$V_{i,j}$、$U_{j,h}$的求导分别如下，其中$j$表示隐层单元下标,$k$表示输出层下标,$i$表示输入层下标,$h$表示下一时刻隐含层下标.&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align}
+\frac{\partial E^t} {\partial W_{jk}} &amp;amp; = \frac{\partial E^t} {\partial net^t_{yk}} \frac{\partial net^t_{yk}} {\partial W_{jk} } \\
+&amp;amp; =  \frac{\partial E^t} {\partial net^t_{yk}} h^t_j \\
+&amp;amp; = (d_k^t - y_k^t)y^t_k(1-y^t_k)h_j^t
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
+&lt;p&gt;[1]&lt;a href=&quot;http://www.cnblogs.com/YiXiaoZhou/p/6058890.html&quot;&gt;RNN求解过程推导与实现&lt;/a&gt;&lt;/p&gt;
 
 </description>
         <pubDate>Fri, 02 Dec 2016 03:24:56 +0800</pubDate>
@@ -82,78 +114,6 @@ $$
         
         
         <category>MachineLearning</category>
-        
-      </item>
-    
-      <item>
-        <title>轻量应用服务器架构</title>
-        <description>&lt;h1 id=&quot;sub&quot;&gt;SUB&lt;/h1&gt;
-
-&lt;h2 id=&quot;socket&quot;&gt;SOCKET&lt;/h2&gt;
-
-&lt;h3 id=&quot;设置为非阻塞模式可以设置selecteoll-io模型将&quot;&gt;设置为非阻塞模式，可以设置SELECT/EOLL IO模型.将&lt;/h3&gt;
-&lt;p&gt;Read, Write, Accept作为Reactor函数传递给IO模型&lt;/p&gt;
-
-&lt;h3 id=&quot;有新的连接发过来数据利用解析任务解析该任务然&quot;&gt;有新的连接发过来数据，利用解析任务解析该任务，然&lt;/h3&gt;
-&lt;p&gt;后将解析出来的数据按照类型生成新的对应任务丢到队
-列中. 任务处理完成之后，设置该FD为写，并将写的容
-一并返回.&lt;/p&gt;
-
-&lt;h2 id=&quot;io&quot;&gt;IO&lt;/h2&gt;
-
-&lt;h3 id=&quot;select&quot;&gt;Select&lt;/h3&gt;
-
-&lt;h4 id=&quot;使用read_set和write_set处理连接和读写并接受&quot;&gt;使用read_set和write_set处理连接和读写，并接受&lt;/h4&gt;
-&lt;p&gt;server 传递过来的回调函数指针作为事件处理方法&lt;/p&gt;
-
-&lt;h3 id=&quot;epoll&quot;&gt;Epoll&lt;/h3&gt;
-
-&lt;h4 id=&quot;todo&quot;&gt;TODO&lt;/h4&gt;
-
-&lt;h2 id=&quot;taskmgr&quot;&gt;TaskMgr&lt;/h2&gt;
-
-&lt;h3 id=&quot;task&quot;&gt;task&lt;/h3&gt;
-
-&lt;h4 id=&quot;对任务的封装单个任务会有自己运行的回掉函数以&quot;&gt;对任务的封装，单个任务会有自己运行的回掉函数，以&lt;/h4&gt;
-&lt;p&gt;及运行时的参数空间,运行run完成之后，这个run会将
-数据写回缓冲区. 然后调用call_back函数，将结果写
-会fd,不同的任务会继承该task, 计算任务可以由用户指
-定运行的回调函数.&lt;/p&gt;
-
-&lt;h3 id=&quot;task_handler&quot;&gt;task_handler&lt;/h3&gt;
-
-&lt;h4 id=&quot;作为线程池的thead_handler每次都会从任务队列&quot;&gt;作为线程池的thead_handler，每次都会从任务队列&lt;/h4&gt;
-&lt;p&gt;中取一个任务进行运行&lt;/p&gt;
-
-&lt;h2 id=&quot;threadmgr&quot;&gt;ThreadMgr&lt;/h2&gt;
-
-&lt;h3 id=&quot;thread&quot;&gt;thread&lt;/h3&gt;
-
-&lt;h4 id=&quot;对线程的封装线程运行函数由thread_handler指定&quot;&gt;对线程的封装，线程运行函数由thread_handler指定&lt;/h4&gt;
-
-&lt;h3 id=&quot;thread_handler&quot;&gt;thread_handler&lt;/h3&gt;
-
-&lt;h4 id=&quot;线程真正的实现逻辑不同类型的线程有不同的handl&quot;&gt;线程真正的实现逻辑，不同类型的线程有不同的handl&lt;/h4&gt;
-&lt;p&gt;er去处理，对于线程池中的handler会不断的从taskM
-gr中取task进行处理&lt;/p&gt;
-
-&lt;h3 id=&quot;thread_pool&quot;&gt;thread_pool&lt;/h3&gt;
-
-&lt;h4 id=&quot;线程池模型根据配置中的线程数启动每个线程分配一&quot;&gt;线程池模型,根据配置中的线程数启动每个线程分配一&lt;/h4&gt;
-&lt;p&gt;个handler&lt;/p&gt;
-
-&lt;h2 id=&quot;pluginmgr&quot;&gt;PluginMgr&lt;/h2&gt;
-
-&lt;h2 id=&quot;dictmgr&quot;&gt;DictMgr&lt;/h2&gt;
-
-&lt;h2 id=&quot;configmgr&quot;&gt;ConfigMgr&lt;/h2&gt;
-
-&lt;h2 id=&quot;memorymgr&quot;&gt;MemoryMgr&lt;/h2&gt;
-</description>
-        <pubDate>Tue, 20 Sep 2016 00:00:00 +0800</pubDate>
-        <link>http://kymo.github.io/2016/09/20/%E8%BD%BB%E9%87%8F%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%9E%B6%E6%9E%84.html</link>
-        <guid isPermaLink="true">http://kymo.github.io/2016/09/20/%E8%BD%BB%E9%87%8F%E5%BA%94%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%9E%B6%E6%9E%84.html</guid>
-        
         
       </item>
     
@@ -195,17 +155,13 @@ gr中取task进行处理&lt;/p&gt;
 &lt;p&gt;通常而言，用户的点击数据可以用来对已有的声学模型或者语言模型进行概率，当然也可以利用这些数据对语言识别的结果进行纠正，本文作者想要构建的就是基于用户数据的纠错模型。&lt;/p&gt;
 
 &lt;p&gt;本文的工作和主流的改写流程差不多，主要包含了两个方面：&lt;/p&gt;
-
 &lt;ul&gt;
   &lt;li&gt;语音识别系统首先会给出n-best候选，不同于一般的候选，这里会增加一部分通过点击数据统计出来的额外的候选。&lt;/li&gt;
-  &lt;li&gt;接着进行ReScore，构建更加精确的n-best list&lt;/li&gt;
+  &lt;li&gt;接着进行ReScore，构建更加精确的n-best list
+对于第一步，需要从user click data中统计出result confusion matrix,该矩阵揭示了当展现某一个query的时候，用户点击其他query的频次，比如对于识别系统识别出来的n-best list:&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;对于第一步，需要从user click data中统计出result confusion matrix,该矩阵揭示了当展现某一个query的时候，用户点击其他query的频次，比如对于识别系统识别出来的n-best list:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Sterling  Stirling  Burlington  Cooling&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;+++ Sterling  Stirling  Burlington  Cooling&lt;/p&gt;
 
 &lt;p&gt;通过点击数据可以构造如下的result confusion matrix:&lt;/p&gt;
 
@@ -279,6 +235,95 @@ gr中取task进行处理&lt;/p&gt;
       </item>
     
       <item>
+        <title>sub: 轻量应用服务器</title>
+        <description>&lt;p&gt;sub是正在开发的一种轻量的应用服务器, 项目地址: &lt;a href=&quot;https://github.com/kymo/sub&quot;&gt;sub&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;sub&quot;&gt;SUB&lt;/h1&gt;
+
+&lt;h2 id=&quot;socket&quot;&gt;SOCKET&lt;/h2&gt;
+
+&lt;h3 id=&quot;设置为非阻塞模式可以设置selecteoll-io模型将&quot;&gt;设置为非阻塞模式，可以设置SELECT/EOLL IO模型.将&lt;/h3&gt;
+&lt;p&gt;Read, Write, Accept作为Reactor函数传递给IO模型&lt;/p&gt;
+
+&lt;h3 id=&quot;有新的连接发过来数据利用解析任务解析该任务然&quot;&gt;有新的连接发过来数据，利用解析任务解析该任务，然&lt;/h3&gt;
+&lt;p&gt;后将解析出来的数据按照类型生成新的对应任务丢到队
+列中. 任务处理完成之后，设置该FD为写，并将写的容
+一并返回.&lt;/p&gt;
+
+&lt;h2 id=&quot;io&quot;&gt;IO&lt;/h2&gt;
+
+&lt;h3 id=&quot;select&quot;&gt;Select&lt;/h3&gt;
+
+&lt;h4 id=&quot;使用read_set和write_set处理连接和读写并接受&quot;&gt;使用read_set和write_set处理连接和读写，并接受&lt;/h4&gt;
+&lt;p&gt;server 传递过来的回调函数指针作为事件处理方法&lt;/p&gt;
+
+&lt;h3 id=&quot;epoll&quot;&gt;Epoll&lt;/h3&gt;
+
+&lt;h4 id=&quot;todo&quot;&gt;TODO&lt;/h4&gt;
+
+&lt;h2 id=&quot;taskmgr&quot;&gt;TaskMgr&lt;/h2&gt;
+
+&lt;h3 id=&quot;task&quot;&gt;task&lt;/h3&gt;
+
+&lt;h4 id=&quot;对任务的封装单个任务会有自己运行的回掉函数以&quot;&gt;对任务的封装，单个任务会有自己运行的回掉函数，以&lt;/h4&gt;
+&lt;p&gt;及运行时的参数空间,运行run完成之后，这个run会将
+数据写回缓冲区. 然后调用call_back函数，将结果写
+会fd,不同的任务会继承该task, 计算任务可以由用户指
+定运行的回调函数.&lt;/p&gt;
+
+&lt;h3 id=&quot;task_handler&quot;&gt;task_handler&lt;/h3&gt;
+
+&lt;h4 id=&quot;作为线程池的thead_handler每次都会从任务队列&quot;&gt;作为线程池的thead_handler，每次都会从任务队列&lt;/h4&gt;
+&lt;p&gt;中取一个任务进行运行&lt;/p&gt;
+
+&lt;h2 id=&quot;threadmgr&quot;&gt;ThreadMgr&lt;/h2&gt;
+
+&lt;h3 id=&quot;thread&quot;&gt;thread&lt;/h3&gt;
+
+&lt;h4 id=&quot;对线程的封装线程运行函数由thread_handler指定&quot;&gt;对线程的封装，线程运行函数由thread_handler指定&lt;/h4&gt;
+
+&lt;h3 id=&quot;thread_handler&quot;&gt;thread_handler&lt;/h3&gt;
+
+&lt;h4 id=&quot;线程真正的实现逻辑不同类型的线程有不同的handl&quot;&gt;线程真正的实现逻辑，不同类型的线程有不同的handl&lt;/h4&gt;
+&lt;p&gt;er去处理，对于线程池中的handler会不断的从taskM
+gr中取task进行处理&lt;/p&gt;
+
+&lt;h3 id=&quot;thread_pool&quot;&gt;thread_pool&lt;/h3&gt;
+
+&lt;h4 id=&quot;线程池模型根据配置中的线程数启动每个线程分配一&quot;&gt;线程池模型,根据配置中的线程数启动每个线程分配一&lt;/h4&gt;
+&lt;p&gt;个handler&lt;/p&gt;
+
+&lt;h2 id=&quot;pluginmgr&quot;&gt;PluginMgr&lt;/h2&gt;
+
+&lt;h2 id=&quot;dictmgr&quot;&gt;DictMgr&lt;/h2&gt;
+
+&lt;h2 id=&quot;configmgr&quot;&gt;ConfigMgr&lt;/h2&gt;
+
+&lt;h2 id=&quot;memorymgr&quot;&gt;MemoryMgr&lt;/h2&gt;
+</description>
+        <pubDate>Wed, 20 Apr 2016 23:11:02 +0800</pubDate>
+        <link>http://kymo.github.io/machinelearning/2016/04/20/SUB.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/20/SUB.html</guid>
+        
+        
+        <category>MachineLearning</category>
+        
+      </item>
+    
+      <item>
+        <title>卷积神经网络的一些小事儿</title>
+        <description>
+</description>
+        <pubDate>Wed, 20 Apr 2016 23:11:02 +0800</pubDate>
+        <link>http://kymo.github.io/machinelearning/2016/04/20/CNN.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/20/CNN.html</guid>
+        
+        
+        <category>MachineLearning</category>
+        
+      </item>
+    
+      <item>
         <title>Ensemble Learning Methods</title>
         <description>&lt;p&gt;集成学习的关键是弱学习器的组合，目标是为了提升模型的性能，一般用在Model Selection，此时降低了选择弱名的可能性。当然集成学习也广泛的应用于结果置信度检验、特征选择、数据融合、增量学习等方面，取得了良好的效果。&lt;/p&gt;
 
@@ -318,7 +363,7 @@ gr中取task进行处理&lt;/p&gt;
       <item>
         <title>Probability Latent Semantic Analysis</title>
         <description>&lt;p&gt;pLSA是一种主题模型(Topic Model)，全称概率潜在语义分析，是一种将文本的高维稀疏向量表示成低位维稠密向量的映射方法。
-它是一种无监督学习方法，假设整个文档集合是由若干个主题组成，某一篇文章都以一定的概率&lt;script type=&quot;math/tex&quot;&gt;p(z \mid d)&lt;/script&gt;属于某一主题;在给定主题的情况下，以&lt;script type=&quot;math/tex&quot;&gt;p(w \mid z)&lt;/script&gt;的概率产生文档的词。
+它是一种无监督学习方法，假设整个文档集合是由若干个主题组成，某一篇文章都以一定的概率&lt;script type=&quot;math/tex&quot;&gt;p(z \mid d)​&lt;/script&gt;属于某一主题;在给定主题的情况下，以&lt;script type=&quot;math/tex&quot;&gt;p(w \mid z)​&lt;/script&gt;的概率产生文档的词。
 pLSA是基于这样一个假设，假设文档和主题的分布以及主题和词汇的分布都是多项式分布，因此一个词汇的生成过程可以表示为：&lt;/p&gt;
 
 &lt;ul&gt;
@@ -337,65 +382,78 @@ pLSA是基于这样一个假设，假设文档和主题的分布以及主题和�
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) = \prod_{i=1}^N\prod_{j=1}^Np(d_i,w_j)^{n(d_i,w_j)}&lt;/script&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;ln(L(\theta)) = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)logp(d_i,w_j) \\
-=  \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(p(d_i)\sum_{k=1}^Kp(z_k \mid d_i)p(w_j \mid z_k)) \\
-= \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(p(d_i))+\sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(\sum_{k=1}^Kp(z_k\mid d_i)p(w_j \mid z_k))&lt;/script&gt;
-
-&lt;p&gt;如果直接求导的话，很明显就得需要求解(n+m)个方程，几乎是不可能完成的任务。
+&lt;p&gt;
+$$
+\begin{align} ln(L(\theta)) = \\
+&amp;amp; = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)logp(d_i,w_j) \\
+&amp;amp; =  \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(p(d_i)\sum_{k=1}^Kp(z_k \mid d_i)p(w_j \mid z_k)) \\
+&amp;amp; = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(p(d_i))+\sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(\sum_{k=1}^Kp(z_k\mid d_i)p(w_j \mid z_k))
+\end{align}
+$$
+&lt;p&gt;
+如果直接求导的话，很明显就得需要求解(n+m)个方程，几乎是不可能完成的任务。
 一般采用最大期望算法(Maximum Expection， ME)，EM算法的基本思想很直观，即随机初始化相关参数；随后，在E步，计算潜在变量的后验概率；M步，
-利用潜在变量的后验概率去更新未知参数。循环迭代直至达到最大迭代次数算法退出。&lt;/p&gt;
+利用潜在变量的后验概率去更新未知参数。循环迭代直至达到最大迭代次数算法退出。
 
-&lt;h3 id=&quot;问题为什么可以收敛&quot;&gt;问题：为什么可以收敛？&lt;/h3&gt;
+### 问题：为什么可以收敛？
 
-&lt;p&gt;在e步&lt;/p&gt;
+在e步
+&lt;p&gt;
+$$ p(z_k \mid w_j, d_i) = \frac{p(z_k \mid w_j)p(w_j \mid z_k)} {\sum_{k=1}^Kp(z_k \mid w_j)p(w_j\mid z_k)} $$
+ &lt;/p&gt;
+M步，最大化极大似然
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(z_k \mid w_j, d_i) = \frac{p(z_k \mid w_j)p(w_j \mid z_k)} {\sum_{k=1}^Kp(z_k \mid w_j)p(w_j\mid z_k)}&lt;/script&gt;
+$$ L(\theta) = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(\sum_{k=1}^Kp(z_k\mid d_i)p(w_j \mid z_k)) $$
 
-&lt;p&gt;M步，最大化极大似然&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(\sum_{k=1}^Kp(z_k\mid d_i)p(w_j \mid z_k))&lt;/script&gt;
+又由于此时：
 
-&lt;p&gt;又由于此时：&lt;/p&gt;
+$$ \sum_{k=1}^K p(z_k|d_i)p(w_j|z_k) &amp;gt; \sum_{k=1}^K p(z_k \mid d_i) p(z_k \mid d_i )p(w_j\mid z_k); \sum_{k=1}^Kp(z_k \mid d_i,w_j) = 1 $$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{k=1}^K p(z_k|d_i)p(w_j|z_k) &gt; \sum_{k=1}^K p(z_k \mid d_i) p(z_k \mid d_i )p(w_j\mid z_k); \sum_{k=1}^Kp(z_k \mid d_i,w_j) = 1&lt;/script&gt;
+所以：
 
-&lt;p&gt;所以：&lt;/p&gt;
+$$ L(\theta) &amp;gt; \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log( \sum_{k=1}^K p(z_k \mid d_i) p(z_k \mid d_i )p(w_j\mid z_k) ) $$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) &gt; \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log( \sum_{k=1}^K p(z_k \mid d_i) p(z_k \mid d_i )p(w_j\mid z_k) )&lt;/script&gt;
 
-&lt;p&gt;利用Jensen不等式，对于凸函数&lt;script type=&quot;math/tex&quot;&gt;f(x)&lt;/script&gt;有：&lt;script type=&quot;math/tex&quot;&gt;f(\sum_{i=1}^Nw_ix_i)&gt;=\sum_{i=1}^Nw_if(x_i)&lt;/script&gt;可以得到：&lt;/p&gt;
+利用Jensen不等式，对于凸函数$$f(x)$$有：$$ f(\sum_{i=1}^Nw_ix_i)&amp;gt;=\sum_{i=1}^Nw_if(x_i) $$可以得到：
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(\theta) &gt; \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)\sum_{k=1}^K p(z_k \mid d_i) log(p(z_k \mid d_i )p(w_j\mid z_k) ) = L'(\theta)&lt;/script&gt;
+$$ L(\theta) &amp;gt; \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)\sum_{k=1}^K p(z_k \mid d_i) log(p(z_k \mid d_i )p(w_j\mid z_k) ) = L'(\theta)$$
 
-&lt;p&gt;此时即转化为，对于约束条件：&lt;script type=&quot;math/tex&quot;&gt;\sum_{k=1}^Kp(z_k|d_i)=1[1],\sum_{j=1}^Mp(w_j|z_k)=1[2]&lt;/script&gt; ，求&lt;script type=&quot;math/tex&quot;&gt;L'(\theta)&lt;/script&gt;的最大值。
-对于这种带等式约束的优化问题，很显然可以构造拉格朗日乘法进行求解：&lt;/p&gt;
+此时即转化为，对于约束条件：$$\sum_{k=1}^Kp(z_k|d_i)=1[1],\sum_{j=1}^Mp(w_j|z_k)=1[2]$$ ，求$$L'(\theta)$$的最大值。
+对于这种带等式约束的优化问题，很显然可以构造拉格朗日乘法进行求解：
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;H = L'(\theta) + \sum_{i=1}^N\alpha_i(\sum_{k=1}^Kp(z_k|d_i)-1)+\sum_{k=1}^K\beta_k(\sum_{j=1}^Mp(w_j|z_k)-1)&lt;/script&gt;
+$$H = L'(\theta) + \sum_{i=1}^N\alpha_i(\sum_{k=1}^Kp(z_k|d_i)-1)+\sum_{k=1}^K\beta_k(\sum_{j=1}^Mp(w_j|z_k)-1)$$
 
-&lt;p&gt;分别对 &lt;script type=&quot;math/tex&quot;&gt;p(z_k\mid d_i),p(w_j\mid z_k)&lt;/script&gt;求导可得：&lt;/p&gt;
+分别对 $$p(z_k\mid d_i),p(w_j\mid z_k)$$求导可得：
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;=\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)-\alpha_ip(z_k|d_i) = 0      [3] \\
-	= \sum_{i=1}^Nn(d_i,w_j)p(z_k|d_i,w_j)-\beta_kp(w_j|z_k) = 0     [4]&lt;/script&gt;
+$$ =\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)-\alpha_ip(z_k|d_i) = 0      [3] \\
+	= \sum_{i=1}^Nn(d_i,w_j)p(z_k|d_i,w_j)-\beta_kp(w_j|z_k) = 0     [4]
+$$
+联立方程组[1],[2],[3],[4]求解可得：
 
-&lt;p&gt;联立方程组[1],[2],[3],[4]求解可得：&lt;/p&gt;
+$$ p(z_k|d_i) = \frac {\sum_{i=1}^N n(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)} $$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(z_k|d_i) = \frac {\sum_{i=1}^N n(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}&lt;/script&gt;
+$$ p(w_j|z_k) = \frac {\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{j=1}^M\sum_{k=1}^Kn(d_i,w_j)p(z_k|d_i,w_j)} \\
+ = \frac{\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{n(d_i)} 
+$$
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(w_j|z_k) = \frac {\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{j=1}^M\sum_{k=1}^Kn(d_i,w_j)p(z_k|d_i,w_j)} \\
- = \frac{\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{n(d_i)}&lt;/script&gt;
+因此，在M步更求新参数，通过不断迭代，如果求得的极大似然趋近收敛，则训练结束。
 
-&lt;p&gt;因此，在M步更求新参数，通过不断迭代，如果求得的极大似然趋近收敛，则训练结束。&lt;/p&gt;
+总结一下：
 
-&lt;p&gt;总结一下：&lt;/p&gt;
+- E步：求当前估计的参数条件下的后验概率：p(z \mid w,d)
+- M步：最大化complete data(加上隐藏变量主题)极大似然估计的期望
+- E步和M步循环迭代，直至收敛。
 
-&lt;ul&gt;
-  &lt;li&gt;E步：求当前估计的参数条件下的后验概率：p(z \mid w,d)&lt;/li&gt;
-  &lt;li&gt;M步：最大化complete data(加上隐藏变量主题)极大似然估计的期望&lt;/li&gt;
-  &lt;li&gt;E步和M步循环迭代，直至收敛。&lt;/li&gt;
-&lt;/ul&gt;
+实现的源码见：plsa.cpp plsa.h ，由于切词用到了公司的lib库，所以切词的初始化和切词的过程在源码中被删去，可以去中科院nlp主页获取相关模块。
 
-&lt;p&gt;实现的源码见：plsa.cpp plsa.h ，由于切词用到了公司的lib库，所以切词的初始化和切词的过程在源码中被删去，可以去中科院nlp主页获取相关模块。&lt;/p&gt;
 
+
+[jekyll]: http://jekyllrb.com
+[jekyll-gh]: https://github.com/jekyll/jekyll
+[jekyll-help]: https://github.com/jekyll/jekyll-help
+
+&lt;/p&gt;&lt;/p&gt;
 </description>
         <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
         <link>http://kymo.github.io/naturallanguageprocessing/2016/04/02/pLSA.html</link>
@@ -419,56 +477,75 @@ sign distance可以衡量某个样本被分类的置信，如果sign distance越
 而geometry distance可以理解为样本距离超平面&lt;script type=&quot;math/tex&quot;&gt;Y = w^TX + b&lt;/script&gt;的距离，是sign distance归一化的结果，
 求解目标为&lt;script type=&quot;math/tex&quot;&gt;argmax(\frac { \mid w^Tx + b \mid } { \mid  \mid w \mid  \mid })&lt;/script&gt;，并且需要满足约束：&lt;script type=&quot;math/tex&quot;&gt;y_i(w^Tx_i + b) \geq 1&lt;/script&gt;，为了求解方便，可以不加证明的令&lt;script type=&quot;math/tex&quot;&gt;\mid w^Tx+b \mid =1&lt;/script&gt;，形式化如下：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{cases}argmax \frac{1}{ \mid  \mid w \mid  \mid } \\ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases}&lt;/script&gt;
-
+&lt;p&gt;
+$$
+\begin{cases} 
+argmax \frac{1}{ \mid  \mid w \mid  \mid } \\ 
+y_i(w^Tx_i+b) \geq 1   ~~~ i=1,2,\cdot \cdot ,n 
+\end{cases} 
+$$
+&lt;/p&gt;
 &lt;p&gt;而此时最大化 &lt;script type=&quot;math/tex&quot;&gt;\frac{1}{ \mid  \mid w \mid  \mid }&lt;/script&gt;等价于最小化 &lt;script type=&quot;math/tex&quot;&gt;w&lt;/script&gt; ，并且最小化和最小化&lt;script type=&quot;math/tex&quot;&gt;\frac {1}{2} w^Tw&lt;/script&gt;等价，&lt;/p&gt;
 
 &lt;p&gt;所以1.1可以变为：&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{cases}argmmin \frac {1}{2} w^Tw \\ s.t ~~ y_i(w^Tx_i+b) \geq 1 ~~i=1,2,\cdot \cdot ,n \end{cases}&lt;/script&gt;
-
+&lt;p&gt;
+$$
+\begin{cases}
+argmin \frac {1}{2} w^Tw \\
+y_i(w^Tx_i+b) \geq 1 ~~~ i=1,2,\cdot \cdot ,n 
+\end{cases}
+$$
+&lt;/p&gt;
 &lt;p&gt;由此可以得到不等式约束问题，原始问题通过分析不难发现，求解十分困难，不过对于PSO(粒子群算法)而言，往往可以求得比较好的解。不过在碰到这种带不等式约束的问题的时候，我们可以通过拉格朗日对偶性质将原始问题转化为对偶问题，在最大熵模型中也有类似的处理过程。首先构造拉格朗日函数：&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;L(w,b,\alpha) = \frac {1} {2} w^Tw - \sum_{i=1}^N a_i[y_i(w^Tx_i + b) - 1]&lt;/script&gt;
 
 &lt;p&gt;首先我们可以得到这个函数的等价形式，令&lt;script type=&quot;math/tex&quot;&gt;\theta = argmax_\alpha L(w,b,\alpha)&lt;/script&gt;，那么：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\theta=\begin{cases}\frac {1} {2} w^Tw~~~y_i(w^Tx_i+b) \geq 1\\ \infty~~~~ y_i(w^Tx_i+b) &lt; 1~~\end{cases} %]]&gt;&lt;/script&gt;
+&lt;p&gt;
+$$
+\theta=
+\begin{cases}\frac {1} {2} w^Twy_i(w^Tx_i+b) \geq 1 \\
+\infty &amp;lt; y_i(w^Tx_i+b) &amp;lt; 1
+\end{cases}
+$$
+&lt;/p&gt;
 
-&lt;p&gt;可见，&lt;script type=&quot;math/tex&quot;&gt;min\theta&lt;/script&gt;和原始优化目标&lt;script type=&quot;math/tex&quot;&gt;argmin \frac {1}{2}w^Tw&lt;/script&gt;等价。令&lt;script type=&quot;math/tex&quot;&gt;p=min\theta&lt;/script&gt;，其对偶形式&lt;script type=&quot;math/tex&quot;&gt;d=max_{\alpha}min_{w,b}L(w,\alpha)&lt;/script&gt;，那么必然会有&lt;script type=&quot;math/tex&quot;&gt;p \geq d&lt;/script&gt;。此时令&lt;script type=&quot;math/tex&quot;&gt;g=argmin_{w} L(w,b,\alpha)&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;g \leq L(w^*,b,\alpha) \leq \frac {1}{2} {w^*}^Tw^* = p&lt;/script&gt;，所以&lt;script type=&quot;math/tex&quot;&gt;p \geq d&lt;/script&gt;。所以此时该算法满足弱对偶，我们可以通过求解该弱对偶问题去近似求解原始问题，在EM中就是不断优化极大似然下界~ 并且可以知道的是，不管原始问题是何种优化，对偶问题都会是凸优化，也即都会存在极值。不过在SVM中，我们是可以把弱对偶加强，变成strong duality，也即&lt;script type=&quot;math/tex&quot;&gt;p = d&lt;/script&gt;，优化对偶问题等价于对原始问题的求解。那么怎么判断该对偶问题是强对偶问题呢？KKT条件。如下：&lt;/p&gt;
+&lt;p&gt;可见，&lt;script type=&quot;math/tex&quot;&gt;min\theta​&lt;/script&gt;和原始优化目标&lt;script type=&quot;math/tex&quot;&gt;argmin \frac {1}{2}w^Tw​&lt;/script&gt;等价。令&lt;script type=&quot;math/tex&quot;&gt;p=min\theta​&lt;/script&gt;，其对偶形式&lt;script type=&quot;math/tex&quot;&gt;d=max_{\alpha}min_{w,b}L(w,\alpha)​&lt;/script&gt;，那么必然会有&lt;script type=&quot;math/tex&quot;&gt;p \geq d​&lt;/script&gt;。此时令&lt;script type=&quot;math/tex&quot;&gt;g=argmin_{w} L(w,b,\alpha)​&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;g \leq L(w^*,b,\alpha) \leq \frac {1}{2} {w^*}^Tw^* = p​&lt;/script&gt;，所以&lt;script type=&quot;math/tex&quot;&gt;p \geq d​&lt;/script&gt;。所以此时该算法满足弱对偶，我们可以通过求解该弱对偶问题去近似求解原始问题，在EM中就是不断优化极大似然下界~ 并且可以知道的是，不管原始问题是何种优化，对偶问题都会是凸优化，也即都会存在极值。不过在SVM中，我们是可以把弱对偶加强，变成strong duality，也即&lt;script type=&quot;math/tex&quot;&gt;p = d​&lt;/script&gt;，优化对偶问题等价于对原始问题的求解。那么怎么判断该对偶问题是强对偶问题呢？KKT条件。如下：&lt;/p&gt;
 
-&lt;p&gt;\begin{cases}  \bigtriangledown L(w,b,\alpha) = 0 \ \alpha_i(y_i(w^Tx_i+b) - 1) = 0\ \alpha_i \geq 0 \end{cases}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{cases}  \bigtriangledown L(w,b,\alpha) = 0 \\ \alpha_i(y_i(w^Tx_i+b) - 1) = 0 \\ \alpha_i \geq 0 \end{cases}&lt;/script&gt;
 
 &lt;p&gt;很明显，此时KKT条件成立，所以满足强对偶。其中&lt;script type=&quot;math/tex&quot;&gt;y_i(w^Tx_i+b)-1) = 0&lt;/script&gt;但此时KKT只是必要条件，不过由于我们的原始问题是凸优化，所以KKT便是充要条件了。&lt;/p&gt;
 
 &lt;p&gt;对对偶问题，首先是&lt;script type=&quot;math/tex&quot;&gt;min_{w,b}L(w,b,\alpha)&lt;/script&gt;，分别对&lt;script type=&quot;math/tex&quot;&gt;w&lt;/script&gt;和&lt;script type=&quot;math/tex&quot;&gt;b&lt;/script&gt;求导，得：&lt;/p&gt;
 
-&lt;p&gt;[\frac {\partial L(w,\alpha,b)} {\partial(w)} = w - \sum_{i=1}^N \alpha_iy_ix_i=0]&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac {\partial L(w,\alpha,b)} {\partial(w)} = w - \sum_{i=1}^N \alpha_iy_ix_i=0&lt;/script&gt;
 
-&lt;p&gt;[\frac {\partial L(w,\alpha,b)} {\partial(b)} = \sum_{i=1}^N\alpha_iy_i=0]&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac {\partial L(w,\alpha,b)} {\partial(b)} = \sum_{i=1}^N\alpha_iy_i=0&lt;/script&gt;
 
 &lt;p&gt;随后，将&lt;script type=&quot;math/tex&quot;&gt;w=\sum_{i=1}^N\alpha_iy_ix_i&lt;/script&gt;代入&lt;script type=&quot;math/tex&quot;&gt;L(w,b,\alpha)&lt;/script&gt;中，则有：&lt;/p&gt;
-
-&lt;p&gt;\begin{eqnarray&lt;em&gt;}
-L(w,\alpha,b)&amp;amp;=&amp;amp;\frac {1}{2} w^Tw - \sum_{i=1}^N\alpha_i[y_i(w^Tx_i+b)-1]\&amp;amp;=&amp;amp;\frac{1}{2}\sum_{i=1}^N\alpha_iy_ix_i^T\sum_{j=1}^N\alpha_jy_jx_j - \sum_{i=1}^N\alpha_i[y_i(w^Tx_i+b)-1]\ &amp;amp;=&amp;amp;\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j - \sum_{i=1}^N\alpha_i\sum_{j=1}^N\alpha_jy_jx_j^Tx_i + \sum_{i=1}^N\alpha_i\&amp;amp;=&amp;amp;-\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j + \sum_{i=1}^N\alpha_i\end{eqnarray&lt;/em&gt;}&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{eqnarray*}
+L(w,\alpha,b)&amp;amp;=&amp;amp;\frac {1}{2} w^Tw - \sum_{i=1}^N\alpha_i[y_i(w^Tx_i+b)-1]\\&amp;amp;=&amp;amp;\frac{1}{2}\sum_{i=1}^N\alpha_iy_ix_i^T\sum_{j=1}^N\alpha_jy_jx_j - \sum_{i=1}^N\alpha_i[y_i(w^Tx_i+b)-1]\\ &amp;amp;=&amp;amp;\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j - \sum_{i=1}^N\alpha_i\sum_{j=1}^N\alpha_jy_jx_j^Tx_i + \sum_{i=1}^N\alpha_i\\&amp;amp;=&amp;amp;-\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j + \sum_{i=1}^N\alpha_i\end{eqnarray*}
+$$
+&lt;/p&gt;
 
 &lt;p&gt;所以：&lt;/p&gt;
 
-&lt;p&gt;[\begin{cases}-\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j + \sum_{i=1}^N\alpha_i\s.t~~~\sum_{i=1}^N\alpha_iy_i=0 \end{cases}]&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{cases}-\frac {1}{2} \sum_{i=1}^N\sum_{j=1}^N\alpha_i\alpha_jy_iy_jx_i^Tx_j + \sum_{i=1}^N\alpha_i\\s.t~~~\sum_{i=1}^N\alpha_iy_i=0 
+\end{cases}&lt;/script&gt;
 
 &lt;p&gt;到这，我们还没有考虑soft margin。实际情况中，总是会存在一定的噪声数据，使得我们的分类超平面被这些噪声数据所误导，从而使得模型的variance增大，所以一般来讲都会采用soft margin构建优化函数，我们以&lt;script type=&quot;math/tex&quot;&gt;\varepsilon&lt;/script&gt;的范围容许一定的误差，即原来的&lt;script type=&quot;math/tex&quot;&gt;y_i(w^Tx_i+b) \geq 1&lt;/script&gt;此时为&lt;script type=&quot;math/tex&quot;&gt;y_i(w^Tx_i + b) \geq 1 - \varepsilon_i&lt;/script&gt;，所以我们的优化目标变为：&lt;/p&gt;
 
-&lt;p&gt;[\begin{cases}argmin \frac {1}{2} w^Tw + C\sum_{i=1}^N\varepsilon_i \s.t ~~ y_i(w^Tx_i+b) \geq 1 - \varepsilon_i ~~i=1,2,\cdot \cdot ,n \ \sum_{i=1}^N\varepsilon_i \geq C \end{cases}]&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{cases}argmin \frac {1}{2} w^Tw + C\sum_{i=1}^N\varepsilon_i \\s.t ~~ y_i(w^Tx_i+b) \geq 1 - \varepsilon_i ~~i=1,2,\cdot \cdot ,n \\ \sum_{i=1}^N\varepsilon_i \geq C \end{cases}&lt;/script&gt;
 
 &lt;p&gt;关于上式，可以看成是利用hinge loss加l2范数正则项的结果，SVM此时的损失函数可以表示为 &lt;script type=&quot;math/tex&quot;&gt;min_{w,b} \sum_{i=1}^N [1-y_i(w^Tx_i+b)]_{+} + \lambda\ \mid w\ \mid ^2&lt;/script&gt;，其中如果&lt;script type=&quot;math/tex&quot;&gt;z&gt;0&lt;/script&gt;，那么&lt;script type=&quot;math/tex&quot;&gt;z_{+}&lt;/script&gt;=z，否则等于0。如果令&lt;script type=&quot;math/tex&quot;&gt;\varepsilon_i=1-y_i(w^Tx_i+b),\varepsilon_i \geq 0&lt;/script&gt;，那么此时最优化问题为 &lt;script type=&quot;math/tex&quot;&gt;min_{w,b} \sum_{i=1}^N\varepsilon_i + \lambda\ \mid w\ \mid ^2&lt;/script&gt;，如果取&lt;script type=&quot;math/tex&quot;&gt;\lambda=\frac {1}{2C}&lt;/script&gt;，那么就和上述优化目标等价，所以可以看出，软间隔实际上是在ERM的基础上加了SRM~&lt;/p&gt;
 
 &lt;p&gt;之后的推导没有多大差别，只不过在求导的过程中出现了&lt;script type=&quot;math/tex&quot;&gt;\alpha_i = C - \varepsilon_i&lt;/script&gt;，又有前面在对偶转换使用的KKT条件之一&lt;script type=&quot;math/tex&quot;&gt;\alpha_i(y_i(w^Tx_i+b) - 1) =0&lt;/script&gt;可得，在分类超平面上的点，也即满足&lt;script type=&quot;math/tex&quot;&gt;y_i(w^Tx_i+b)-1 + \varepsilon_i = 0&lt;/script&gt;，而那些不在超平面的点，必然有&lt;script type=&quot;math/tex&quot;&gt;\alpha_i=0&lt;/script&gt;，而在超平面上的，则有&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
 0&lt; \alpha_i &lt; C %]]&gt;&lt;/script&gt;，在超平面之外的则是&lt;script type=&quot;math/tex&quot;&gt;\alpha_i=C&lt;/script&gt;。&lt;/p&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;nonlinear SVM&lt;/li&gt;
-&lt;/ol&gt;
+&lt;h3 id=&quot;2-nonlinear-svm&quot;&gt;2. nonlinear SVM&lt;/h3&gt;
 
 &lt;p&gt;非线性情况之下，利用线性曲线去拟合，明显会产生underfitting，但是我们可以通过函数映射的方式，将原来空间中的非线性特征，映射到高维空间中，使得样本可分或者近似可分，实际上是，机器学习中有一种叫做基展开的技术，就是处理这种线性到非线性的特征映射。不过对于SVM中使用这种非线性变化是因为它能够和核函数配合的天衣无缝。&lt;/p&gt;
 
@@ -480,46 +557,85 @@ L(w,\alpha,b)&amp;amp;=&amp;amp;\frac {1}{2} w^Tw - \sum_{i=1}^N\alpha_i[y_i(w^T
 K(p,q) = &lt;\phi(\eta_1,\eta_2), \phi(\gamma_1, \gamma_2)&gt; %]]&gt;&lt;/script&gt;=&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
 &lt;p,q&gt;^2 %]]&gt;&lt;/script&gt;。对偶转换之后只需要将&lt;script type=&quot;math/tex&quot;&gt;x_i,x_j&lt;/script&gt;的内积运算更换成&lt;script type=&quot;math/tex&quot;&gt;K(x_i,x_j)&lt;/script&gt;，即可处理非线性数据~&lt;/p&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;SMO&lt;/li&gt;
-&lt;/ol&gt;
+&lt;h3 id=&quot;3-smo&quot;&gt;3. SMO&lt;/h3&gt;
 
 &lt;p&gt;SMO本质上上一种坐标上升优化算法，坐标上升可以理解为在&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;维向量构成的空间中，每次选择一个维度进行优化，最终能够求得比较合适的解。SMO每次选择两个参数，因为此时待求变量有&lt;script type=&quot;math/tex&quot;&gt;\sum_{i=1}^N\alpha_iy_i =0&lt;/script&gt;的约束。SMO的优化过程如下：&lt;/p&gt;
 
-&lt;p&gt;选择&lt;script type=&quot;math/tex&quot;&gt;\alpha_i, \alpha_j&lt;/script&gt;
-固定其他参数，然后对&lt;script type=&quot;math/tex&quot;&gt;\alpha_i, \alpha_j&lt;/script&gt;进行优化
-利用&lt;script type=&quot;math/tex&quot;&gt;\alpha_i, \alpha_j&lt;/script&gt;，对截距进行优化
-在了解确切的&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;贪心选择策略之前，先假定我们已经将&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;选择妥当，然后直接对&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;进行优化。根据条件&lt;script type=&quot;math/tex&quot;&gt;\sum_{k=1}^N\alpha_ky_k=0&lt;/script&gt;，令&lt;script type=&quot;math/tex&quot;&gt;A = y_i\sum_{k!=i,j}^N\alpha_ky_k&lt;/script&gt;. 那么&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;的关系为&lt;script type=&quot;math/tex&quot;&gt;\alpha_i = A - y_iy_j\alpha_j&lt;/script&gt;。此时我们的优化目标[max_{\alpha} L(\alpha) = \sum_{k=1}^N\alpha_k - \frac{1}{2} \sum_{l=1}^N\sum_{k=1}^N\alpha_l\alpha_ky_ly_kK_{l,k}]&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;选择&lt;script type=&quot;math/tex&quot;&gt;\alpha_i, \alpha_j&lt;/script&gt;&lt;/li&gt;
+  &lt;li&gt;固定其他参数，然后对&lt;script type=&quot;math/tex&quot;&gt;\alpha_i, \alpha_j&lt;/script&gt;进行优化&lt;/li&gt;
+  &lt;li&gt;利用&lt;script type=&quot;math/tex&quot;&gt;\alpha_i, \alpha_j&lt;/script&gt;，对截距进行优化&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在了解确切的&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;贪心选择策略之前，先假定我们已经将&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;选择妥当，然后直接对&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;进行优化。根据条件&lt;script type=&quot;math/tex&quot;&gt;\sum_{k=1}^N\alpha_ky_k=0&lt;/script&gt;，令&lt;script type=&quot;math/tex&quot;&gt;A = y_i\sum_{k!=i,j}^N\alpha_ky_k&lt;/script&gt;. 那么&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;的关系为&lt;script type=&quot;math/tex&quot;&gt;\alpha_i = A - y_iy_j\alpha_j&lt;/script&gt;。此时我们的优化目标为&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;max_{\alpha} L(\alpha) = \sum_{k=1}^N\alpha_k - \frac{1}{2} \sum_{l=1}^N\sum_{k=1}^N\alpha_l\alpha_ky_ly_kK_{l,k}&lt;/script&gt;
 
 &lt;p&gt;其中，&lt;script type=&quot;math/tex&quot;&gt;K_{l,k} = K(x_l, x_j)&lt;/script&gt;，令&lt;script type=&quot;math/tex&quot;&gt;B = \sum_{k!=i,j}\alpha_k, S = y_iy_j, V_i = \sum_{k!=i,j}\alpha_ky_kK_{i,k}, V_j =\sum_{k!=i,j}\alpha_ky_kK_{j,k}&lt;/script&gt;，那么有：&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align} L(\alpha) &amp;amp; = \sum_{k!=i,j}^N\alpha_k + \alpha_i + \alpha_j \\
+&amp;amp; - \frac {1}{2}[\alpha_i\alpha_i y_iy_iK_{i,i} + \alpha_j\alpha_jy_jy_jK_{j,j} + 2\alpha_i\alpha_jy_iy_jK_{i,j} + \\
+&amp;amp; 2\sum_{k!=i,j}^N\alpha_i\alpha_ky_iy_kK_{i,k} + 2\sum_{k!=i,j}^N\alpha_j\alpha_ky_jy_kK_{j,k} + \sum_{l!=i,j}^N \sum_{k!=i,j}^N\alpha_l\alpha_ky_ly_kK_{l,k}]\end{align}
+$$
+&lt;/p&gt;
 
-&lt;p&gt;\begin{eqnarray&lt;em&gt;} L(\alpha) &amp;amp;=&amp;amp; \sum_{k!=i,j}^N\alpha_k + \alpha_i + \alpha_j - \frac {1}{2}[\alpha_i\alpha_i y_iy_iK_{i,i} + \alpha_j\alpha_jy_jy_jK_{j,j} + 2\alpha_i\alpha_jy_iy_jK_{i,j} + 2\sum_{k!=i,j}^N\alpha_i\alpha_ky_iy_kK_{i,k} + 2\sum_{k!=i,j}^N\alpha_j\alpha_ky_jy_kK_{j,k} + \sum_{l!=i,j}^N \sum_{k!=i,j}^N\alpha_l\alpha_ky_ly_kK_{l,k}] \                                                               &amp;amp;=&amp;amp; B + A - S\alpha_j + \alpha_j - \frac{1}{2} [2\alpha_i\alpha_jSK_{i,j} + \alpha_i^2K_{i,i} + \alpha_j^2K_{j,j} + 2\alpha_iy_iV_i + 2\alpha_jy_jV_j +  \sum_{l!=i,j}^N \sum_{k!=i,j}^N\alpha_l\alpha_ky_ly_kK_{l,k}]    \                                                          &amp;amp;=&amp;amp;-S\alpha_j + \alpha_j  - \frac{1}{2}K_{i,i}(A-S\alpha_j)^2 - \frac{1}{2} K_{j,j}\alpha_j^2 - K_{i,j}\alpha_j(A-S\alpha_j)S - \alpha_jy_jV_j - (A-S\alpha_j)y_iV_i + \varepsilon_{constant} \end{eqnarray&lt;/em&gt;}&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align}
+L(\alpha) &amp;amp; = B + A - S\alpha_j + \alpha_j - \frac{1}{2} [2\alpha_i\alpha_jSK_{i,j} + \alpha_i^2K_{i,i} + \alpha_j^2K_{j,j} \\
+&amp;amp; + 2\alpha_iy_iV_i + 2\alpha_jy_jV_j +  \sum_{l!=i,j}^N \sum_{k!=i,j}^N\alpha_l\alpha_ky_ly_kK_{l,k}]    \\
+&amp;amp; =-S\alpha_j + \alpha_j  - \frac{1}{2}K_{i,i}(A-S\alpha_j)^2 - \frac{1}{2} K_{j,j}\alpha_j^2 - K_{i,j}\alpha_j(A-S\alpha_j)S \\
+&amp;amp; - \alpha_jy_jV_j - (A-S\alpha_j)y_iV_i + \varepsilon_{constant} \end{align}
+$$
+&lt;/p&gt;
 
 &lt;p&gt;其中，&lt;script type=&quot;math/tex&quot;&gt;\varepsilon_{constant}&lt;/script&gt;为一些常量，在求极值点是可以忽略，上式对&lt;script type=&quot;math/tex&quot;&gt;\alpha_j&lt;/script&gt;求导，有：&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{eqnarray*} \frac {\partial_{L(\alpha_j)}} {\partial_{\alpha_j}} &amp;amp;=&amp;amp; -S + 1 + ASK_{i,i} -K_{i,i}\alpha_j - K_{j,j}\alpha_j -ASK_{i,j} + 2K_{i,j}\alpha_j -y_jV_j + Sy_iV_i=0 \\ \alpha_j&amp;amp;=&amp;amp; \frac {-S + 1 + AS(K_{i,i}-K_{i,j}) + y_j(V_i-V_j)}{K_{i,i} + K_{j,j} - 2K_{i,j}} \end{eqnarray*}
+$$
+&lt;/p&gt;
 
-&lt;p&gt;\begin{eqnarray&lt;em&gt;} \frac {\partial_{L(\alpha_j)}} {\partial_{\alpha_j}} &amp;amp;=&amp;amp; -S + 1 + ASK_{i,i} -K_{i,i}\alpha_j - K_{j,j}\alpha_j -ASK_{i,j} + 2K_{i,j}\alpha_j -y_jV_j + Sy_iV_i=0 \ \alpha_j&amp;amp;=&amp;amp; \frac {-S + 1 + AS(K_{i,i}-K_{i,j}) + y_j(V_i-V_j)}{K_{i,i} + K_{j,j} - 2K_{i,j}} \end{eqnarray&lt;/em&gt;}&lt;/p&gt;
-
-&lt;p&gt;又有优化&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;的时候，其他参数没有被改变。&lt;/p&gt;
-
-&lt;p&gt;\begin{eqnarray&lt;em&gt;}\alpha_iy_i+\alpha_jy_j&amp;amp;=&amp;amp; -\sum_{k!=i,j}\alpha_k^{old}y_k=\alpha_i^{old}y_i + \alpha_j^{old}y_j \ V_i &amp;amp;=&amp;amp; \sum_{k!=i,j}\alpha_ky_kK_{i,k}=\sum_{k!=i,j}\alpha_k^{old}y_kK_{i,k} = \sum_{k=1}^N\alpha_k^{old}y_kK_{i,k} + b - b - \alpha_i^{old}y_iK_{i,i} - \alpha_j^{old}y_jK_{i,j} \ V_j &amp;amp; = &amp;amp;\sum_{k!=i,j}\alpha_ky_kK_{j,k}=\sum_{k!=i,j}\alpha_k^{old}y_kK_{j,k} = \sum_{k=1}^N\alpha_k^{old}y_kK_{j,k} + b - b - \alpha_j^{old}y_jK_{j,j} - \alpha_i^{old}y_iK_{i,j}  \end{eqnarray&lt;/em&gt;}&lt;/p&gt;
-
+&lt;p&gt;在优化&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;的时候，其他参数没有被改变。&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{eqnarray*}
+\alpha_iy_i+\alpha_jy_j&amp;amp;=&amp;amp; -\sum_{k!=i,j}\alpha_k^{old}y_k=\alpha_i^{old}y_i + \alpha_j^{old}y_j \\ 
+V_i &amp;amp;=&amp;amp; \sum_{k!=i,j}\alpha_ky_kK_{i,k} \\
+&amp;amp;=&amp;amp;\sum_{k!=i,j}\alpha_k^{old}y_kK_{i,k} \\
+&amp;amp;=&amp;amp; \sum_{k=1}^N\alpha_k^{old}y_kK_{i,k} + b - b - \alpha_i^{old}y_iK_{i,i} - \alpha_j^{old}y_jK_{i,j} \\
+V_j &amp;amp;=&amp;amp;\sum_{k!=i,j}\alpha_ky_kK_{j,k} \\
+&amp;amp;=&amp;amp;\sum_{k!=i,j}\alpha_k^{old}y_kK_{j,k} \\
+&amp;amp;=&amp;amp; \sum_{k=1}^N\alpha_k^{old}y_kK_{j,k} + b - b - \alpha_j^{old}y_jK_{j,j} - \alpha_i^{old}y_iK_{i,j}  
+\end{eqnarray*}
+$$
+&lt;/p&gt;
 &lt;p&gt;且&lt;script type=&quot;math/tex&quot;&gt;g(x_i) = \sum_{k=1}^N\alpha_k^{old}y_kK_{i,k} + b&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;g(x_j) = \sum_{k=1}^N\alpha_k^{old}y_kK_{j,k} + b&lt;/script&gt;，所以：&lt;/p&gt;
 
-&lt;p&gt;[V_i - V_j = g(x_i) - g(x_j) - \alpha_i^{old}y_iK_{i,i} + \alpha_j^{old}y_jK_{j,j} - \alpha_j^{old}y_jK_{i,j} + \alpha_i^{old}y_iK_{i,j} ]&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;V_i - V_j = g(x_i) - g(x_j) - \alpha_i^{old}y_iK_{i,i} + \alpha_j^{old}y_jK_{j,j} - \alpha_j^{old}y_jK_{i,j} + \alpha_i^{old}y_iK_{i,j}&lt;/script&gt;
 
 &lt;p&gt;然后，将A = &lt;script type=&quot;math/tex&quot;&gt;\alpha_i^{old}+S\alpha_j^{old}&lt;/script&gt;，S=&lt;script type=&quot;math/tex&quot;&gt;y_iy_j&lt;/script&gt;代入&lt;script type=&quot;math/tex&quot;&gt;\alpha_j&lt;/script&gt;表达式，可得：&lt;/p&gt;
 
-&lt;p&gt;\begin{eqnarray&lt;em&gt;}\alpha_j &amp;amp;=&amp;amp; \frac {y_jy_j - y_iy_j +(\alpha_i^{old}+y_iy_j\alpha_j^{old})y_iy_j(K_{i,i}-K_{i,j}) + y_j(g(x_i) - g(x_j) - \alpha_i^{old}y_iK_{i,i} + \alpha_j^{old}y_jK_{j,j} - \alpha_j^{old}y_jK_{i,j} + \alpha_i^{old}y_iK_{i,j})} {K_{i,i} + K_{j,j} - 2K_{i,j}} \ &amp;amp;=&amp;amp; \frac {y_j[y_j-y_i + y_j\alpha_j^{old}(K_{i,i} + K_{j,j} - 2K_{i,j} + g(x_i) - g(x_j) ]} {K_{i,i} + K_{j,j} - 2K_{i,j}}\ &amp;amp;=&amp;amp; \alpha_j^{old} + \frac{y_j[y_j-y_i + g(x_i)-g(x_j)]} {K_{i,i} + K_{j,j} - 2K_{i,j}}\end{eqnarray&lt;/em&gt;}&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{eqnarray*}\alpha_j &amp;amp;=&amp;amp; \frac {\{y_jy_j - y_iy_j +(\alpha_i^{old}+y_iy_j\alpha_j^{old})y_iy_j(K_{i,i}-K_{i,j}) \\ 
++ y_j(g(x_i) - g(x_j) - \alpha_i^{old}y_iK_{i,i} + \alpha_j^{old}y_jK_{j,j} - \alpha_j^{old}y_jK_{i,j} + \alpha_i^{old}y_iK_{i,j})\}} {K_{i,i} + K_{j,j} - 2K_{i,j}} \\ &amp;amp;=&amp;amp; \frac {y_j[y_j-y_i + y_j\alpha_j^{old}(K_{i,i} + K_{j,j} - 2K_{i,j} + g(x_i) - g(x_j) ]} {K_{i,i} + K_{j,j} - 2K_{i,j}} \\ &amp;amp;=&amp;amp; \alpha_j^{old} + \frac{y_j[y_j-y_i + g(x_i)-g(x_j)]} {K_{i,i} + K_{j,j} - 2K_{i,j}}\end{eqnarray*}
+$$
+&lt;/p&gt;
 
 &lt;p&gt;然后令&lt;script type=&quot;math/tex&quot;&gt;E_i = g(x_i) - y_i&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;\eta = K_{i,i} + K_{j,j} - 2K{i,j}&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;\alpha_j^{new,unc} = \alpha_j^{old} + \frac {y_j(E_i - E_j)} {\eta}&lt;/script&gt;，此时求出的&lt;script type=&quot;math/tex&quot;&gt;\alpha_j&lt;/script&gt;还需要经过边界判定，对&lt;script type=&quot;math/tex&quot;&gt;\alpha_i,\alpha_j&lt;/script&gt;有&lt;script type=&quot;math/tex&quot;&gt;\alpha_iy_i + \alpha_jy_j = \alpha_i^{old} + \alpha_j^{old}&lt;/script&gt;和&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
 0&lt;=\alpha_i&lt;=C %]]&gt;&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
 0&lt;=\alpha_j&lt;=C %]]&gt;&lt;/script&gt;的条件限制，所以必须对&lt;script type=&quot;math/tex&quot;&gt;\alpha_i, \alpha_j&lt;/script&gt;的上下边界&lt;script type=&quot;math/tex&quot;&gt;L,H&lt;/script&gt;进行确认。&lt;/p&gt;
 
-&lt;p&gt;如果&lt;script type=&quot;math/tex&quot;&gt;y_i = y_j&lt;/script&gt;，那么&lt;script type=&quot;math/tex&quot;&gt;L= max(0, \alpha_j^{old} - \alpha_i^{old})&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;H=min(C,C+\alpha_j^{old} - \alpha_i^{old})&lt;/script&gt;
-如果&lt;script type=&quot;math/tex&quot;&gt;y_i!=y_j&lt;/script&gt;，那么&lt;script type=&quot;math/tex&quot;&gt;L=max(0, \alpha_j^{old} + \alpha_i^{old} - C)&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;H=min(C,\alpha_j^{old} + \alpha_i^{old})&lt;/script&gt;
-根据上式可以得到&lt;script type=&quot;math/tex&quot;&gt;\alpha_j^{new}&lt;/script&gt;为：&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;如果&lt;script type=&quot;math/tex&quot;&gt;y_i = y_j&lt;/script&gt;，那么&lt;script type=&quot;math/tex&quot;&gt;L= max(0, \alpha_j^{old} - \alpha_i^{old})&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;H=min(C,C+\alpha_j^{old} - \alpha_i^{old})&lt;/script&gt; &lt;br /&gt;
+如果&lt;script type=&quot;math/tex&quot;&gt;y_i!=y_j&lt;/script&gt;，那么&lt;script type=&quot;math/tex&quot;&gt;L=max(0, \alpha_j^{old} + \alpha_i^{old} - C)&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;H=min(C,\alpha_j^{old} + \alpha_i^{old})&lt;/script&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;[\alpha_j^{new} = \begin{cases} H,~&lt;del&gt;\alpha_j^{new,unc} &amp;gt; H \ \alpha_j^{new,unc},&lt;/del&gt;~~~ L&amp;lt;=\alpha_j^{new,unc}&amp;lt;=H \ L,~~~~~\alpha_j^{new,unc} &amp;lt; L \end{cases}]&lt;/p&gt;
+&lt;p&gt;根据上式可以得到&lt;script type=&quot;math/tex&quot;&gt;\alpha_j^{new}&lt;/script&gt;为：
+&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
+alpha_j^{new} = \begin{cases} H,~~~\alpha_j^{new,unc} &gt; H \\ \alpha_j^{new,unc},~~~~~ L&lt;=\alpha_j^{new,unc}&lt;=H \\ L,~~~~~\alpha_j^{new,unc} &lt; L \end{cases} %]]&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;p&gt;由此可以得到&lt;script type=&quot;math/tex&quot;&gt;\alpha_i^{new}= \alpha_i^{old} + y_iy_j(\alpha_j^{old} - \alpha_j^{new})&lt;/script&gt;。&lt;/p&gt;
 
@@ -533,7 +649,7 @@ K(p,q) = &lt;\phi(\eta_1,\eta_2), \phi(\gamma_1, \gamma_2)&gt; %]]&gt;&lt;/scrip
 如果&lt;script type=&quot;math/tex&quot;&gt;\alpha_i^{new}&lt;/script&gt;、&lt;script type=&quot;math/tex&quot;&gt;\alpha_j^{new}&lt;/script&gt;为0或者C，那么取&lt;script type=&quot;math/tex&quot;&gt;b_1^{new}&lt;/script&gt;和&lt;script type=&quot;math/tex&quot;&gt;b_2^{new}&lt;/script&gt;的中值即可
 至此，SMO算法结束，不过实际中，需要实时更新&lt;script type=&quot;math/tex&quot;&gt;E_i&lt;/script&gt;，所以在更新完bias之后，再利用已有的信息重新更新&lt;script type=&quot;math/tex&quot;&gt;E_i&lt;/script&gt;即可。&lt;/p&gt;
 
-&lt;p&gt;最终实现见：SVM@GITHUB&lt;/p&gt;
+&lt;p&gt;最终实现见：&lt;a href=&quot;https://github.com/kymo/SUML/tree/master/SVM&quot;&gt;svm&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;参考资料&lt;/p&gt;
 
@@ -719,53 +835,6 @@ x_{m,1}   ,  \cdot \cdot  \cdot  ,  x_{m,n}
         <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
         <link>http://kymo.github.io/machinelearning/2016/04/02/RandomForests.html</link>
         <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/RandomForests.html</guid>
-        
-        
-        <category>MachineLearning</category>
-        
-      </item>
-    
-      <item>
-        <title>HMM</title>
-        <description>&lt;p&gt;在了解隐马尔科夫模型之前，先得了解马尔科夫过程，一般而言，在理解一个模型的时候，最好是能够知道该模型提出的初衷，站在设计者的角度来思考模型总能达到事半功倍的效果。
-n阶马尔科夫过过程的当前状态只依赖于前n个时刻的状态，通常而言，n一般为1，也即常见的马尔科夫过程。##&lt;/p&gt;
-
-&lt;p&gt;隐马尔科夫模型在基础的马尔科夫过程中做了简单的变换，将状态作为一种隐含状态，观测序列作为观测状态，并且状态之间有概率转移关系，状态到观测序列之间也有概率转移关系。
-由此可以得到隐马尔科夫模型的形式化表示：HMM=(pi,A,B)&lt;/p&gt;
-
-&lt;p&gt;其中，pi为系统的初始状态，A为状态转移矩阵，其中&lt;script type=&quot;math/tex&quot;&gt;A_{i,j}&lt;/script&gt;表示从隐含状态i变成隐含状态j的概率，B为混淆矩阵或者观测状态生成矩阵，
-&lt;script type=&quot;math/tex&quot;&gt;B_{i,j}&lt;/script&gt;表示隐含状态i生成观测序列元素j的概率。
-在实例讲解隐马尔科夫模型的例子中，有一个较为经典，也即海藻和天气。海藻的状态我们随时可以观测得到，而天气的状态是一种未知的变量。假设我们知道天气之间变化的概率A，也知道当海藻处于某种观测状态的前提下各种天气状态的出现概率B，同时也有初始状态，也即给出了一个HMM模型，那么我们可以解决以下两种问题：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;给定海藻的观测状态序列，求出该观测序列出现的概率，对应于HMM三大问题之概率计算问题&lt;/li&gt;
-  &lt;li&gt;给定某种观测状态序列，求出该观测序列出现的最大的状态概率，对应于HMM三大问题之预测问题&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;对于第一种问题，可以使用最为原始的暴力出奇迹，枚举所有的状态，求出状态和观测序列的联合概率分布，然后进行求和，即可得到最后的结果，也可以使用更为优雅的算法，比如即将介绍的基于动态规划的forward-backward算法，这两种算法也是HMM这类概率图模型所特有的一种求解方法，就像是BP之于NN一般。&lt;/p&gt;
-
-&lt;h4 id=&quot;1-forword-algorithm&quot;&gt;1&amp;gt; forword-algorithm&lt;/h4&gt;
-
-&lt;p&gt;前向算法，是一种动态规划算法，之前看NLP的另外一个算法中也使用了动态规划的思想，它具有许多独特的性质，比如子问题最优，也即全局最优可以通过枚举子问题最优得到，联想到HMM的图模型结构，我们不难得知，在时刻t处于状态i的情况(此时观测序列为O1,O2,O3,…,Ot)下，它可以由多种子状态按照HMM的性质转化而来，即可以由时刻t-1处于状态j的情况(此时观测序列为O1,O2,O3,…,Ot-1)首先从状态i转换到j，然后生成观测序列Ot得到，所以可以得到如下的DP状态转移方程：&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha[t][i] = \sum_{j=1}^N{\alpha[t-1][j] * A[j][i]} * B[i][t]&lt;/script&gt;
-
-&lt;p&gt;上述方程也可以通过贝叶斯公式推出来。由此，问题1可以通过累加Alpha[T][i]得到。&lt;/p&gt;
-
-&lt;h3 id=&quot;2-backward-algorithm&quot;&gt;2&amp;gt; Backward-algorithm&lt;/h3&gt;
-
-&lt;p&gt;有了前向算法，后向算法就很容易理解了，在时刻t处于状态i的前提下，观测序列为O(t+1)…O(T)的情况可以由在时刻t+1处于状态j的前提下的情况，首先从状态j转移到状态i，然后生成观测序列O(t+1)的过程得到，也即：&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\beta[t][i] = \sum_{j=1}^N{\beta[t+1][j] * A[j][i] * B[j][t+1]}&lt;/script&gt;
-
-&lt;p&gt;由此，问题1也可以通过Beta计算得到.&lt;/p&gt;
-
-&lt;p&gt;HMM的基于统计的train的过程以及decode的过程见 HMM ，其中还给出了HMM在分词中的应用～&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
-        <link>http://kymo.github.io/machinelearning/2016/04/02/HMM.html</link>
-        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/HMM.html</guid>
         
         
         <category>MachineLearning</category>

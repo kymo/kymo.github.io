@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "ESL Notes"
-date:  2016-04-01 19:24:56
+title:  "Elements of Statistical Learning 笔记"
+date:  2015-02-01 19:24:56
 categories: MachineLearning
 ---
 
@@ -10,29 +10,25 @@ categories: MachineLearning
 
 第1章 略
 
-第2章 [Overview of Supervised Learning]()
+第2章 [Overview of Supervised Learning](https://book.douban.com/annotation/34095355/)
 
-第3章 [Linear Methods for Regression]
+第3章 [Linear Methods for Regression](https://book.douban.com/annotation/34098767/)
 
-第4章 Linear Methods for Classification
+第4章 [Linear Methods for Classification](https://book.douban.com/annotation/34103627/)
 
-第5章 Basis Expansions And Regularization
+第5章 [Basis Expansions And Regularization](https://book.douban.com/annotation/33993826/)
 
-第6章 Kernel Methods
+第6章 [Kernel Methods](https://book.douban.com/annotation/34110823/)
 
-第7章 Model Assessment And Selection
+第7章 [Model Assessment And Selection](https://book.douban.com/annotation/33966657/)
 
-第8章 Model Inference And Averaging
+第8章 [Model Inference And Averaging](https://book.douban.com/annotation/34113134/)
 
-第9章 Additive Models And Trees
+第9章 [Additive Models And Trees](https://book.douban.com/annotation/34137656/)
 
-第10章 Boosting And Additive Trees
+第10章 [Boosting And Additive Trees](https://book.douban.com/annotation/34155885/)
 
-第11章 Neural Networks
+第11章 [Neural Networks](https://book.douban.com/annotation/34158235/)
 
 第12-14章节 略
-
-[jekyll]:      http://jekyllrb.com
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-help]: https://github.com/jekyll/jekyll-help
 

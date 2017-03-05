@@ -1,0 +1,7 @@
+---
+layout: post
+title:  "卷积神经网络的一些小事儿"
+date:  2016-04-20 15:11:02
+categories: MachineLearning
+---
+

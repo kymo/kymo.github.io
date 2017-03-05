@@ -1,0 +1,71 @@
+---
+layout: post
+title:  "sub: 轻量应用服务器"
+date:  2016-04-20 15:11:02
+categories: MachineLearning
+---
+
+sub是正在开发的一种轻量的应用服务器, 项目地址: [sub](https://github.com/kymo/sub)
+
+# SUB
+
+## SOCKET
+
+### 设置为非阻塞模式，可以设置SELECT/EOLL IO模型.将
+Read, Write, Accept作为Reactor函数传递给IO模型
+
+### 有新的连接发过来数据，利用解析任务解析该任务，然
+后将解析出来的数据按照类型生成新的对应任务丢到队
+列中. 任务处理完成之后，设置该FD为写，并将写的容
+一并返回.
+
+## IO
+
+### Select
+
+#### 使用read\_set和write\_set处理连接和读写，并接受
+server 传递过来的回调函数指针作为事件处理方法
+
+### Epoll
+
+#### TODO
+
+## TaskMgr
+
+### task
+
+#### 对任务的封装，单个任务会有自己运行的回掉函数，以
+及运行时的参数空间,运行run完成之后，这个run会将
+数据写回缓冲区. 然后调用call\_back函数，将结果写
+会fd,不同的任务会继承该task, 计算任务可以由用户指
+定运行的回调函数.
+
+### task\_handler
+
+#### 作为线程池的thead\_handler，每次都会从任务队列
+中取一个任务进行运行
+
+## ThreadMgr
+
+### thread
+
+#### 对线程的封装，线程运行函数由thread\_handler指定
+
+### thread\_handler
+
+#### 线程真正的实现逻辑，不同类型的线程有不同的handl
+er去处理，对于线程池中的handler会不断的从taskM
+gr中取task进行处理
+
+### thread\_pool
+
+#### 线程池模型,根据配置中的线程数启动每个线程分配一
+个handler
+
+## PluginMgr
+
+## DictMgr
+
+## ConfigMgr
+
+## MemoryMgr

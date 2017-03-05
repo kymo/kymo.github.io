@@ -1,13 +1,9 @@
 ---
 layout: post
-title:  "RNN"
+title:  "递归神经网络的一些小事儿"
 date:  2016-12-01 19:24:56
 categories: MachineLearning
 ---
-
-
-递归神经网络的一些小事儿
------
 
 ### 1. 从神经网络谈起
 
@@ -61,18 +57,50 @@ $$
 ### 2. 循环神经网络
 
   传统的神经网络一般都是全连接结构，且非相邻两层之间是没有连接的。一般而言，定长输入的样本很容易通过神经网络来解决，但是类似于NLP中的序列标注这样的非定长输入，前向神经网络却无能为力。
-  
-  于是有人提出了循环神经网络(Recurrent Neural Network)，这是一种无法像前向神经网络一样有可以具象的网络结构的模型，一般认为是网络隐层节点之间有相互作用的连接，其实质可以认为是多个具有相同结构和参数的前向神经网络的stacking, 前向神经网络的数目和输入序列的长度一致，且序列中毗邻的元素对应的前向神经网络的隐层之间有互联结构，其图示( [来源](http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/) )如下.
-:![](http://d3kbpzbmcynnmx.cloudfront.net/wp-content/uploads/2015/09/rnn.jpg)
 
- 上图只是一个比较抽象的结构，下面是一个以时间展开的更为具体的结构([来源](http://www.cnblogs.com/YiXiaoZhou/p/6058890.html))~
-:![](http://images2015.cnblogs.com/blog/1027162/201611/1027162-20161113162111280-1753976877.png)
+  于是有人提出了循环神经网络(Recurrent Neural Network)，这是一种无法像前向神经网络一样有可以具象的网络结构的模型，一般认为是网络隐层节点之间有相互作用的连接，其实质可以认为是多个具有相同结构和参数的前向神经网络的stacking, 前向神经网络的数目和输入序列的长度一致，且序列中毗邻的元素对应的前向神经网络的隐层之间有互联结构，其图示( [图片来源](http://www.wildml.com/2015/09/recurrent-neural-networks-tutorial-part-1-introduction-to-rnns/) )如下.
+![](http://d3kbpzbmcynnmx.cloudfront.net/wp-content/uploads/2015/09/rnn.jpg)
 
-从图中可以看出，每个输出层神经元的输出和前向神经网络
+ 上图只是一个比较抽象的结构，下面是一个以时间展开的更为具体的结构([图片来源](http://www.cnblogs.com/YiXiaoZhou/p/6058890.html)).
+![](http://images2015.cnblogs.com/blog/1027162/201611/1027162-20161113162111280-1753976877.png)
+
+从图中可以看出，输出层神经元的输入输出和前向神经网络中没有什么差异，仅仅在于隐层除了要接收输入层的输入外，还需要接受来自于自身的输入(可以理解为t时刻的隐层需要接收来自于t-1时刻隐层的输入, 当然这仅限于单向RNN的情况，在双向RNN还需要接受来自t+1时刻的输入). 
+
+RNN的隐层是控制信息传递的重要单元，不同时刻隐层之间的连接权值决定了过去时刻对当前时刻的影响，所以会存在时间跨度过大而导致这种影响会削弱甚至消失的现象，称之为梯度消失，改进一般都是针对隐层做文章，LSTM(控制输入量，补充新的信息然后输出)，GRU(更新信息然后输出)等都是这类的改进算法. 
+
+下图为某时刻隐层单元的结构示意图([图片来源](http://www.cnblogs.com/YiXiaoZhou/p/6058890.html)).
+
+![](http://images2015.cnblogs.com/blog/1027162/201611/1027162-20161113162105295-307972897.png)
+
+虽说处理的是不定长输入数据，但是某个时刻的输入还是定长的。令t时刻:输入$x_t \in R^{xdim}$ ,t隐层输出$$h_t\in R^{hdim}$$, 输出层$y_t \in R^{ydim}$, RNN和CNN有着同样的共享权值的属性，输入层到隐层的权值矩阵$V\in R^{xdim\times hdim}$, 隐层到输出层的权值矩阵$W \in R^{hdim\times ydim}$, 不同时刻隐层自连接权值矩阵$U\in R^{hdim\times hdim}$[1]. RNN有着类似于CNN的权值共享特点，所以不同时刻的U,V,W都是相同的，所有整个网络的学习目标就是优化这些参数以及偏置. RNN和普通神经网络一样，也有超过三层的结构，下文的推导仅以三层为例.
+
+令隐含层的激励函数$f(x)$, 输出层的激励函数为$g(x)$. 则有：
+<p>
+$$
+\begin{align}
+h^t & = f(net_h^t) \\
+net_h^t & = x^tV + h^{t-1}U + b_h \\
+y^t & = g(net_y^t) \\
+net_y^t & = h^tW + b^y
+\end{align}
+$$
+</p>
+
+对于单个样本，定义我们的cost function $E^t = \frac{1}{2}\|\|d^t- y^t \|\|^2$，则对权值$W_{j,k}$、$V_{i,j}$、$U_{j,h}$的求导分别如下，其中$j$表示隐层单元下标,$k$表示输出层下标,$i$表示输入层下标,$h$表示下一时刻隐含层下标.
+<p>
+$$
+\begin{align}
+\frac{\partial E^t} {\partial W_{jk}} & = \frac{\partial E^t} {\partial net^t_{yk}} \frac{\partial net^t_{yk}} {\partial W_{jk} } \\
+& =  \frac{\partial E^t} {\partial net^t_{yk}} h^t_j \\
+& = (d_k^t - y_k^t)y^t_k(1-y^t_k)h_j^t
+\end{align}
+$$
+</p>
 
 
 
-
+### 参考资料
+\[1\][RNN求解过程推导与实现](http://www.cnblogs.com/YiXiaoZhou/p/6058890.html)
 
 
 
