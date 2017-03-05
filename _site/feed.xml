@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 05 Mar 2017 16:09:04 +0800</pubDate>
-    <lastBuildDate>Sun, 05 Mar 2017 16:09:04 +0800</lastBuildDate>
+    <pubDate>Sun, 05 Mar 2017 22:04:28 +0800</pubDate>
+    <lastBuildDate>Sun, 05 Mar 2017 22:04:28 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -312,7 +312,25 @@ gr中取task进行处理&lt;/p&gt;
     
       <item>
         <title>卷积神经网络的一些小事儿</title>
-        <description>
+        <description>&lt;h3 id=&quot;1-从手写体图片识别说起&quot;&gt;1. 从手写体图片识别说起&lt;/h3&gt;
+
+&lt;p&gt;手写体识别一般是神经网络入门必备的demo，在传统的神经网络进行手写体识别的时候，需要更多的人工对特征进行处理，一般是如下的步骤:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1.将原始图片的像素值栅格化为一维向量,如原始图片为8*8, 则栅格化之后的向量为164; &lt;br /&gt;
+2.将栅格化的向量作为神经网络的输入，手写体对应的数字编码之后作为神经网络的输出;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;然后在MNIST数据集上也能有96%以上的正确率，但是MNIST数据集给的都是28*28大小的数据，如果图片的像素规模很大呢？这里可能就会考虑两个方案：要么就是直接将全部的像素作为神经网络的输入；要么就是人工去对像素进行采样降维。那么可行性又如何？对于第一种，假设隐层神经元的数量为1000，那么输入层-隐含层权值矩阵就达到了$10^9$的规模，一般的机器根本训不动，更别提用梯度下降这种可能会陷入局部最优的算法了(参数多，解空间大)；对于第二种可能就是无尽的特征提取工作了。&lt;/p&gt;
+
+&lt;p&gt;谈到第二点，深度学习某种意义可以认为是对特征工程的改革，领域知识在传统机器学习中十分重要，不管是CTR预估亦或是信用评级、LTR等，都需要在相关领域有较多的经验，往往某几个特征的发现能够给整个系统带来质的飞跃，当然这也使得传统机器学习的解释性更好。&lt;/p&gt;
+
+&lt;h3 id=&quot;2-你的眼睛是怎么看图片的&quot;&gt;2. 你的眼睛是怎么看图片的？&lt;/h3&gt;
+
+&lt;p&gt;通常而言，我们在观察事物的时候，都是会将注意力集中到某一块部分，可能一块还足以让我们判断这个东西的类型，但是多观察几个局部，就能大概知道所观察的东西是个啥了。这个给我们的启发是对于输入的1000*1000像素的图片，我们并不需要所有像素的信息，提取局部的特征也能够给我们勾勒出该图片所代表的事物的特征。这个在卷积神经网络中对应的就是卷积核。另外，对图片进行采样模糊等变换，某种程度上也不会改变图片中事物的主要特征，这个在卷积神经网络中对应的就是pooling，也就是向下采样.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-卷积神经网络&quot;&gt;3. 卷积神经网络&lt;/h3&gt;
+
 </description>
         <pubDate>Wed, 20 Apr 2016 23:11:02 +0800</pubDate>
         <link>http://kymo.github.io/machinelearning/2016/04/20/CNN.html</link>
