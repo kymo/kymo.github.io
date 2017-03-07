@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "递归神经网络的一些小事儿"
+title:  "循环神经网络的一些小事儿"
 date:  2016-12-01 19:24:56
 categories: MachineLearning
 ---

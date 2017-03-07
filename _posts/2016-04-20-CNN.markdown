@@ -22,3 +22,6 @@ categories: MachineLearning
 
 ### 3. 卷积神经网络
 
+卷积神经网络一般是卷积层与pooling层交替组合，构成深度神经网络，像下图中经典的LeNet-5网络结构，就是由3个卷积层
+
+![](http://7pn4yt.com1.z0.glb.clouddn.com/blog-lenet.jpg)
