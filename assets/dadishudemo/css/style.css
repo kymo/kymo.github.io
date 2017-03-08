@@ -1,7 +1,9 @@
 @charset "utf-8";
 /* CSS Document */
+
 *{ margin:0px auto; padding:0px;}
 .claer{ clear:both;}
 
-.main{ width:500px;background:#c6c6c6; cursor:url(../img/111.ico),-moz-zoom-out; height:100%;}
+.main{ width:600px;background:#c6c6c6; cursor:url(../img/chuizi.png),-moz-zoom-out; height:100%;}
+
 .frame{ display:block; background:url(../img/keng.png) no-repeat ; float:left; margin:30px;  width:102px; height:58px;}
