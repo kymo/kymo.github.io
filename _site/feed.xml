@@ -6,12 +6,12 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 07 Mar 2017 22:53:36 +0800</pubDate>
-    <lastBuildDate>Tue, 07 Mar 2017 22:53:36 +0800</lastBuildDate>
+    <pubDate>Wed, 08 Mar 2017 20:40:43 +0800</pubDate>
+    <lastBuildDate>Wed, 08 Mar 2017 20:40:43 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
-        <title>递归神经网络的一些小事儿</title>
+        <title>循环神经网络的一些小事儿</title>
         <description>&lt;h3 id=&quot;1-从神经网络谈起&quot;&gt;1. 从神经网络谈起&lt;/h3&gt;
 
 &lt;p&gt;了解神经网络的都知道，神经网络作为一种非线性模型，在监督学习领域取得了state-of-art的效果，其中反向传播算法的提出居功至伟，到如今仍然是主流的优化神经网络参数的算法. 递归神经网络、卷积神经网络以及深度神经网络作为人工神经网络的”变种”，仍然延续了ANN的诸多特质，如权值连接，激励函数，以神经元为计算单元等，只不过因为应用场景的不同衍生了不同的特性，如：处理变长数据、权值共享等。&lt;/p&gt;
@@ -344,6 +344,17 @@ gr中取task进行处理&lt;/p&gt;
 
 &lt;h3 id=&quot;3-卷积神经网络&quot;&gt;3. 卷积神经网络&lt;/h3&gt;
 
+&lt;p&gt;卷积神经网络一般是卷积层与pooling层交替组合，构成深度神经网络，像下图中经典的LeNet-5网络结构，就是由3个卷积层和两个pooling层以及一个全连接层组成。
+&lt;img src=&quot;http://7pn4yt.com1.z0.glb.clouddn.com/blog-lenet.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;卷积层和pooling层可以认为是对特征的学习过程，然后将学习到的特征再输入到一个分类器中进行训练. 在卷积层，是利用卷积核对上一层的特征图进行卷积操作，然后将卷积结果重新输出到新的特征图中，在LeNet5中的C1层中，利用的就是6个5*5的卷积核对输入图像进行卷积，然后得到6个特征图，每个特征图的大小是28*28.&lt;/p&gt;
+
+&lt;p&gt;这里需要注意的是，卷积层的特征图并不仅仅是来自于前一层的一个特征图，有可能是前一层的多个特征图和多个卷积核进行联合操作之后得到，如LeNet-5中Pooling层S2到卷积层C3就是按照如下的排列进行连接的, 其中C3的第一个特征图来自于S2中的0,1,2号3个特征图，最后一个特征图与S2中的所有特征图相连，此时需要60个卷积核. 加上偏置，需要学习的参数为60*5*5+16. &lt;br /&gt;
+&lt;img src=&quot;http://images2015.cnblogs.com/blog/743682/201604/743682-20160421101636460-1080820356.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;参考文献&quot;&gt;参考文献&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/xuanyuansen/article/details/41800721&quot;&gt;卷积神经网络（一）：LeNet5的基本结构&lt;/a&gt; &lt;br /&gt;
+&lt;a href=&quot;http://blog.csdn.net/kaido0/article/details/53161684&quot;&gt;理解结构，LeNet5介绍&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 20 Apr 2016 23:11:02 +0800</pubDate>
         <link>http://kymo.github.io/machinelearning/2016/04/20/CNN.html</link>
