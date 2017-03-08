@@ -24,18 +24,19 @@ function dian(){
 	
 	
 	var bg = document.getElementById('frame'+ran);	
-				bg.onclick=function(){//有地鼠的点击事件
+			bg.onclick=function(){//有地鼠的点击事件
 			var zonghe = document.getElementById("he");
-			bg.style.background="url(img/11.jpeg)";
-			 zonghe.innerHTML++;
+			bg.style.background="url(img/111.jpeg) no-repeat";
+			
+			zonghe.innerHTML++;
 			 if(zonghe.innerHTML=="100"){
 				 alert("恭喜你，大神!!!");
 				clearTimeout(b);
 				//bg.style.background="url(img/keng.png)";
 				 }
 			}
-	bg.style.background="url(img/22.jpeg)";
-	
+			bg.style.background="url(img/222.jpeg) no-repeat";
+
 
 	
 	}
@@ -43,7 +44,7 @@ function dian(){
 
 //定时器
 window.onload = function times(){	
-
+ 
  b = setInterval("dian()",500);//1000为1秒钟
 }
 
