@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 09 Mar 2017 08:36:43 +0800</pubDate>
-    <lastBuildDate>Thu, 09 Mar 2017 08:36:43 +0800</lastBuildDate>
+    <pubDate>Mon, 13 Mar 2017 09:57:56 +0800</pubDate>
+    <lastBuildDate>Mon, 13 Mar 2017 09:57:56 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -357,7 +357,48 @@ gr中取task进行处理&lt;/p&gt;
 &lt;p&gt;这里需要注意的是，卷积层的特征图并不仅仅是来自于前一层的一个特征图，有可能是前一层的多个特征图和多个卷积核进行联合操作之后得到，如LeNet-5中Pooling层S2到卷积层C3就是按照如下的排列进行连接的, 其中C3的第一个特征图来自于S2中的0,1,2号3个特征图，最后一个特征图与S2中的所有特征图相连，此时需要60个卷积核. 加上偏置，需要学习的参数为60*5*5+16. &lt;br /&gt;
 &lt;img src=&quot;http://images2015.cnblogs.com/blog/743682/201604/743682-20160421101636460-1080820356.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
+&lt;p&gt;令$X_i^l$ 为第$l$层的输出，当$l=1$时即为原始图像特征，$M_j^l$为与第$l$层(卷积层)相连的前一层特征图集合的某个子集，对于卷积层的第j个特征图，假设其与前一层特征图集合的子集$M_j^l$相连，那么该特征图则为：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;X_j^l = f(\sum_{i\in M_j^l}K^l_{i,j}*X_i^{l-1} + b_j^l)&lt;/script&gt;
+
+&lt;p&gt;其中，&lt;script type=&quot;math/tex&quot;&gt;*&lt;/script&gt;为卷积运算，假设图片像素矩阵$P$，卷积核为$K$, 如下:&lt;/p&gt;
+
+&lt;p&gt;
+$$
+{\begin{matrix}
+P=\begin{bmatrix}
+0 &amp;amp; 1 &amp;amp; 2 &amp;amp; 2\\
+     1 &amp;amp; 0 &amp;amp; 3 &amp;amp; 3 \\
+     3 &amp;amp; 4 &amp;amp; 3 &amp;amp; 0 \\
+     4 &amp;amp; 2 &amp;amp; 4 &amp;amp; 4 \\
+     
+\end{bmatrix} &amp;amp;   K = \begin{bmatrix}
+2 &amp;amp; 1 \\ 
+1 &amp;amp; -1
+\end{bmatrix}
+\end{matrix}}
+$$
+&lt;/p&gt;
+&lt;p&gt;那么对图像进行卷积之后的结果$F=K*P$为：&lt;/p&gt;
+&lt;p&gt;
+$$
+F=\begin{bmatrix}
+1 &amp;amp; 7 &amp;amp; 11 \\
+     10 &amp;amp; 13 &amp;amp; 3 \\
+     9 &amp;amp; 9 &amp;amp; 9 \\
+\end{bmatrix} 
+$$
+&lt;/p&gt;
+&lt;p&gt;此时需要注意的是卷积的时候不是直接算矩阵乘法，而是将卷积矩阵旋转180度之后再算矩阵乘法.&lt;/p&gt;
+
+&lt;p&gt;CNN的推导其实没什么特别的地方，关键在于两点:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;1.卷积层到Pooling层，前向计算的时候由于下采样导致为维度降低，在误差反向传导时，需要对下一层误差进行反向采样 &lt;br /&gt;
+2.Pooling层到卷积层，误差项中需要弄清楚和当前卷积核进行卷积的patch.&lt;/p&gt;
+&lt;/blockquote&gt;
+
 &lt;h3 id=&quot;参考文献&quot;&gt;参考文献&lt;/h3&gt;
+
 &lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/xuanyuansen/article/details/41800721&quot;&gt;卷积神经网络（一）：LeNet5的基本结构&lt;/a&gt; &lt;br /&gt;
 &lt;a href=&quot;http://blog.csdn.net/kaido0/article/details/53161684&quot;&gt;理解结构，LeNet5介绍&lt;/a&gt; &lt;br /&gt;
 &lt;a href=&quot;http://dataunion.org/11692.html&quot;&gt;技术向：一文读懂卷积神经网络CNN&lt;/a&gt;&lt;/p&gt;
