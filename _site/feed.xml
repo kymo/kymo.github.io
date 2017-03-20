@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 13 Mar 2017 09:57:56 +0800</pubDate>
-    <lastBuildDate>Mon, 13 Mar 2017 09:57:56 +0800</lastBuildDate>
+    <pubDate>Sun, 19 Mar 2017 22:54:04 +0800</pubDate>
+    <lastBuildDate>Sun, 19 Mar 2017 22:54:04 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -357,11 +357,12 @@ gr中取task进行处理&lt;/p&gt;
 &lt;p&gt;这里需要注意的是，卷积层的特征图并不仅仅是来自于前一层的一个特征图，有可能是前一层的多个特征图和多个卷积核进行联合操作之后得到，如LeNet-5中Pooling层S2到卷积层C3就是按照如下的排列进行连接的, 其中C3的第一个特征图来自于S2中的0,1,2号3个特征图，最后一个特征图与S2中的所有特征图相连，此时需要60个卷积核. 加上偏置，需要学习的参数为60*5*5+16. &lt;br /&gt;
 &lt;img src=&quot;http://images2015.cnblogs.com/blog/743682/201604/743682-20160421101636460-1080820356.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;令$X_i^l$ 为第$l$层的输出，当$l=1$时即为原始图像特征，$M_j^l$为与第$l$层(卷积层)相连的前一层特征图集合的某个子集，对于卷积层的第j个特征图，假设其与前一层特征图集合的子集$M_j^l$相连，那么该特征图则为：&lt;/p&gt;
+&lt;h4 id=&quot;31-卷积层&quot;&gt;3.1 卷积层&lt;/h4&gt;
+&lt;p&gt;令$X_j^l$ 为第$l$层(卷积层)第j个特征图，当$l=1$时即为原始图像特征，$M_j^l$为与第$l$层(卷积层)第$j$个特征图相连的前一层特征图集合的某个子集，那么第l层的第j个特征图的计算：&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;X_j^l = f(\sum_{i\in M_j^l}K^l_{i,j}*X_i^{l-1} + b_j^l)&lt;/script&gt;
 
-&lt;p&gt;其中，&lt;script type=&quot;math/tex&quot;&gt;*&lt;/script&gt;为卷积运算，假设图片像素矩阵$P$，卷积核为$K$, 如下:&lt;/p&gt;
+&lt;p&gt;其中，&lt;script type=&quot;math/tex&quot;&gt;*&lt;/script&gt;为卷积运算，$b_j^l$为一维的实数，假设图片像素矩阵$P$，卷积核为$K$, 如下:&lt;/p&gt;
 
 &lt;p&gt;
 $$
@@ -389,19 +390,164 @@ F=\begin{bmatrix}
 \end{bmatrix} 
 $$
 &lt;/p&gt;
-&lt;p&gt;此时需要注意的是卷积的时候不是直接算矩阵乘法，而是将卷积矩阵旋转180度之后再算矩阵乘法.&lt;/p&gt;
+&lt;p&gt;此时需要注意卷积不是直接算矩阵点乘，而是将卷积矩阵旋转180度之后再算点乘。并且F中的元素与P中的元素有如下的对应关系，其中u,v为输出特征图的下标，卷积核大小为d*d，$K_{d-h,d-j}$为卷积核参数$K_{h,j}$旋转180度之后对应的值，$P_{u+h,v+j}$为与输入特征图进行卷积的位置的像素值。&lt;/p&gt;
 
-&lt;p&gt;CNN的推导其实没什么特别的地方，关键在于两点:&lt;/p&gt;
+&lt;p&gt;
+$$
+F_{u,v} = \sum_{h}\sum_{j} K_{d-h,d-j}*P_{u+h,v+j}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;卷积核的大小d一般选奇数，卷积时候的步长(一般为1)也可以根据具体的场景进行调整，当然如果为了保证卷积之后维度不变，也可以进行边缘扩展，在原始特征图的边缘补充新的像素值。&lt;/p&gt;
+
+&lt;h4 id=&quot;32-pooling层&quot;&gt;3.2 Pooling层&lt;/h4&gt;
+&lt;p&gt;Pooling层主要的作用是降噪降维，缓解过拟合的尴尬。为什么这么说呢？因为就典型的max pooling（取最大）或者averaging pooling(取平均)操作而言，它能够使得模型关注于局部某一部分，而不是具体的像素，模型的鲁棒性和泛化能力得到了一定程度的保障。&lt;/p&gt;
+
+&lt;p&gt;Pooling层的特征图与上一层的卷积层一一对应，只不过特征图的维度变小。令$X_j^l$为Pooling层的第j个特征图，$down()$为向下采样。则有：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;X_j^l = f(\beta_j^l \cdot down(X_j^{l-1}) + b_j^l)&lt;/script&gt;
+
+&lt;p&gt;对于Pooling层的输入特征图，其每一个采样局部共享同一个采样尺度和偏置，也即$\beta_j^ll$和$b_j^l$都是一个实数. Pooling层之后，维度一般会减半。假设学习到的采样尺度为0.25, 偏执为0.1，采样窗口为2*2，激励函数f才用的sigmoid函数，则在Pooling层由输入特征图到输出特征图的过程如下：&lt;/p&gt;
+
+&lt;p&gt;
+$$
+{\begin{matrix}
+X_j^{l-1}=\begin{bmatrix}
+0 &amp;amp; 2 &amp;amp; 4 &amp;amp; 2\\
+     2 &amp;amp; 0 &amp;amp; 3 &amp;amp; 3 \\
+     3 &amp;amp; 4 &amp;amp; 3 &amp;amp; 0 \\
+     4 &amp;amp; 2 &amp;amp; 4 &amp;amp; 4 \\
+     
+\end{bmatrix} 
+&amp;amp;   
+X_j^l = \begin{bmatrix}
+f(1.1) &amp;amp; f(3.1) \\ 
+f(3.35) &amp;amp; f(2.85)
+\end{bmatrix}
+\end{matrix}}
+$$
+&lt;/p&gt;
+
+&lt;h4 id=&quot;33-全连接层&quot;&gt;3.3 全连接层&lt;/h4&gt;
+
+&lt;p&gt;在通过卷积层和Pooling层可以认为是对特征的学习，在这个交替的层次之后，原始的数据被转换到新的特征空间中，然后通过全连接层将特征空间和样本空间进行关联。在通常情况下，全连接层可由卷积操作实现：对前层是全连接的全连接层可以转化为卷积核为1x1的卷积；而前层是卷积层的全连接层可以转化为卷积核为hxw的全局卷积，h和w分别为前层卷积结果的高和宽。&lt;/p&gt;
+
+&lt;h4 id=&quot;34-反向传播推导&quot;&gt;3.4 反向传播推导&lt;/h4&gt;
+
+&lt;p&gt;CNN的推导和基本的全连接神经网络无异，没什么特别的地方，关键在于两点:&lt;/p&gt;
 &lt;blockquote&gt;
   &lt;p&gt;1.卷积层到Pooling层，前向计算的时候由于下采样导致为维度降低，在误差反向传导时，需要对下一层误差进行反向采样 &lt;br /&gt;
 2.Pooling层到卷积层，误差项中需要弄清楚和当前卷积核进行卷积的patch.&lt;/p&gt;
 &lt;/blockquote&gt;
 
+&lt;p&gt;令$\delta_j^l$ 为第$l$层第$j$个特征图$X_j^l$对应的误差项，其维度和$X_j^l$一致，$(\delta_j^l)_{u,v}$ 为$X_j^l$ 下标为u,v对应的误差项，即有：&lt;/p&gt;
+
+&lt;p&gt;
+$$
+\begin{align}
+\delta_j^l &amp;amp; = \frac {\partial E}{\partial net_j^l} ; (\delta_j^l)_{u,v} = \frac {\partial E}{\partial ((net_j^l)_{u,v})} \\
+
+net_j^l &amp;amp;= \left\{
+\begin{aligned}
+&amp;amp; \sum_{i\in M_j^l}K^l_{i,j}*X_i^{l-1} + b_j^l \ \ \ l层为卷积层 \\
+&amp;amp; \beta_j^l \cdot down(X_j^{l-1}) + b_j^l \ \ \ l层为Pooling层\\
+\end{aligned}
+\right.
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;当$l$层为卷积层时&lt;/strong&gt;，需要学习的参数为卷积核和偏执，个数为$\sum_{j}{||M_j||} + N^l$，其中$||M_j||$为与卷积层第j个特征图相连的前层特征图的某个子集，$N^l$为第l层卷积层的特征图数目。&lt;/p&gt;
+
+&lt;p&gt;每一个输出特征图对应一个为偏执$b_j^l$, 且$b_j^l$为标量，其与每一个$(\delta_j^l)_{u,v}$ 都有关联，所以对偏执的求导为：&lt;/p&gt;
+
+&lt;p&gt;
+$$
+\begin{align}
+\frac {\partial E}{\partial b_j^l} &amp;amp; = \sum_u\sum_v \frac {\partial E}{\partial ((net_j^l)_{u,v})} \frac {\partial ((net_j^l)_{u,v})}{\partial b_j^l} =  \sum_u\sum_v (\delta_j^l)_{u,v}
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;每一个输出特征图由若干个卷积核与输入特征图卷积得来，对于卷积核$K_{i,j}^l$而言，其求导的结果为一个$d*d$的矩阵，对于其中的某个值$(K_{i,j})_{r,s}$求导为, 其中r,s为卷积核中的下标，大小在[0,d-1]范围内，u,v为输出特征图的下标：&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align}
+\frac {\partial E}{\partial ((K_{i,j}^l)_{r,s})} &amp;amp; = \sum_u\sum_v \frac {\partial E}{\partial ((net_j^l)_{u,v})} \frac {\partial ((net_j^l)_{u,v})}{\partial ((K_{i,j}^l)_{r,s})} \\ 
+&amp;amp; = \sum_u\sum_v (\delta_j^l)_{u,v}\frac {\partial ((net_j^l)_{u,v})}{\partial ((K_{i,j}^l)_{r,s})} \\
+&amp;amp; = \sum_u\sum_v (\delta_j^l)_{u,v}\frac {\partial ((X_i^{l-1} * K_{i,j}^l)_{u,v})}{\partial ((K_{i,j}^l)_{r,s})}
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;此时又有：&lt;/p&gt;
+&lt;p&gt;
+$$
+(X_i^{l-1} * K_{i,j}^l)_{u,v} = \sum_{r}\sum_{s} (K_{i,j}^l)_{r,s}(X_i^{l-1})_{u+r,v+s}
+$$
+&lt;/p&gt;
+&lt;p&gt;所以：&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align}
+\frac {\partial E}{\partial ((K_{i,j}^l)_{r,s})} &amp;amp; = \sum_u\sum_v (\delta_j^l)_{u,v} (X_i^{l-1})_{u+r,v+s}
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;也即：&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align}
+\frac {\partial E}{\partial K_{i,j}^l} &amp;amp; = \sum_u\sum_v (\delta_j^l)_{u,v} (PT_i^{l-1})_{u,v}
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;其中，$PT_i^{l-1}$为$X_i^{l-1}$中与卷积核进行卷积的部分，可以认为是一个4维的矩阵，$(PT_i^{l-1})_{u,v}$对应于$X_i^{l-1}$中$row\in [u,u+d-1] \ \ col\in [v,v+d-1]$范围内的部分.&lt;/p&gt;
+
+&lt;p&gt;卷积层的误差项来自于下一层与其相连的Pooling层，此时有:&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align}
+\left\{
+\begin{aligned}
+net_j^{l+1} &amp;amp; = \beta_j^{l+1} \circ down(X_j^{l}) + b_j^{l+1} \\
+X_j^{l} &amp;amp; = f(net_j^l) \\
+\end{aligned}
+\right.
+\end{align}
+$$
+&lt;/p&gt;
+&lt;p&gt;所以：&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align}
+\frac {\partial E}{\partial net_j^l} &amp;amp; = \frac {\partial E}{\partial net_j^{l+1}} \frac {\partial E}{\partial net_j^{l+1}}
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;当$l$层为Pooling层时&lt;/strong&gt;，需要学习的参数为偏执和采样尺度，每一个特征图对应两个参数。对偏执的求导与卷积层无异，对采样尺度$\beta_j^l$的求导如下：&lt;/p&gt;
+
+&lt;p&gt;
+$$
+\begin{align}
+\frac {\partial E}{\partial \beta_j^l} &amp;amp; = \sum_u\sum_v \frac {\partial E}{\partial ((net_j^l)_{u,v})} \frac {\partial ((net_j^l)_{u,v})}{\partial \beta_j^l} \\
+&amp;amp; =  \sum_u\sum_v (\delta_j^l)_{u,v} down(X_j^{l-1})_{u,v} \\
+&amp;amp; = \sum_u\sum_v (\delta_j^l \circ down(X_j^{l-1}))_{u,v}
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;h3 id=&quot;35-应用&quot;&gt;3.5 应用&lt;/h3&gt;
+
 &lt;h3 id=&quot;参考文献&quot;&gt;参考文献&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/xuanyuansen/article/details/41800721&quot;&gt;卷积神经网络（一）：LeNet5的基本结构&lt;/a&gt; &lt;br /&gt;
 &lt;a href=&quot;http://blog.csdn.net/kaido0/article/details/53161684&quot;&gt;理解结构，LeNet5介绍&lt;/a&gt; &lt;br /&gt;
-&lt;a href=&quot;http://dataunion.org/11692.html&quot;&gt;技术向：一文读懂卷积神经网络CNN&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&quot;http://dataunion.org/11692.html&quot;&gt;技术向：一文读懂卷积神经网络CNN&lt;/a&gt;
+&lt;a href=&quot;https://www.zhihu.com/question/41037974&quot;&gt;全连接层的作用是什么？&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 20 Apr 2016 23:11:02 +0800</pubDate>
         <link>http://kymo.github.io/machinelearning/2016/04/20/CNN.html</link>
