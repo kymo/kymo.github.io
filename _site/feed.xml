@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 19 Mar 2017 22:54:04 +0800</pubDate>
-    <lastBuildDate>Sun, 19 Mar 2017 22:54:04 +0800</lastBuildDate>
+    <pubDate>Sun, 16 Apr 2017 22:49:36 +0800</pubDate>
+    <lastBuildDate>Sun, 16 Apr 2017 22:49:36 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -94,6 +94,7 @@ $$
 &lt;/p&gt;
 
 &lt;p&gt;对于单个样本，定义我们的cost function $E^t = \frac{1}{2}||d^t- y^t ||^2$，则对权值$W_{j,k}$、$V_{i,j}$、$U_{j,r}$的求导分别如下，其中$j$表示隐层单元下标,$k$表示输出层下标,$i$表示输入层下标,$r$表示下一时刻隐含层下标.$net^t_{hj}$表示t时刻隐层第j个神经元的加权输入，$net^t_{yk}$表示t时刻输出层第k个神经元的加权输入。&lt;/p&gt;
+
 &lt;p&gt;
 $$
 \begin{align}
@@ -107,15 +108,28 @@ $$
 \color{red}{ \sum_r \frac{\partial E}{\partial net^{t+1}_{hr}} \frac{\partial net^{t+1}_{hr}}{\partial h^{t}_{j}} \frac{\partial h^{t}_{j}} {\partial net^t_{hj}} })x^t_i \\ 
 &amp;amp; = (\sum_k \frac{\partial E}{\partial net^t_{yk}} W_{jk} + \color{red} { \sum_r \frac{\partial E}{\partial net^{t+1}_{hr}}U_{jr}} ) \frac{\partial h^{t}_{j}} {\partial net^t_{hj}} x^t_i \\
 
-\frac{\partial E} {\partial U_{jr}} &amp;amp; =  \frac{\partial E} {\partial net^{t+1}_r} \frac{\partial net^{t+1}_r}{\partial U_{jr}} \\
-&amp;amp; = \frac{\partial E}{\partial net^{t+1}_r} h^t_j \\
-&amp;amp; = \sum_k \frac{\partial E} {\partial net^{t+1}_{yk}} \frac {\partial net^{t+1}_{yk}} {\partial h^{t+1}_r}  \frac {\partial h^{t+1}_r} {\partial net^{t+1}_r} h^t_j \\
+\frac{\partial E} {\partial U_{jr}} &amp;amp; =  \frac{\partial E} {\partial net^{t+1}_{hr}} \frac{\partial net^{t+1}_{hr}}{\partial U_{jr}} \\
+&amp;amp; = \frac{\partial E}{\partial net^{t+1}_{hr}} h^t_j \\
+&amp;amp; = (\sum_k \frac{\partial E} {\partial net^{t+1}_{yk}} \frac {\partial net^{t+1}_{yk}} {\partial h^{t+1}_r}  \frac {\partial h^{t+1}_r} {\partial net^{t+1}_{hr}} + \color{red}{\sum_j \frac{\partial E} {\partial net^{t+2}_{hj}} \frac {\partial net^{t+2}_{hj}} {\partial h^{t+1}_r}  \frac {\partial h^{t+1}_r} {\partial net^{t+1}_{hr}}})  h^t_j \\
+&amp;amp; = (\sum_k \frac{\partial E} {\partial net^{t+1}_{yk}} W_{rk} + \color{red}{\sum_j \frac{\partial E} {\partial net^{t+2}_{hj}} U_{jr}})  \frac {\partial h^{t+1}_r} {\partial net^{t+1}_{hr}} h^t_j \\
 \end{align}
 $$
-
-上述 公式其实在了解反向传播之后就能够很容易推导，对于$W_{jk}$、$U_{jr}$的推导套用反向传播公式即可，而对于$V_{i,j}$需要加上来自于下一时刻的误差，如以上式子中红色部分所示. 对于LSTM，GRU的推导也类似，了解清楚误差传递的来源和去向，就很容易得到对当前参数的推导链式规则了.
-
 &lt;/p&gt;
+
+&lt;p&gt;令$\delta_{y,k}^t$为t时刻输出层y第k个神经元的误差项，令$\delta_{h,j}^t$为t时刻隐含层h第j个神经元的误差项, 则有:&lt;/p&gt;
+&lt;p&gt;
+$$
+\begin{align}
+\delta_{y,k}^t &amp;amp; = \frac{\partial E} {\partial net_{yk}^t} \\
+\delta_{h,j}^t &amp;amp; = \frac{\partial E} {\partial net_{hj}^t} \\
+\delta_{y,k}^t &amp;amp; = (d_k^t - y_k^t)y^t_k(1-y^t_k) \\
+\delta_{h,j}^t &amp;amp; = (\sum_k \frac{\partial E}{\partial net^t_{yk}} W_{jk} + \sum_r \frac{\partial E}{\partial net^{t+1}_{hr}}U_{jr}) \frac{\partial h^{t}_{j}} {\partial net^t_{hj}} \\
+&amp;amp; = (\sum_k \delta_{y,k}^t W_{jk} + \sum_r \delta_{h,j}^{t+1} U_{jr}) \frac{\partial h^{t}_{j}} {\partial net^t_{hj}} 
+\end{align}
+$$
+&lt;/p&gt;
+
+&lt;p&gt;上述 公式其实在了解反向传播之后就能够很容易推导，对于$W_{jk}$、$U_{jr}$的推导套用反向传播公式即可，而对于$V_{i,j}$需要加上来自于下一时刻的误差，如以上式子中红色部分所示. 对于LSTM，GRU的推导也类似，了解清楚误差传递的来源和去向，就很容易得到对当前参数的推导链式规则了.&lt;/p&gt;
 
 &lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
 &lt;p&gt;[1]&lt;a href=&quot;http://www.cnblogs.com/YiXiaoZhou/p/6058890.html&quot;&gt;RNN求解过程推导与实现&lt;/a&gt;&lt;/p&gt;
