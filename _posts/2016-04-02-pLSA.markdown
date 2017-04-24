@@ -5,90 +5,145 @@ date:  2016-04-01 19:24:56
 categories: NaturalLanguageProcessing
 ---
 
+### 1. 建模思想
 pLSA是一种主题模型(Topic Model)，全称概率潜在语义分析，是一种将文本的高维稀疏向量表示成低位维稠密向量的映射方法。
-它是一种无监督学习方法，假设整个文档集合是由若干个主题组成，某一篇文章都以一定的概率$$p(z \mid d)​$$属于某一主题;在给定主题的情况下，以$$p(w \mid z)​$$的概率产生文档的词。
-pLSA是基于这样一个假设，假设文档和主题的分布以及主题和词汇的分布都是多项式分布，因此一个词汇的生成过程可以表示为：
+它是一种无监督的建模方法，用以表征某doc的主题分布. 其假设文档上的主题分布以及某个主题的词分布服从多项式分布。某一篇文章都以一定的概率$$p(z \mid d)$$属于某一主题;在给定主题的情况下，以$$p(w \mid z)$$的概率产生文档的词，即：
 
 + 以一定的概率生成一篇文档 
 + 在该文档中按照文档主题分布选择一个主题 
 + 在该主题下面，按照主题-词汇分布生成一个词汇
 
-可以得到如下模型$$p(w,d)=p(d)p(w \mid d); p(w \mid d)=\sum_{z=1}p(z \mid d)p(w \mid z) $$，其中z为主题，w为词，d为文档。
-其实这个过程也很容易理解，假设现在我们要写篇paper，在动笔之前，会列好提纲，大概选择几个点(也就是主题)。
-在完善这些主题的过程中，我们会在积累的词典中去选择和这个主题相适应的词进行修饰。
-比如写到关于pLSA的文章的时候，我们会选择”建模、概率、主题模型、极大似然“等词去完善这个主题。
-在得到模型之后，我们就需要进行Model Inference，也就是参数估计了，pLSA作为概率图模型，一般是采用MLE作为inference的tool。
-首先构造极大似然函数：$$L(\theta) = \prod_{i=1}^N\prod_{j=1}^Np(d_i,w_j)^{n(d_i,w_j)}$$，其中$$n(d_i,w_j)$$表示的是词$$w_j$$在和文档$$d_i$$的共现频率，由于我们$$p(w \mid z)$$和$$p(z \mid d)$$都是多项式分布，  
-接着，是参数估计，一般而言，此时可以选用极大似然估计。极大对数似然函数如下：
+pLSA是一个生成模型，构建的是联合概率分布，即$$p(w,d)=p(d)\sum_{z=1}p(z \mid d)p(w \mid z) $$，其中z为主题，w为词，d为文档。
+其实整个过程也很容易理解，假设现在我们要写篇paper，在动笔之前，会列好提纲，大概选择几个点(也就是主题)。在完善这些主题的过程中，我们会在积累的词典中去选择和这个主题相适应的词进行修饰。比如写到关于pLSA的文章的时候，我们会选择”建模、概率、主题模型、极大似然“等词去完善这个主题。
 
-$$
-L(\theta) = \prod_{i=1}^N\prod_{j=1}^Np(d_i,w_j)^{n(d_i,w_j)}
-$$
+### 2. 参数估计
 
+在得到模型之后，我们就需要进行模型的参数估计了。由于我们$$p(w \mid z)$$和$$p(z \mid d)$$都是多项式分布，构造的极大似然函数如下，其中$$n(d_i,w_j)$$表示的是词$$w_j$$在和文档$$d_i$$的共现频率，$N$表示的是文档数，$M$表示的词的数目，$K$是主题的数目：
 <p>
 $$
-\begin{align} ln(L(\theta)) = \\
-& = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)logp(d_i,w_j) \\
-& =  \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(p(d_i)\sum_{k=1}^Kp(z_k \mid d_i)p(w_j \mid z_k)) \\
+\begin{align} 
+L(\theta) & = \prod_{i=1}^N\prod_{j=1}^Mp(d_i,w_j)^{n(d_i,w_j)} \\ 
+ln(L(\theta)) & = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)logp(d_i,w_j) \\
+& =  \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log[p(d_i)\sum_{k=1}^Kp(z_k \mid d_i)p(w_j \mid z_k)] \\
 & = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(p(d_i))+\sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(\sum_{k=1}^Kp(z_k\mid d_i)p(w_j \mid z_k))
 \end{align}
 $$
-<p>
+</p>
 如果直接求导的话，很明显就得需要求解(n+m)个方程，几乎是不可能完成的任务。
-一般采用最大期望算法(Maximum Expection， ME)，EM算法的基本思想很直观，即随机初始化相关参数；随后，在E步，计算潜在变量的后验概率；M步，
-利用潜在变量的后验概率去更新未知参数。循环迭代直至达到最大迭代次数算法退出。
+对于这种带有隐变量的极大似然估计一般采用最大期望算法(Maximum Expection， ME)，EM算法的基本思想很直观，通过优化极大似然估计的下界，对原始问题进行求解。一般包含两个步骤，在E步，计算隐含变量的后验概率；M步，利用隐变量的后验概率去更新未知参数。循环迭代直至达到收敛退出条件。
 
-### 问题：为什么可以收敛？
-
-在e步
+### 3. EM算法
+一般而言，EM算法一般都是对含有隐变量的模型进行求解，一般我们把观测变量和隐变量一起称之为完全数据Complete Data, 但是我们是无法直接对Complete Data进行极大似然估计的，因为隐变量是无法观测的嘛！但是，在对模型进行初步推断之后，我们还是可以得到隐变量的后验分布$P(z|x,\theta)$的。令$p(x;\theta)$为观测变量$x$的似然估计，其对数似然函数如下：
 <p>
-$$ p(z_k \mid w_j, d_i) = \frac{p(z_k \mid w_j)p(w_j \mid z_k)} {\sum_{k=1}^Kp(z_k \mid w_j)p(w_j\mid z_k)} $$
- </p>
-M步，最大化极大似然
-
-$$ L(\theta) = \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log(\sum_{k=1}^Kp(z_k\mid d_i)p(w_j \mid z_k)) $$
-
-
-又由于此时：
-
-$$ \sum_{k=1}^K p(z_k|d_i)p(w_j|z_k) > \sum_{k=1}^K p(z_k \mid d_i) p(z_k \mid d_i )p(w_j\mid z_k); \sum_{k=1}^Kp(z_k \mid d_i,w_j) = 1 $$
-
-所以：
-
-$$ L(\theta) > \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)log( \sum_{k=1}^K p(z_k \mid d_i) p(z_k \mid d_i )p(w_j\mid z_k) ) $$
-
-
-利用Jensen不等式，对于凸函数$$f(x)$$有：$$ f(\sum_{i=1}^Nw_ix_i)>=\sum_{i=1}^Nw_if(x_i) $$可以得到：
-
-$$ L(\theta) > \sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)\sum_{k=1}^K p(z_k \mid d_i) log(p(z_k \mid d_i )p(w_j\mid z_k) ) = L'(\theta)$$
-
-此时即转化为，对于约束条件：$$\sum_{k=1}^Kp(z_k|d_i)=1[1],\sum_{j=1}^Mp(w_j|z_k)=1[2]$$ ，求$$L'(\theta)$$的最大值。
-对于这种带等式约束的优化问题，很显然可以构造拉格朗日乘法进行求解：
-
-$$H = L'(\theta) + \sum_{i=1}^N\alpha_i(\sum_{k=1}^Kp(z_k|d_i)-1)+\sum_{k=1}^K\beta_k(\sum_{j=1}^Mp(w_j|z_k)-1)$$
-
-分别对 $$p(z_k\mid d_i),p(w_j\mid z_k)$$求导可得：
-
-$$ =\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)-\alpha_ip(z_k|d_i) = 0      [3] \\
-	= \sum_{i=1}^Nn(d_i,w_j)p(z_k|d_i,w_j)-\beta_kp(w_j|z_k) = 0     [4]
 $$
+\begin{align}
+L(\theta) & = log(p(x;\theta)) \\
+& = log(\sum_z{p(x,z;\theta)}) \\
+& = log(\sum_zQ(z)\frac{p(x,z;\theta)}{Q(z)})
+\end{align}
+$$
+</p>
+
+由Jenkens不等式$f(\sum_i {\lambda_i x_i}) >= \sum_i \lambda_i f(x_i), \sum_i \lambda_i = 1 $, 并且$\sum_z Q(z) = 1$， 可得:
+<p>
+$$
+\begin{align}
+L(\theta) & = log(\sum_zQ(z)\frac{p(x,z;\theta)}{Q(z)}) \\
+& >= \sum_zQ(z) log(\frac{p(x,z;\theta)}{Q(z)}) 
+\end{align}
+$$
+</p>
+
+此时等号当且仅当$\frac{p(x,z;\theta)}{Q(z)}$为常数时成立，即：
+<p>
+$$
+\begin{align}
+\frac{p(x,z;\theta)}{Q(z)} & = C \\
+\sum_z Q(z) & = 1 \\
+Q(z) & =  \frac{p(x,z;\theta)}{\sum_z {p(x,z;\theta)}} \\
+& = p(z|x;\theta)
+\end{align}
+$$
+</p>
+
+由此，在给定$\theta^t$之后，可以保证Jensens不等式的等号成立，也即：
+<p>
+$$
+\begin{align}
+L(\theta^t) & = \sum_zQ(z) log(\frac{p(x,z;\theta^t)}{Q(z)}) 
+\end{align}
+$$
+</p>
+
+由此，将优化原始极大似然估计的问题转化为优化其下界函数$B(\theta)$：
+<p>
+$$
+\begin{align}
+B(\theta) = \sum_zQ(z) log(\frac{p(x,z;\theta)}{Q(z)}) \propto \sum_zQ(z) log(p(x,z;\theta))
+\end{align}
+$$
+</p>
+
+那么优化下界为什么能够保证收敛呢？对于第t+1次迭代，$B(\theta^{t+1}) >= B(\theta^{t})$，且有：
+<p>
+$$
+\begin{align}
+L(\theta^{t+1}) & >= B(\theta^{t+1}) \\
+& >= B(\theta^{t}) = \sum_zQ(z) log(\frac{p(x,z;\theta^{t})}{Q(z)}) \\
+& >= L(\theta^{t})
+\end{align}
+$$
+</p>
+所以能够保证在不断优化$B(\theta)$的过程中，原有的极大似然估计也得到优化. 其实EM算法之所以交期望最大化算法，其关键也在于对$B(\theta)$的优化。前面提到了无法直接对Complete Data进行似然估计，观察$B(\theta)$我们发现，当$Q(z)=p(z|x;\theta)$时，$B(\theta)$可以看做是Complete Data在隐变量后验分布上的期望，也即$B(\theta) = E_{z|x,\theta^\*}(ln(p(x,z,\theta)))$, 也有写成$B(\theta) = E_{z}(ln(p(x,z,\theta|x,\theta^\*)))$, 此时$\theta^\*$表示的是上一次迭代学习的模型。之前一直困惑既然E步只是计算$p(z|x;\theta)$，何有期望之说，在看了PRML上对EM的解释之后，恍然大悟，EM算法才叫做期望最大化，在E步我们通过计算$Q(z)$得到隐变量的后验分布，然后在M步，对Complete Data在该后验分布上的期望进行极大化！(ps: 还是应该多看书，网上的博客参考就行，包括我自己的总结，也权当自己日后再次回顾时对当时自己的自嘲吧~)
+
+### 4. plsa 参数优化
+在e步，求解隐变量的后验分布，从而得到complete data的期望
+<p>
+$$
+\begin{align}
+p(z_k|w_j,d_i) & = \frac{p(z_k \mid w_j)p(w_j \mid z_k)} {\sum_{k=1}^Kp(z_k \mid w_j)p(w_j\mid z_k)} \\
+E_{z_k|w_j,d_i} log( p(z_{k}|d_i) p(z_{k}|w_j) ) & = \sum_k p(z_k|w_j,d_i) log ( p(z_{k}|d_i) p(z_{k}|w_j) )
+\end{align}
+$$
+</p>
+ 
+M步，最大化complete data对数似然函数的期望$E_{z_k|w_j,d_i} log( p(z_{k}|d_i) p(z_{k}|w_j) )$ ，此时是一个多元函数求极值的问题，且有$\sum_{k=1}^Kp(z_k|d_i)=1[1],\sum_{j=1}^Mp(w_j|z_k)=1[2]$的等式约束，可以用拉格朗日方法进行求解，构造拉格朗日函数为：
+<p>
+$$
+H = L'(\theta) + \sum_{i=1}^N\alpha_i(\sum_{k=1}^Kp(z_k|d_i)-1)+\sum_{k=1}^K\beta_k(\sum_{j=1}^Mp(w_j|z_k)-1)
+$$
+</p>
+分别对 $p(z_k\mid d_i),p(w_j\mid z_k)$求导可得：
+<p>
+$$ 
+\begin{align}
+\frac {\partial H } {\partial p(z_k|d_i)} & =\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)-\alpha_ip(z_k|d_i) = 0      [3] \\
+\frac {\partial H } {\partial p(w_j|z_k)} &= \sum_{i=1}^Nn(d_i,w_j)p(z_k|d_i,w_j)-\beta_kp(w_j|z_k) = 0     [4]
+\end{align}
+$$
+</p>
+
 联立方程组[1],[2],[3],[4]求解可得：
-
-$$ p(z_k|d_i) = \frac {\sum_{i=1}^N n(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)} $$
-
-$$ p(w_j|z_k) = \frac {\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{j=1}^M\sum_{k=1}^Kn(d_i,w_j)p(z_k|d_i,w_j)} \\
- = \frac{\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{n(d_i)} 
+<p>
 $$
+\begin{align}
+p(z_k|d_i) & = \frac {\sum_{i=1}^N n(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{i=1}^N\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)} \\
+p(w_j|z_k) & = \frac {\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{j=1}^M\sum_{k=1}^Kn(d_i,w_j)p(z_k|d_i,w_j)} \\
+& = \frac{\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{n(d_i)} 
+\end{align}
+$$
+</p>
 
 因此，在M步更求新参数，通过不断迭代，如果求得的极大似然趋近收敛，则训练结束。
 
+
+
 总结一下：
++ E步：求当前估计的参数条件下的后验概率：$p(z|w,d)$
++ M步：最大化complete data(加上隐藏变量主题)极大似然估计的期望
++ E步和M步循环迭代，直至收敛。
 
-- E步：求当前估计的参数条件下的后验概率：p(z \mid w,d)
-- M步：最大化complete data(加上隐藏变量主题)极大似然估计的期望
-- E步和M步循环迭代，直至收敛。
-
-实现的源码见：plsa.cpp plsa.h ，由于切词用到了公司的lib库，所以切词的初始化和切词的过程在源码中被删去，可以去中科院nlp主页获取相关模块。
+实现的源码见：[plsa](https://github.com/kymo/plsa) ，由于切词用到了公司的lib库，所以切词的初始化和切词的过程在源码中被删去，可以去中科院nlp主页获取相关模块。
 
 
 
