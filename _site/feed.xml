@@ -6,8 +6,8 @@
 </description>
     <link>http://kymo.github.io/</link>
     <atom:link href="http://kymo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 23 Apr 2017 23:03:47 +0800</pubDate>
-    <lastBuildDate>Sun, 23 Apr 2017 23:03:47 +0800</lastBuildDate>
+    <pubDate>Mon, 24 Apr 2017 23:35:17 +0800</pubDate>
+    <lastBuildDate>Mon, 24 Apr 2017 23:35:17 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -154,6 +154,108 @@ $$
         
         
         <category>MachineLearning</category>
+        
+      </item>
+    
+      <item>
+        <title>Cv</title>
+        <description>
+&lt;p&gt;% LaTeX file for resume 
+% This file uses the resume document class (res.cls)&lt;/p&gt;
+
+&lt;p&gt;\documentclass[margin]{res} 
+% the margin option causes section titles to appear to the left of body text 
+\textwidth=5.2in % increase textwidth to get smaller right margin
+%\usepackage{helvetica} % uses helvetica postscript font (download helvetica.sty)
+%\usepackage{newcent}   % uses new century schoolbook postscript font&lt;/p&gt;
+
+&lt;p&gt;\begin{document}&lt;/p&gt;
+
+&lt;p&gt;\name{王晓峰  \[14pt] } % the \[12pt] adds a blank line after name&lt;/p&gt;
+
+&lt;p&gt;\address{\ (+86)15071013512 \ kymowind@gmail.com }
+\address{\ github.com/kymo \ www.idiotaron.org }&lt;/p&gt;
+
+&lt;p&gt;\begin{resume}&lt;/p&gt;
+
+&lt;p&gt;\section{Objective} 
+算法工程师&lt;/p&gt;
+
+&lt;p&gt;\section{Education} 
+M.S. in Software Engineering, WuHan University \hfill 2013.09-2016.07
+\begin{itemize} 
+\item Concentrations on Machine Learning \&amp;amp; Optimization Algorithms
+\end{itemize} 
+B.S. in Computer Science \&amp;amp; Technology, WuHan Univerity \hfill 2009.09-2013.07
+\begin{itemize} \itemsep -2pt 
+\item Excellent Student Scholarship 2010\&amp;amp; 2011\&amp;amp; 2012(top 10\%)
+\end{itemize}&lt;/p&gt;
+
+&lt;p&gt;\section{Internship}&lt;/p&gt;
+
+&lt;p&gt;{\bf Algorithm Engineer,} Alibaba Inc, Hangzhou \hfill  2015.04-2015.06&lt;/p&gt;
+
+&lt;p&gt;\begin{itemize} \itemsep -2pt % reduce space between items
+\item Query Recommendation for search drop down list, already on A/B Test 
+\item Query Quality Model Investigation
+\end{itemize}&lt;/p&gt;
+
+&lt;p&gt;{\bf Algorithm Engineer,} Baidu Inc, Beijing \hfill 2014.07-2014.11
+ \begin{itemize} \itemsep -2pt  % reduce space between items
+ \item Created a new searching strategy by mining ngram pattern from online query set (good Performance on A/B Test)
+ \item Maintained Text Miner module and added pLSA model into it
+ \end{itemize}&lt;/p&gt;
+
+&lt;p&gt;{\bf Web Backend Engineer,} Jiaming Inc, Wuhan \hfill 2012.09-2012.12
+ \begin{itemize} \itemsep -2pt  % reduce space between items
+ \item Developed the information stream system and user management system
+ \item Maintain the web server and help design the Ajax interface
+ \end{itemize}&lt;/p&gt;
+
+&lt;p&gt;\section{Project}&lt;/p&gt;
+
+&lt;p&gt;{\bf SUML,} Machine Learning Library written in C++  \hfill 2015
+\begin{itemize} 
+\item Implemented SVM, Random Forest, GBDT, Logistic Regression and Back Propagation Neural Network and the multi-thread version of GBDT
+\end{itemize}&lt;/p&gt;
+
+&lt;p&gt;{\bf HMMSEG,} Chinese Word Segmentation Module written in C++  \hfill 2014 
+\begin{itemize} \itemsep -2pt
+\item Stored the dictionary with Trie, and process the maximum match algorithm among the tree and then use HMM Model to choose the best one
+\item Implemented the whole project and good performance on long text
+\end{itemize}&lt;/p&gt;
+
+&lt;p&gt;{\bf QiShu,} A Novel Searching Engine written in Python \hfill 2013
+\begin{itemize} \itemsep -2pt
+\item Leveraged Django, MySQL, Bootstrap and Memcached
+\item Designed and implemented Searching Engine ,Crawler Engine, Back-End logic and the Front-End page
+\end{itemize}&lt;/p&gt;
+
+&lt;p&gt;{\bf GeBi,} A Social Network Website written in Python \hfill 2012
+\begin{itemize} \itemsep -2pt
+\item Leveraged Django, MySQL, Bootstrap and Memcached
+\item Help designed and implemented the Back-End logic
+\end{itemize}&lt;/p&gt;
+
+&lt;p&gt;\section{Publish}
+GPU-based Neural Network learning algorithm based on improved Differential Evolution with Elite Strategy&lt;/p&gt;
+
+&lt;p&gt;% Tabulate Computer Skills; p{3in} defines paragraph 3 inches wide
+\section{Skills}&lt;/p&gt;
+
+&lt;p&gt;Familiar with Python \&amp;amp; C++ \&amp;amp; Linux Shell, Map-Reduce, CUDA and SQL &lt;br /&gt;
+Familiar with basic data mining algorithm, and good sense of feature engineering &lt;br /&gt;
+Familiar with Data Structure \&amp;amp; Multi-thread Programming \&amp;amp; Network Programming&lt;/p&gt;
+
+&lt;p&gt;\end{resume}&lt;/p&gt;
+
+&lt;p&gt;\end{document}&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 12 Sep 2016 00:00:00 +0800</pubDate>
+        <link>http://kymo.github.io/2016/09/12/cv.html</link>
+        <guid isPermaLink="true">http://kymo.github.io/2016/09/12/cv.html</guid>
+        
         
       </item>
     
@@ -715,7 +817,16 @@ L(\theta^{t+1}) &amp;amp; &amp;gt;= B(\theta^{t+1}) \\
 \end{align}
 $$
 &lt;/p&gt;
-&lt;p&gt;所以能够保证在不断优化$B(\theta)$的过程中，原有的极大似然估计也得到优化. 其实EM算法之所以交期望最大化算法，其关键也在于对$B(\theta)$的优化。前面提到了无法直接对Complete Data进行似然估计，观察$B(\theta)$我们发现，当$Q(z)=p(z|x;\theta)$时，$B(\theta)$可以看做是Complete Data在隐变量后验分布上的期望，也即$B(\theta) = E_{z|x,\theta^*}(ln(p(x,z,\theta)))$, 也有写成$B(\theta) = E_{z}(ln(p(x,z,\theta|x,\theta^*)))$, 此时$\theta^*$表示的是上一次迭代学习的模型。之前一直困惑既然E步只是计算$p(z|x;\theta)$，何有期望之说，在看了PRML上对EM的解释之后，恍然大悟，EM算法才叫做期望最大化，在E步我们通过计算$Q(z)$得到隐变量的后验分布，然后在M步，对Complete Data在该后验分布上的期望进行极大化！(ps: 还是应该多看书，网上的博客参考就行，包括我自己的总结，也权当自己日后再次回顾时对当时自己的自嘲吧~)&lt;/p&gt;
+&lt;p&gt;所以能够保证在不断优化$B(\theta)$的过程中，原有的极大似然估计也得到优化. 其实EM算法之所以交期望最大化算法，其关键也在于对$B(\theta)$的优化。前面提到了无法直接对Complete Data进行似然估计，观察$B(\theta)$我们发现，当$Q(z)=p(z|x;\theta)$时，$B(\theta)$可以看做是Complete Data在隐变量后验分布上的期望，也即$B(\theta) = E_{z|x,\theta^*}(ln(p(x,z,\theta)))$, 也有写成$B(\theta) = E_{z}(ln(p(x,z,\theta|x,\theta^*)))$, 此时$\theta^*$表示的是上一次迭代学习的模型。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;之前一直困惑既然E步只是计算$p(z&lt;/td&gt;
+      &lt;td&gt;x;\theta)$，何有期望之说。在看了PRML上对EM的解释之后，恍然大悟。在E步我们通过计算$Q(z)$得到隐变量的后验分布，然后在M步，对Complete Data在该后验分布上的期望进行极大化！(ps: 还是应该多看书，网上的博客参考就行，包括我自己的总结，也权当自己日后再次回顾时对当时自己的自嘲吧~)，当然EM算法的优化目标是KL散度，也即complete data的分布和隐变量后验分布的相似度.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
 
 &lt;h3 id=&quot;4-plsa-参数优化&quot;&gt;4. plsa 参数优化&lt;/h3&gt;
 &lt;p&gt;在e步，求解隐变量的后验分布，从而得到complete data的期望&lt;/p&gt;
@@ -755,20 +866,11 @@ p(w_j|z_k) &amp;amp; = \frac {\sum_{j=1}^Mn(d_i,w_j)p(z_k|d_i,w_j)}{\sum_{j=1}^M
 $$
 &lt;/p&gt;
 
-&lt;p&gt;因此，在M步更求新参数，通过不断迭代，如果求得的极大似然趋近收敛，则训练结束。&lt;/p&gt;
+&lt;p&gt;因此，在M步更求新参数，通过不断迭代，如果求得的极大似然趋近收敛，则训练结束。Plsa跟lsa之间也有某种关系，&lt;/p&gt;
 
 &lt;p&gt;总结一下：&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;table&gt;
-      &lt;tbody&gt;
-        &lt;tr&gt;
-          &lt;td&gt;E步：求当前估计的参数条件下的后验概率：$p(z&lt;/td&gt;
-          &lt;td&gt;w,d)$&lt;/td&gt;
-        &lt;/tr&gt;
-      &lt;/tbody&gt;
-    &lt;/table&gt;
-  &lt;/li&gt;
+  &lt;li&gt;E步：求当前估计的参数条件下的后验概率：&lt;/li&gt;
   &lt;li&gt;M步：最大化complete data(加上隐藏变量主题)极大似然估计的期望&lt;/li&gt;
   &lt;li&gt;E步和M步循环迭代，直至收敛。&lt;/li&gt;
 &lt;/ul&gt;
@@ -982,122 +1084,6 @@ alpha_j^{new} = \begin{cases} H,~~~\alpha_j^{new,unc} &gt; H \\ \alpha_j^{new,un
         <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
         <link>http://kymo.github.io/machinelearning/2016/04/02/SVM.html</link>
         <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/SVM.html</guid>
-        
-        
-        <category>MachineLearning</category>
-        
-      </item>
-    
-      <item>
-        <title>SVD</title>
-        <description>&lt;p&gt;奇异值分解作为一种矩阵分解的算法，广泛的应用于数据分析、信号处理、模式识别、图片压缩、天气预测以及潜在概率语义分析等应用。其实质是通过分解矩阵，找到矩阵行列之间的某种潜在关系。如在推荐系统中利用SVD分解用户-商品的评分矩阵，便可以得到用户和商品之间的关联。&lt;/p&gt;
-
-&lt;h3 id=&quot;特征值分解&quot;&gt;特征值分解&lt;/h3&gt;
-&lt;p&gt;一般矩阵乘以某个向量，代表着对该向量进行某种线性变换：拉伸、平移以及旋转，在计算机图形学中经常对三维场景的物体在各种不同的坐标系下进行变换也利用了该种性质，直接利用物体的三维坐标乘以变换矩阵即可实现。如果对向量的线性变换仅仅只是对向量进行了缩放，那么这种情况便是特征值分解，既有&lt;script type=&quot;math/tex&quot;&gt;Ax=\lambda x&lt;/script&gt;. 特征值分解的物理意义在不同的应用场景下有不同的解释。不过一般都是对对称矩阵&lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt;进行分解，得到一组正交的特征向量作为正交基，使得矩阵&lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt;能够被投射到以该正交基为基底的空间中，特征值则表示在不同的正交基下的投射距离，特征值越大说明矩阵在对应的特征向量上的方差越大，功率越大，信息熵也越大，在PCA(principal  component analysis)中，即可以利用特征值分解，获取最重要的K个成分对数据进行降维，保证在数据规模可控的情况下获得足够的信息量。&lt;/p&gt;
-
-&lt;h3 id=&quot;奇异值分解&quot;&gt;奇异值分解&lt;/h3&gt;
-&lt;p&gt;奇异值分解可以认为是特征值分解的扩充，即解决对于矩阵&lt;script type=&quot;math/tex&quot;&gt;A(m \times n)&lt;/script&gt;能否在原始空间&lt;script type=&quot;math/tex&quot;&gt;R^n&lt;/script&gt;中找到一组正交基&lt;script type=&quot;math/tex&quot;&gt;(v_1, v_2, v_3, \cdot \cdot \cdot , v_n)&lt;/script&gt;，使得经过该线性变换矩阵投射得新的空间&lt;script type=&quot;math/tex&quot;&gt;R^m&lt;/script&gt;中的向量仍然正交的问题，即当&lt;script type=&quot;math/tex&quot;&gt;i!=j ，v_i^T \times v_j = 0&lt;/script&gt;时，&lt;script type=&quot;math/tex&quot;&gt;(Av_i,Av_j) = 0&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;对于矩阵&lt;script type=&quot;math/tex&quot;&gt;A^TA(n \times n)&lt;/script&gt;，该矩阵为对称矩阵，且有&lt;script type=&quot;math/tex&quot;&gt;r(A^TA)=r&lt;/script&gt;，则可以通过特征值分解得到对应的一组正交基&lt;script type=&quot;math/tex&quot;&gt;(v_1, v_2, v_3, \cdot \cdot \cdot , v_r)&lt;/script&gt;，使得&lt;script type=&quot;math/tex&quot;&gt;A^TAv_i=\lambda v_i&lt;/script&gt;.
-对于经过&lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt;线性变化投射到新的空间的向量&lt;script type=&quot;math/tex&quot;&gt;Av_i&lt;/script&gt;，容易推知当&lt;script type=&quot;math/tex&quot;&gt;i!=j&lt;/script&gt;时，&lt;script type=&quot;math/tex&quot;&gt;(Av_i,Av_j)&lt;/script&gt;=0. 从而可以得到投射之后的新的一组正交基&lt;script type=&quot;math/tex&quot;&gt;U&lt;/script&gt;为&lt;script type=&quot;math/tex&quot;&gt;(Av_1,Av_2,  \cdot  \cdot  \cdot  Av_r)&lt;/script&gt;，对其进行标准化，有&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;u_i=\frac{Av_i}{\mid Av_i\mid} =\frac{1}{\sqrt {\lambda_i}} Av_i =&gt; Av_i = \sqrt {\lambda_i}u_i = \delta_i u_i&lt;/script&gt;
-
-&lt;p&gt;则有&lt;/p&gt;
-
-&lt;p&gt;$A(v_1, v_2, v_3, \cdot \cdot \cdot, v_r) = (\delta_1 u_1 , \delta_2 u_2 , \delta_3 u_3, \cdot \cdot \cdot , \delta_r u_r) = (u_1, u_2, \cdot \cdot \cdot, u_r) \times [
-\begin {matrix}
-\delta_1, \cdot \cdot \cdot, 0 \\
-0, \cdot \cdot \cdot, 0 \\
-0, \cdot \cdot \cdot, \delta_r
-\end {matrix}
-]
-$&lt;/p&gt;
-
-&lt;p&gt;即&lt;script type=&quot;math/tex&quot;&gt;AV = U\Sigma =&gt; AVV^T = U\Sigma V^T =&gt; A =  U\Sigma V^T (VV^T=E)&lt;/script&gt; ，其中，$\Sigma$的对角元素为特征值的开平方，表示&lt;script type=&quot;math/tex&quot;&gt;V&lt;/script&gt;向量经过&lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt;方阵变换之后与&lt;script type=&quot;math/tex&quot;&gt;U&lt;/script&gt;向量之间的缩放对应关系，此时&lt;script type=&quot;math/tex&quot;&gt;U&lt;/script&gt;矩阵大小为&lt;script type=&quot;math/tex&quot;&gt;m \times r&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;V&lt;/script&gt;矩阵大小为&lt;script type=&quot;math/tex&quot;&gt;n \times r&lt;/script&gt;，也可以将&lt;script type=&quot;math/tex&quot;&gt;U&lt;/script&gt;扩充为&lt;script type=&quot;math/tex&quot;&gt;m \times m&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;V&lt;/script&gt;扩充为 &lt;script type=&quot;math/tex&quot;&gt;n \times n&lt;/script&gt;，此时&lt;script type=&quot;math/tex&quot;&gt;\Sigma&lt;/script&gt;大小则为&lt;script type=&quot;math/tex&quot;&gt;m \times n&lt;/script&gt;，即在原来的基础之上增加若干个0行和0列.&lt;/p&gt;
-
-&lt;p&gt;从另外一个角度，对于任意矩阵&lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt;，可以分解为&lt;script type=&quot;math/tex&quot;&gt;A= U\Sigma V^T&lt;/script&gt;的形式，于是可以得到：&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;AA^T=U\Sigma V^T V\Sigma^TU^T = U\Sigma \Sigma^TU^T&lt;/script&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;A^TA= V\Sigma^TU^T  U\Sigma V^T = V\Sigma \Sigma^TV^T&lt;/script&gt;
-
-&lt;p&gt;所以，&lt;script type=&quot;math/tex&quot;&gt;U&lt;/script&gt;可以看成是对矩阵&lt;script type=&quot;math/tex&quot;&gt;AA^T&lt;/script&gt;进行特征值分解得到的正交基，&lt;script type=&quot;math/tex&quot;&gt;V&lt;/script&gt;可以看成是对矩阵&lt;script type=&quot;math/tex&quot;&gt;A^TA&lt;/script&gt;进行分解得到的正交基。&lt;/p&gt;
-
-&lt;h3 id=&quot;svd-在lsa中的应用&quot;&gt;SVD 在LSA中的应用&lt;/h3&gt;
-
-&lt;p&gt;奇异值分解在诸多方面都有十分成功的应用，在数据压缩中，可以通过将原始的矩阵进行奇异值分解，去除奇异值较小的部分得到低阶近似，从而实现对数据的降维；在语义分析中，通过对构造的文档-词汇矩阵&lt;script type=&quot;math/tex&quot;&gt;D&lt;/script&gt;进行奇异值分解&lt;script type=&quot;math/tex&quot;&gt;D=U \Sigma V^T&lt;/script&gt;&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;D = [
-\begin{array}{ccc}
-x_{1,1}  , \cdot \cdot  \cdot  ,  x_{1,n} \\\
-\cdot \cdot  \cdot   ,  \cdot \cdot  \cdot  ,  \cdot \cdot  \cdot \\\
-x_{m,1}   ,  \cdot \cdot  \cdot  ,  x_{m,n} 
-\end{array}
-]
-= [t_1 , t_2, \cdot \cdot \cdot , t_n]^T = [d_1 , d_2, \cdot \cdot \cdot , d_m]&lt;/script&gt;
-
-&lt;p&gt;其中，&lt;script type=&quot;math/tex&quot;&gt;t_i^T = (x_{i,1}, x_{i,2}, \cdot \cdot \cdot , x_{i,n}) , d_j^T = (x_{1,j}, x_{2,j}, \cdot \cdot \cdot , x_{m,j})&lt;/script&gt;。&lt;/p&gt;
-
-&lt;p&gt;进行SVD分解之后&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;D=U\Sigma V^T = (u_1, u_2,  \cdot \cdot \cdot, u_r) \times [
-\begin {matrix}
-\delta_1, \cdot \cdot \cdot, 0 \\\
-0, \cdot \cdot \cdot, 0 \\\
-0, \cdot \cdot \cdot, \delta_r
-\end {matrix}
-]
-\times 
-(v_1, v_2, \cdot \cdot \cdot , v_r)^T&lt;/script&gt;
-
-&lt;p&gt;随后进行k-阶近似，取最大的k个奇异值&lt;script type=&quot;math/tex&quot;&gt;\Sigma_k&lt;/script&gt;以及对应的奇异向量&lt;script type=&quot;math/tex&quot;&gt;U_k,V_k&lt;/script&gt;，便可以对&lt;script type=&quot;math/tex&quot;&gt;D&lt;/script&gt;进行降维，将词汇-文档空间映射到语义空间中去，此时k值可以认为是语义空间中的主题数，&lt;script type=&quot;math/tex&quot;&gt;U_k&lt;/script&gt;可以看做在该语义空间中，文档上的主题分布，而&lt;script type=&quot;math/tex&quot;&gt;V_k&lt;/script&gt;则可以看成是主题上的词汇分布。&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;D_k = U_k \Sigma_k V_k^T = (u_1, u_2,  \cdot \cdot \cdot, u_k) \times [
-\begin {matrix}
-\delta_1, \cdot \cdot \cdot, 0 \\\
-0, \cdot \cdot \cdot, 0 \\\
-0, \cdot \cdot \cdot, \delta_k
-\end {matrix}
-]
-\times 
-(v_1, v_2, \cdot \cdot \cdot , v_k)^T&lt;/script&gt;
-
-&lt;p&gt;此时，&lt;script type=&quot;math/tex&quot;&gt;d_j^T = (v_{1,j}，v_{2,j}, \cdot \cdot \cdot ,v_{k,j})&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;t_i^T =  (u_{1,j}，u_{2,j}, \cdot \cdot \cdot ,u_{k,j})&lt;/script&gt;
-此时D仍然是&lt;script type=&quot;math/tex&quot;&gt;m \times n&lt;/script&gt;，得到对词汇-文档原始矩阵的奇异值分解结果之后，变可以完成包括词汇相似度计算、文档相似度计算等任务。&lt;/p&gt;
-
-&lt;h4 id=&quot;1-词汇相似度计算计算语料中的两个词汇pq的语义相似度&quot;&gt;1. 词汇相似度计算，计算语料中的两个词汇&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;，&lt;script type=&quot;math/tex&quot;&gt;q&lt;/script&gt;的语义相似度&lt;/h4&gt;
-&lt;p&gt;分别计算&lt;script type=&quot;math/tex&quot;&gt;\Sigma_k \times t_i&lt;/script&gt;以及&lt;script type=&quot;math/tex&quot;&gt;\Sigma_k \times t_j&lt;/script&gt;(i和j为词汇p,q对应的ID)，可以得到两个列向量，然后通过某种距离计算方式可以得到两者的语义距离.&lt;/p&gt;
-
-&lt;h4 id=&quot;2-文档相似度计算计算语料中的两篇文档p-q的语义相似度&quot;&gt;2. 文档相似度计算，计算语料中的两篇文档&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;q&lt;/script&gt;的语义相似度&lt;/h4&gt;
-&lt;p&gt;分别计算&lt;script type=&quot;math/tex&quot;&gt;\Sigma_k \times d_i&lt;/script&gt;以及&lt;script type=&quot;math/tex&quot;&gt;\Sigma_k \times d_j&lt;/script&gt;(i和j为词汇p,q对应的ID)，可以得到两个列向量，然后通过某种距离计算方式可以得到两者的语义距离.&lt;/p&gt;
-
-&lt;h4 id=&quot;3-分本聚类&quot;&gt;3. 分本聚类&lt;/h4&gt;
-&lt;p&gt;低阶降维之后可以的到语义空间的文档特征，从而可以利用一些无监督的聚类算法进行文档聚类，当然也可以作为分档分类的特征。&lt;/p&gt;
-
-&lt;h4 id=&quot;4-lsa-缺点&quot;&gt;4. LSA 缺点&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;新生成的矩阵的解释性比较差.造成这种难以解释的结果是因为SVD只是一种数学变换，并无法对应成现实中的概念。&lt;/li&gt;
-  &lt;li&gt;LSA无法扑捉一词多以的现象。在原始词-向量矩阵中，每个文档的每个词只能有一个含义。比如同一篇文章中的“The Chair of Board”和”the chair maker”的chair会被认为一样。在语义空间中，含有一词多意现象的词其向量会呈现多个语义的平均。相应的，如果有其中一个含义出现的特别频繁，则语义向量会向其倾斜。&lt;/li&gt;
-  &lt;li&gt;LSA具有词袋模型的缺点，即在一篇文章，或者一个句子中忽略词语的先后顺序。&lt;/li&gt;
-  &lt;li&gt;LSA的概率模型假设文档和词的分布是服从联合正态分布的，但从观测数据来看是服从泊松分布的。因此LSA算法的一个改进PLSA使用了多项分布，其效果要好于LSA。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.puffinwarellc.com/index.php/news-and-articles/articles/30-singular-value-decomposition-tutorial.html?showall=1&quot;&gt;Singular Value Decomposition (SVD) Tutorial&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://blog.sciencenet.cn/blog-696950-699432.html&quot;&gt;奇异值分解(SVD) — 几何意义&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.zhihu.com/question/21874816&quot;&gt;如何理解矩阵特征值？&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://charlesx.top/2016/03/Singularly-Valuable-Decomposition/&quot;&gt;漫谈奇异值分解&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.math.washington.edu/~morrow/464_14/svd.pdf&quot;&gt;Dan Kalman. A singularly valuable decomposition: The SVD of a matrix[J]. College Mathematics Journal, 1996, 27(1):2–23.&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://blog.csdn.net/roger__wong/article/details/41175967&quot;&gt;LSA潜在语义分析&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Sat, 02 Apr 2016 03:24:56 +0800</pubDate>
-        <link>http://kymo.github.io/machinelearning/2016/04/02/SVD.html</link>
-        <guid isPermaLink="true">http://kymo.github.io/machinelearning/2016/04/02/SVD.html</guid>
         
         
         <category>MachineLearning</category>
